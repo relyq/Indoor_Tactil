@@ -151,7 +151,7 @@ uint16_t buttoncolors[15] = {
 
 
 const uint8_t screensTotal = 24;    // cantidad de pantallas
-bool screens[screensTotal] = {      // array donde se guarda la pantalla activa - entonces, screens[1] = true significa screens[1] = true
+bool screens[screensTotal] = {      // array donde se guarda la pantalla activa - entonces, screens[1] = true significa menuScreenOn = true
   1,                                // 0 - homeScreenOn
   0,                                // 1 - menuScreenOn
   0,                                // 2 - settingsScreenOn
@@ -577,87 +577,21 @@ void loop(void) {
   // Configuracion Button
   if (screens[0] && p.x > 10 && p.x < 230 && p.y > 30 && p.y < 70) {
     Serial.println("Configuracion ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = true;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
-    screens[22] = false;
+    changeActiveScreenTo(0x01);
     initAllScreens();
   }
 
   // Opcion 1 Button
   if (screens[1] && p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
     Serial.println("Opcion 1 ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = true;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x06);
     initAllScreens();
   }
 
   // Opcion 2 Button
   if (screens[1] && p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
     Serial.println("Opcion 2 ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = true;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x07);
     initAllScreens();
   }
 
@@ -693,29 +627,7 @@ void loop(void) {
   // Opcion 4 Button
   if (screens[1] && p.x > 10 && p.x < 230 && p.y > 190 && p.y < 230) {
     Serial.println("Opcion 4 ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = true;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x09);
     initAllScreens();
   }
 
@@ -753,406 +665,98 @@ void loop(void) {
 
   if (screens[6] && p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
     Serial.println("verano Z1 ON");
-    screens[11] = true;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x0b);
     initAllScreens();
   }
 
   // Otoño Z1 Button
   if (screens[6] && p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
     Serial.println("Otonio Z1 ON");
-    screens[11] = false;
-    screens[12] = true;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x0c);
     initAllScreens();
   }
 
   // Invierno Z1 Button
   if (screens[6] && p.x > 10 && p.x < 230 && p.y > 145 && p.y < 185) {
     Serial.println("Invierno Z1 ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = true;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x0d);
     initAllScreens();
   }
 
   // Primavera Z1 Button
   if (screens[6] && p.x > 10 && p.x < 230 && p.y > 190 && p.y < 230) {
     Serial.println("Primavera Z1 ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = true;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x0e);
     initAllScreens();
   }
 
   // Verano Z2 Button
   if (screens[7] && p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
     Serial.println("Verano Z2 ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = true;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x0f);
     initAllScreens();
   }
 
   // Otoño Z2 Button
   if (screens[7] && p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
     Serial.println("Otonio Z2 ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = true;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x10);
     initAllScreens();
   }
 
   // Invierno Z2 Button
   if (screens[7] && p.x > 10 && p.x < 230 && p.y > 145 && p.y < 185) {
     Serial.println("Invierno Z2 ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = true;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x11);
     initAllScreens();
   }
 
   // Primavera Z2 Button
   if (screens[7] && p.x > 10 && p.x < 230 && p.y > 190 && p.y < 230) {
     Serial.println("Primavera Z2 ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = true;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x12);
     initAllScreens();
   }
 
   // Control Z1 Button
   if (screens[6] && p.x > 10 && p.x < 230 && p.y > 235 && p.y < 275) {
     Serial.println("Control Z1 ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = true;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x13);
     initAllScreens();
   }
 
   // Control Z2 Button
   if (screens[7] && p.x > 10 && p.x < 230 && p.y > 235 && p.y < 275) {
     Serial.println("Control Z2 ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = true;
-    screens[6] = false;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x14);
     initAllScreens();
   }
 
   // Alarmas Button
   if (screens[9] && p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
     Serial.println("Alarmas ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = true;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x03);
     initAllScreens();
   }
 
   // WiFi Button
   if (screens[9] && p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
     Serial.println("WiFi ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = true;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x04);
     initAllScreens();
   }
 
   // Iot Button
   if (screens[9] && p.x > 10 && p.x < 230 && p.y > 145 && p.y < 185) {
     Serial.println("Iot ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = true;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x05);
     initAllScreens();
   }
 
   // BackHome Button
   if (screens[1] && p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
     Serial.println("BackHome ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = true;
+    changeActiveScreenTo(0x00);
     initAllScreens();
   }
 
@@ -1161,29 +765,7 @@ void loop(void) {
        screens[9] || screens[10] || screens[3] || wifiScreenInit || iotScreenInit) &&
       p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
     Serial.println("BackMenu ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = true;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x01);
     initAllScreens();
   }
 
@@ -1192,29 +774,7 @@ void loop(void) {
        screens[14] || screens[19]) &&
       p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
     Serial.println("BackOpcion1 ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = true;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x06);
     initAllScreens();
   }
 
@@ -1223,29 +783,7 @@ void loop(void) {
        screens[18] || screens[20]) &&
       p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
     Serial.println("BackOpcion2 ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = true;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = false;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
+    changeActiveScreenTo(0x07);
     initAllScreens();
   }
 
@@ -1277,3 +815,12 @@ void loop(void) {
 /////  Fin Loop Principal
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// cambia la pantalla activa
+void changeActiveScreenTo(uint8_t newActiveScreen){
+  for(uint8_t i = 0; i < screensTotal; i++){
+    if     (i == newActiveScreen) screens[i] = true;
+    else if(i != newActiveScreen) screens[i] = false;
+  }
+}
