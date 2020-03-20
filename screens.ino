@@ -72,18 +72,18 @@ void NumericKeyboardScreen(TSPoint p) {
       if (b == 2) {
         // status(F("Hanging up"));
         // fona.hangUp();
-        if (numericScreenOnTemperature) {
+        if (screens[22]) {
           // temperatureSP = textfield;
-          settingsScreenOn = true;
+          screens[2] = true;
           settingsScreenInit = false;
-          numericScreenOnTemperature = false;
+          screens[22] = false;
         }
 
-        if (numericScreenOnHumidity) {
+        if (screens[23]) {
           // temperatureSP = textfield;
-          settingsScreenOn = true;
+          screens[2] = true;
           settingsScreenInit = false;
-          numericScreenOnHumidity = false;
+          screens[23] = false;
         }
 
         for (int i = 0; i <= 12; i++) {
@@ -95,18 +95,18 @@ void NumericKeyboardScreen(TSPoint p) {
       if (b == 0) {
         // status(F("Calling"));
         // Serial.print("Calling "); Serial.print(textfield);
-        if (numericScreenOnTemperature) {
+        if (screens[22]) {
           temperatureSP = textfield;
-          settingsScreenOn = true;
+          screens[2] = true;
           settingsScreenInit = false;
-          numericScreenOnTemperature = false;
+          screens[22] = false;
         }
 
-        if (numericScreenOnHumidity) {
+        if (screens[23]) {
           humiditySP = textfield;
-          settingsScreenOn = true;
+          screens[2] = true;
           settingsScreenInit = false;
-          numericScreenOnHumidity = false;
+          screens[23] = false;
         }
 
         for (int i = 0; i <= 12; i++) {
@@ -115,7 +115,7 @@ void NumericKeyboardScreen(TSPoint p) {
         textfield_i = 0;
 
         // fona.callPhone(textfield);
-        // temperatureSP,settingsScreenOn,settingsScreenInit
+        // temperatureSP,screens[2],settingsScreenInit
       }
 
       delay(100);  // UI debouncing
