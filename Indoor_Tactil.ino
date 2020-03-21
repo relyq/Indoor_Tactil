@@ -1,7 +1,3 @@
-// IMPORTANT: Adafruit_TFTLCD LIBRARY MUST BE SPECIFICALLY
-// CONFIGURED FOR EITHER THE TFT SHIELD OR THE BREAKOUT BOARD.
-// SEE RELEVANT COMMENTS IN Adafruit_TFTLCD.h FOR SETUP.
-// Technical support:goodtft@163.com
 
 #include "Adafruit_GFX.h"     // Core graphics library
 #include "Adafruit_TFTLCD.h"  // Hardware-specific library
@@ -13,7 +9,6 @@
 
 #define DHTPIN 40  // what digital pin we're connected to
 
-// Uncomment whatever type you're using!
 #define DHTTYPE DHT11  // DHT 11
 //#define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
 //#define DHTTYPE DHT21   // DHT 21 (AM2301)
@@ -206,15 +201,13 @@ bool screensInit[screensTotal - 2] = {
     0,  // 21 - numericScreenInit
 };
 
-String serialTemp;
-String oldData = "";
 String temperatureSP = "0";
 String humiditySP = "0";
 
 bool heaterOn = false;
 bool fanOn = false;
 
-void setup(void) {
+void setup() {
   dht.begin();
   Serial.begin(9600);
   Serial.println(F("TFT LCD test"));
@@ -268,18 +261,9 @@ void setup(void) {
 #define MINPRESSURE 10
 #define MAXPRESSURE 1000
 
-void loop(void) {
-/*
-  // See if there's any  touch data for us
-  if (ts.bufferEmpty()) {
-    return;
-  }
-  /*
-  // You can also wait for a touch
-  if (! ts.touched()) {
-    return;
-  }
-*/
+void loop() {
+
+  Serial.println("void loop()");
 
   TSPoint p = ts.getPoint();
 
@@ -289,19 +273,8 @@ void loop(void) {
   pinMode(YP, OUTPUT);
   // pinMode(YM, OUTPUT);
 
-  /*
-  if (ts.bufferSize()) {
 
-  }
-  else {
-    // this is our way of tracking touch 'release'!
-    p.x = p.y = p.z = -1;
-  }*/
-
-  // we have some minimum pressure we consider 'valid'
-  // pressure of 0 means no pressing!
-  //// if the screen is being touched map the xy position to some valid place in the screen
-
+  // si la pantalla está siendo presionada se mappea el resultado de getPoint() a un punto valido del cursor en la pantalla
   if (p.z > MINPRESSURE && p.z < MAXPRESSURE) {
     // scale from 0->1023 to tft.width
     p.x = map(p.x, TS_MINX, TS_MAXX, tft.width(), 0);
@@ -316,15 +289,6 @@ void loop(void) {
     Serial.print(p.z);
     Serial.println(") ");
   }
-  /*
-   if(Serial.available()){
-    serialTemp = Serial.readString();
-   }
-   if(oldData!=serialTemp){
-    oldData = serialTemp;
-    //screens[0] = false;
-    }
-    */
 
   if (screens[0]) {
     float h = dht.readHumidity();
@@ -345,6 +309,7 @@ void loop(void) {
                fanOn);
   }
 
+
   /////////////////////////
   /////  Acciones del menu
 
@@ -353,15 +318,15 @@ void loop(void) {
   }
 
   else if (screens[1]) {
-    MenuScreen(temperatureSP, humiditySP);
+    MenuScreen();
   }
 
   else if (screens[6]) {
-    Opcion1Screen(temperatureSP, humiditySP);
+    Opcion1Screen();
   }
 
   else if (screens[7]) {
-    Opcion2Screen(temperatureSP, humiditySP);
+    Opcion2Screen();
   }
   /*
     if(screens[8]){
@@ -370,7 +335,7 @@ void loop(void) {
       }
   */
   else if (screens[9]) {
-    Opcion4Screen(temperatureSP, humiditySP);
+    Opcion4Screen();
   }
   /*
     if(screens[10]){
@@ -379,60 +344,79 @@ void loop(void) {
       }
   */
   else if (screens[11]) {
-    Veranoz1Screen(temperatureSP, humiditySP);
+    Veranoz1Screen();
   }
 
   else if (screens[12]) {
-    Otonioz1Screen(temperatureSP, humiditySP);
+    Otonioz1Screen();
   }
 
   else if (screens[13]) {
-    Inviernoz1Screen(temperatureSP, humiditySP);
+    Inviernoz1Screen();
   }
 
   else if (screens[14]) {
-    Primaveraz1Screen(temperatureSP, humiditySP);
+    Primaveraz1Screen();
   }
 
   else if (screens[15]) {
-    Veranoz2Screen(temperatureSP, humiditySP);
+    Veranoz2Screen();
   }
 
   else if (screens[16]) {
-    Otonioz2Screen(temperatureSP, humiditySP);
+    Otonioz2Screen();
   }
 
   else if (screens[17]) {
-    Inviernoz2Screen(temperatureSP, humiditySP);
+    Inviernoz2Screen();
   }
 
   else if (screens[18]) {
-    Primaveraz2Screen(temperatureSP, humiditySP);
+    Primaveraz2Screen();
   }
 
   else if (screens[19]) {
-    Controlz1Screen(temperatureSP, humiditySP);
+    Controlz1Screen();
   }
 
   else if (screens[20]) {
-    Controlz2Screen(temperatureSP, humiditySP);
+    Controlz2Screen();
   }
 
   else if (screens[3]) {
-    AlarmasScreen(temperatureSP, humiditySP);
+    AlarmasScreen();
   }
 
   else if (screens[4]) {
-    WiFiScreen(temperatureSP, humiditySP);
+    WiFiScreen();
   }
 
   else if (screens[5]) {
-    IotScreen(temperatureSP, humiditySP);
+    IotScreen();
   }
 
   else if (screens[22] || screens[23]) {
     NumericKeyboardScreen(p);
   }
+
+  // no es necesario refrescar la pantalla si no cambio nada ni está siendo presionada
+  while(!hasTHChanged() && !(p.z > MINPRESSURE && p.z < MAXPRESSURE)){
+    p = ts.getPoint();
+  }
+
+
+  // necesito volver a tomar la posicion del cursor para que la pantalla tenga buena respuesta
+  p = ts.getPoint();
+  p.x = map(p.x, TS_MINX, TS_MAXX, tft.width(), 0);
+  p.y = map(p.y, TS_MINY, TS_MAXY, tft.height(), 0);
+  Serial.print("(");
+  Serial.print(p.x);
+  Serial.print(", ");
+  Serial.print(p.y);
+  Serial.print(", ");
+  Serial.print(p.z);
+  Serial.println(") ");
+
 
   //////////////////////////
   /////  Botones del menu
@@ -677,8 +661,8 @@ void loop(void) {
     screens[0] = false;
     initAllScreens();
   }
-}
 
+}
 
 // Print something in the mini status bar with either flashstring
 void status(const __FlashStringHelper *msg) {
@@ -712,4 +696,45 @@ void changeActiveScreenTo(uint8_t newActiveScreen) {
     else if (i != newActiveScreen)
       screens[i] = false;
   }
+}
+
+// se fija si cambio la h o la t; si cambio devuelve true
+bool hasTHChanged(){
+  //float h = dht.readHumidity();
+  //float t = dht.readTemperature();
+
+  float h = 50;
+  float t = 25;
+
+  float lastH = h;
+  float lastT = t;
+  //h = dht.readHumidity();
+  //t = dht.readTemperature();
+
+  h = 50;
+  t = 25;
+
+  if(h != lastH || t != lastT) return true;
+  else return false;
+}
+
+// se fija si la pantalla está siendo presionada, si está siendo presionada devuelte true y mappea las coordenadas
+bool isScreenPressed(){
+  TSPoint p = ts.getPoint();
+  if (p.z > MINPRESSURE && p.z < MAXPRESSURE){
+    p.x = map(p.x, TS_MINX, TS_MAXX, tft.width(), 0);
+    p.y = map(p.y, TS_MINY, TS_MAXY, tft.height(), 0);
+
+    Serial.print("(");
+    Serial.print(p.x);
+    Serial.print(", ");
+    Serial.print(p.y);
+    Serial.print(", ");
+    Serial.print(p.z);
+    Serial.println(") ");
+
+
+    return true;
+  }
+  else false;
 }

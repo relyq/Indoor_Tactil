@@ -118,7 +118,7 @@ void NumericKeyboardScreen(TSPoint p) {
         // temperatureSP,screens[2],screensInit[2]
       }
 
-      delay(100);  // UI debouncing
+      delay(250);  // UI debouncing
     }
   }
 }
@@ -158,16 +158,12 @@ void HomeScreen(String temperature, String humidity, String tempSP,
     tft.setTextColor(ILI9341_WHITE, BLACK);
     tft.print("Riego   ");
 
-    tft.drawCircle(180, 125, 10, GREEN);
     tft.fillCircle(180, 125, 10, GREEN);
 
-    tft.drawCircle(180, 150, 10, RED);
     tft.fillCircle(180, 150, 10, RED);
 
-    tft.drawCircle(215, 125, 10, GREEN);
     tft.fillCircle(215, 125, 10, GREEN);
 
-    tft.drawCircle(215, 150, 10, RED);
     tft.fillCircle(215, 150, 10, RED);
 
     tft.setCursor(10, 175);
@@ -188,34 +184,26 @@ void HomeScreen(String temperature, String humidity, String tempSP,
   }
 
   if (fOn) {
-    tft.drawCircle(215, 100, 10, GREEN);
     tft.fillCircle(215, 100, 10, GREEN);
   } else {
-    tft.drawCircle(215, 100, 10, RED);
     tft.fillCircle(215, 100, 10, RED);
   }
 
   if (hOn) {
-    tft.drawCircle(215, 75, 10, GREEN);
     tft.fillCircle(215, 75, 10, GREEN);
   } else {
-    tft.drawCircle(215, 75, 10, RED);
     tft.fillCircle(215, 75, 10, RED);
   }
 
   if (hOn) {
-    tft.drawCircle(180, 75, 10, GREEN);
     tft.fillCircle(180, 75, 10, GREEN);
   } else {
-    tft.drawCircle(180, 75, 10, RED);
     tft.fillCircle(180, 75, 10, RED);
   }
 
   if (fOn) {
-    tft.drawCircle(180, 100, 10, GREEN);
     tft.fillCircle(180, 100, 10, GREEN);
   } else {
-    tft.drawCircle(180, 100, 10, RED);
     tft.fillCircle(180, 100, 10, RED);
   }
 
@@ -229,11 +217,11 @@ void HomeScreen(String temperature, String humidity, String tempSP,
   tft.setTextColor(ILI9341_WHITE, BLACK);
   tft.print(humidity + " %");
 
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
 
 /////  Pantalla Menu  /////
-void MenuScreen(String temp, String hum) {
+void MenuScreen() {
   if (!screensInit[1]) {
     tft.fillScreen(BLACK);
     tft.setCursor(35, 10);
@@ -275,11 +263,11 @@ void MenuScreen(String temp, String hum) {
 
     screensInit[1] = true;
   }
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
 
 /////  Pantalla Opcion 1 - zona 1  /////
-void Opcion1Screen(String temp, String hum) {
+void Opcion1Screen() {
   if (!screensInit[6]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
@@ -337,11 +325,11 @@ void Opcion1Screen(String temp, String hum) {
 
     screensInit[6] = true;
   }
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
 
 /////  Pantalla Opcion 2 - zona 2  /////
-void Opcion2Screen(String temp, String hum) {
+void Opcion2Screen() {
   if (!screensInit[7]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
@@ -399,7 +387,7 @@ void Opcion2Screen(String temp, String hum) {
 
     screensInit[7] = true;
   }
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
 
 /*/////////////////////////////////////////////////////////////////////////////
@@ -440,7 +428,7 @@ BUTTON_TEXTSIZE); backMenuButton.drawButton();
 */
 
 /////  Pantalla Opcion 4 - opciones  //////
-void Opcion4Screen(String temp, String hum) {
+void Opcion4Screen() {
   if (!screensInit[9]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
@@ -481,7 +469,7 @@ void Opcion4Screen(String temp, String hum) {
 
     screensInit[9] = true;
   }
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
 
 /*
@@ -523,7 +511,7 @@ BUTTON_TEXTSIZE); backMenuButton.drawButton();
 */
 
 /////  Pantalla Verano Z1  /////
-void Veranoz1Screen(String temp, String hum) {
+void Veranoz1Screen() {
   if (!screensInit[11]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
@@ -541,11 +529,11 @@ void Veranoz1Screen(String temp, String hum) {
 
     screensInit[11] = true;
   }
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
 
 /////  Pantalla Otoño Z1  //////
-void Otonioz1Screen(String temp, String hum) {
+void Otonioz1Screen() {
   if (!screensInit[12]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
@@ -563,11 +551,11 @@ void Otonioz1Screen(String temp, String hum) {
 
     screensInit[12] = true;
   }
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
 
 /////  Pantalla Invierno Z1  ///
-void Inviernoz1Screen(String temp, String hum) {
+void Inviernoz1Screen() {
   if (!screensInit[13]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
@@ -585,11 +573,11 @@ void Inviernoz1Screen(String temp, String hum) {
 
     screensInit[13] = true;
   }
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
 
 /////  Pantalla Primavera Z1  ////
-void Primaveraz1Screen(String temp, String hum) {
+void Primaveraz1Screen() {
   if (!screensInit[14]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
@@ -607,11 +595,11 @@ void Primaveraz1Screen(String temp, String hum) {
 
     screensInit[14] = true;
   }
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
 
 /////  Pantalla Verano Z2  /////
-void Veranoz2Screen(String temp, String hum) {
+void Veranoz2Screen() {
   if (!screensInit[15]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
@@ -629,11 +617,11 @@ void Veranoz2Screen(String temp, String hum) {
 
     screensInit[15] = true;
   }
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
 
 /////  Pantalla Otoño Z2  /////
-void Otonioz2Screen(String temp, String hum) {
+void Otonioz2Screen() {
   if (!screensInit[16]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
@@ -651,11 +639,11 @@ void Otonioz2Screen(String temp, String hum) {
 
     screensInit[16] = true;
   }
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
 
 /////  Pantalla Invierno Z2  /////
-void Inviernoz2Screen(String temp, String hum) {
+void Inviernoz2Screen() {
   if (!screensInit[17]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
@@ -673,11 +661,11 @@ void Inviernoz2Screen(String temp, String hum) {
 
     screensInit[17] = true;
   }
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
 
 /////  Pantalla Primavera Z2  /////
-void Primaveraz2Screen(String temp, String hum) {
+void Primaveraz2Screen() {
   if (!screensInit[18]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
@@ -695,11 +683,11 @@ void Primaveraz2Screen(String temp, String hum) {
 
     screensInit[18] = true;
   }
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
 
 /////  Pantalla control Z1    /////
-void Controlz1Screen(String temp, String hum) {
+void Controlz1Screen() {
   if (!screensInit[19]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
@@ -717,11 +705,11 @@ void Controlz1Screen(String temp, String hum) {
 
     screensInit[19] = true;
   }
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
 
 /////  Pantalla control Z2    /////
-void Controlz2Screen(String temp, String hum) {
+void Controlz2Screen() {
   if (!screensInit[20]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
@@ -739,11 +727,11 @@ void Controlz2Screen(String temp, String hum) {
 
     screensInit[20] = true;
   }
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
 
 /////  Pantalla Alarmas       /////
-void AlarmasScreen(String temp, String hum) {
+void AlarmasScreen() {
   if (!screensInit[3]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
@@ -761,11 +749,11 @@ void AlarmasScreen(String temp, String hum) {
 
     screensInit[3] = true;
   }
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
 
 /////  Pantalla WiFi          /////
-void WiFiScreen(String temp, String hum) {
+void WiFiScreen() {
   if (!screensInit[4]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
@@ -783,11 +771,11 @@ void WiFiScreen(String temp, String hum) {
 
     screensInit[4] = true;
   }
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
 
 /////  Pantalla Iot           /////
-void IotScreen(String temp, String hum) {
+void IotScreen() {
   if (!screensInit[5]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
@@ -805,7 +793,7 @@ void IotScreen(String temp, String hum) {
 
     screensInit[5] = true;
   }
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
 
 /////  Pantalla Configuracion temp hum  /////
@@ -839,5 +827,5 @@ void SettingsScreen(String temp, String hum) {
   tft.setTextSize(TEXT_TSIZE);
   tft.print(hum);
 
-  delay(100);  // debouncing
+  delay(250);  // debouncing
 }
