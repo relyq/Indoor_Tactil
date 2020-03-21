@@ -1,5 +1,5 @@
 void NumericKeyboardScreen(TSPoint p) {
-  if (!numericScreenInit) {
+  if (!screensInit[21]) {
     tft.fillScreen(BLACK);
 
     // create buttons
@@ -18,7 +18,7 @@ void NumericKeyboardScreen(TSPoint p) {
 
     // create 'text field'
     tft.drawRect(TEXT_X, TEXT_Y, TEXT_W, TEXT_H, ILI9341_WHITE);
-    numericScreenInit = true;
+    screensInit[21] = true;
   }
 
   // go thru all the buttons, checking if they were pressed
@@ -75,14 +75,14 @@ void NumericKeyboardScreen(TSPoint p) {
         if (screens[22]) {
           // temperatureSP = textfield;
           screens[2] = true;
-          settingsScreenInit = false;
+          screensInit[2] = false;
           screens[22] = false;
         }
 
         if (screens[23]) {
           // temperatureSP = textfield;
           screens[2] = true;
-          settingsScreenInit = false;
+          screensInit[2] = false;
           screens[23] = false;
         }
 
@@ -98,14 +98,14 @@ void NumericKeyboardScreen(TSPoint p) {
         if (screens[22]) {
           temperatureSP = textfield;
           screens[2] = true;
-          settingsScreenInit = false;
+          screensInit[2] = false;
           screens[22] = false;
         }
 
         if (screens[23]) {
           humiditySP = textfield;
           screens[2] = true;
-          settingsScreenInit = false;
+          screensInit[2] = false;
           screens[23] = false;
         }
 
@@ -115,7 +115,7 @@ void NumericKeyboardScreen(TSPoint p) {
         textfield_i = 0;
 
         // fona.callPhone(textfield);
-        // temperatureSP,screens[2],settingsScreenInit
+        // temperatureSP,screens[2],screensInit[2]
       }
 
       delay(100);  // UI debouncing
@@ -123,11 +123,11 @@ void NumericKeyboardScreen(TSPoint p) {
   }
 }
 
-/////  Pantalla Principal  //
+/////  Pantalla Principal  /////
 
 void HomeScreen(String temperature, String humidity, String tempSP,
                 String humSP, bool hOn, bool fOn) {
-  if (!homeScreenInit) {
+  if (!screensInit[0]) {
     tft.fillScreen(BLACK);
 
     /////  Boton del Menu  ///////////
@@ -184,7 +184,7 @@ void HomeScreen(String temperature, String humidity, String tempSP,
     tft.setTextColor(ILI9341_BLUE);
     tft.print("(SP: " + humSP + "%)");
 
-    homeScreenInit = true;
+    screensInit[0] = true;
   }
 
   if (fOn) {
@@ -234,7 +234,7 @@ void HomeScreen(String temperature, String humidity, String tempSP,
 
 /////  Pantalla Menu  /////
 void MenuScreen(String temp, String hum) {
-  if (!menuScreenInit) {
+  if (!screensInit[1]) {
     tft.fillScreen(BLACK);
     tft.setCursor(35, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -273,14 +273,14 @@ void MenuScreen(String temp, String hum) {
     backHomeButton.drawButton();
     /////  Boton Salir del Menu  /////
 
-    menuScreenInit = true;
+    screensInit[1] = true;
   }
   delay(100);  // debouncing
 }
 
 /////  Pantalla Opcion 1 - zona 1  /////
 void Opcion1Screen(String temp, String hum) {
-  if (!opcion1ScreenInit) {
+  if (!screensInit[6]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -335,14 +335,14 @@ void Opcion1Screen(String temp, String hum) {
     backMenuButton.drawButton();
     /////  Boton Salir del Menu  /////
 
-    opcion1ScreenInit = true;
+    screensInit[6] = true;
   }
   delay(100);  // debouncing
 }
 
 /////  Pantalla Opcion 2 - zona 2  /////
 void Opcion2Screen(String temp, String hum) {
-  if (!opcion2ScreenInit) {
+  if (!screensInit[7]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -397,7 +397,7 @@ void Opcion2Screen(String temp, String hum) {
     backMenuButton.drawButton();
     /////  Boton Salir del Menu  /////
 
-    opcion2ScreenInit = true;
+    screensInit[7] = true;
   }
   delay(100);  // debouncing
 }
@@ -408,7 +408,7 @@ void Opcion2Screen(String temp, String hum) {
 /////////////////////////////////////////////////////////////////////////////
 
 void Opcion3Screen(String temp, String hum){
-  if(!opcion3ScreenInit){
+  if(!screensInit[8]){
     tft.fillScreen(BLACK);
     tft.setCursor(40, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -428,7 +428,7 @@ BUTTON_TEXTSIZE); backMenuButton.drawButton();
     /////  Boton Salir del Menu
 //////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-    opcion3ScreenInit = true;
+    screensInit[8] = true;
     }
 
   }
@@ -441,7 +441,7 @@ BUTTON_TEXTSIZE); backMenuButton.drawButton();
 
 /////  Pantalla Opcion 4 - opciones  //////
 void Opcion4Screen(String temp, String hum) {
-  if (!opcion4ScreenInit) {
+  if (!screensInit[9]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -479,7 +479,7 @@ void Opcion4Screen(String temp, String hum) {
     backMenuButton.drawButton();
     /////  Boton Salir del Menu  /////
 
-    opcion4ScreenInit = true;
+    screensInit[9] = true;
   }
   delay(100);  // debouncing
 }
@@ -491,7 +491,7 @@ void Opcion4Screen(String temp, String hum) {
 /////////////////////////////////////////////////////////////////////////////
 
 void Opcion5Screen(String temp, String hum){
-  if(!opcion5ScreenInit){
+  if(!screensInit[10]){
     tft.fillScreen(BLACK);
     tft.setCursor(40, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -511,7 +511,7 @@ BUTTON_TEXTSIZE); backMenuButton.drawButton();
     /////  Boton Salir del Menu
 //////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-    opcion5ScreenInit = true;
+    screensInit[10] = true;
     }
 
   }
@@ -524,7 +524,7 @@ BUTTON_TEXTSIZE); backMenuButton.drawButton();
 
 /////  Pantalla Verano Z1  /////
 void Veranoz1Screen(String temp, String hum) {
-  if (!veranoz1ScreenInit) {
+  if (!screensInit[11]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -539,14 +539,14 @@ void Veranoz1Screen(String temp, String hum) {
     backMenuButton.drawButton();
     /////  Boton Salir del Menu  /////
 
-    veranoz1ScreenInit = true;
+    screensInit[11] = true;
   }
   delay(100);  // debouncing
 }
 
 /////  Pantalla Otoño Z1  //////
 void Otonioz1Screen(String temp, String hum) {
-  if (!otonioz1ScreenInit) {
+  if (!screensInit[12]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -561,14 +561,14 @@ void Otonioz1Screen(String temp, String hum) {
     backMenuButton.drawButton();
     /////  Boton Salir del Menu  /////
 
-    otonioz1ScreenInit = true;
+    screensInit[12] = true;
   }
   delay(100);  // debouncing
 }
 
 /////  Pantalla Invierno Z1  ///
 void Inviernoz1Screen(String temp, String hum) {
-  if (!inviernoz1ScreenInit) {
+  if (!screensInit[13]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -583,14 +583,14 @@ void Inviernoz1Screen(String temp, String hum) {
     backMenuButton.drawButton();
     /////  Boton Salir del Menu  /////
 
-    inviernoz1ScreenInit = true;
+    screensInit[13] = true;
   }
   delay(100);  // debouncing
 }
 
 /////  Pantalla Primavera Z1  ////
 void Primaveraz1Screen(String temp, String hum) {
-  if (!primaveraz1ScreenInit) {
+  if (!screensInit[14]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -605,14 +605,14 @@ void Primaveraz1Screen(String temp, String hum) {
     backMenuButton.drawButton();
     /////  Boton Salir del Menu  /////
 
-    primaveraz1ScreenInit = true;
+    screensInit[14] = true;
   }
   delay(100);  // debouncing
 }
 
 /////  Pantalla Verano Z2  /////
 void Veranoz2Screen(String temp, String hum) {
-  if (!veranoz2ScreenInit) {
+  if (!screensInit[15]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -627,14 +627,14 @@ void Veranoz2Screen(String temp, String hum) {
     backMenuButton.drawButton();
     /////  Boton Salir del Menu  /////
 
-    veranoz2ScreenInit = true;
+    screensInit[15] = true;
   }
   delay(100);  // debouncing
 }
 
 /////  Pantalla Otoño Z2  /////
 void Otonioz2Screen(String temp, String hum) {
-  if (!otonioz2ScreenInit) {
+  if (!screensInit[16]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -649,14 +649,14 @@ void Otonioz2Screen(String temp, String hum) {
     backMenuButton.drawButton();
     /////  Boton Salir del Menu  /////
 
-    otonioz2ScreenInit = true;
+    screensInit[16] = true;
   }
   delay(100);  // debouncing
 }
 
 /////  Pantalla Invierno Z2  /////
 void Inviernoz2Screen(String temp, String hum) {
-  if (!inviernoz2ScreenInit) {
+  if (!screensInit[17]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -671,14 +671,14 @@ void Inviernoz2Screen(String temp, String hum) {
     backMenuButton.drawButton();
     /////  Boton Salir del Menu  /////
 
-    inviernoz2ScreenInit = true;
+    screensInit[17] = true;
   }
   delay(100);  // debouncing
 }
 
 /////  Pantalla Primavera Z2  /////
 void Primaveraz2Screen(String temp, String hum) {
-  if (!primaveraz2ScreenInit) {
+  if (!screensInit[18]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -693,14 +693,14 @@ void Primaveraz2Screen(String temp, String hum) {
     backMenuButton.drawButton();
     /////  Boton Salir del Menu  /////
 
-    primaveraz2ScreenInit = true;
+    screensInit[18] = true;
   }
   delay(100);  // debouncing
 }
 
 /////  Pantalla control Z1    /////
 void Controlz1Screen(String temp, String hum) {
-  if (!controlz1ScreenInit) {
+  if (!screensInit[19]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -715,14 +715,14 @@ void Controlz1Screen(String temp, String hum) {
     backMenuButton.drawButton();
     /////  Boton Salir del Menu  /////
 
-    controlz1ScreenInit = true;
+    screensInit[19] = true;
   }
   delay(100);  // debouncing
 }
 
 /////  Pantalla control Z2    /////
 void Controlz2Screen(String temp, String hum) {
-  if (!controlz2ScreenInit) {
+  if (!screensInit[20]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -737,14 +737,14 @@ void Controlz2Screen(String temp, String hum) {
     backMenuButton.drawButton();
     /////  Boton Salir del Menu  /////
 
-    controlz2ScreenInit = true;
+    screensInit[20] = true;
   }
   delay(100);  // debouncing
 }
 
 /////  Pantalla Alarmas       /////
 void AlarmasScreen(String temp, String hum) {
-  if (!alarmasScreenInit) {
+  if (!screensInit[3]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -759,14 +759,14 @@ void AlarmasScreen(String temp, String hum) {
     backMenuButton.drawButton();
     /////  Boton Salir del Menu  /////
 
-    alarmasScreenInit = true;
+    screensInit[3] = true;
   }
   delay(100);  // debouncing
 }
 
 /////  Pantalla WiFi          /////
 void WiFiScreen(String temp, String hum) {
-  if (!wifiScreenInit) {
+  if (!screensInit[4]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -781,14 +781,14 @@ void WiFiScreen(String temp, String hum) {
     backMenuButton.drawButton();
     /////  Boton Salir del Menu  /////
 
-    wifiScreenInit = true;
+    screensInit[4] = true;
   }
   delay(100);  // debouncing
 }
 
 /////  Pantalla Iot           /////
 void IotScreen(String temp, String hum) {
-  if (!iotScreenInit) {
+  if (!screensInit[5]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -803,14 +803,14 @@ void IotScreen(String temp, String hum) {
     backMenuButton.drawButton();
     /////  Boton Salir del Menu  /////
 
-    iotScreenInit = true;
+    screensInit[5] = true;
   }
   delay(100);  // debouncing
 }
 
 /////  Pantalla Configuracion temp hum  /////
 void SettingsScreen(String temp, String hum) {
-  if (!settingsScreenInit) {
+  if (!screensInit[2]) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 10);
     tft.setTextColor(ILI9341_WHITE);
@@ -827,7 +827,7 @@ void SettingsScreen(String temp, String hum) {
                               ILI9341_WHITE, "Salir", BUTTON_TEXTSIZE);
     backHomeButton.drawButton();
 
-    settingsScreenInit = true;
+    screensInit[2] = true;
   }
   tft.setCursor(TEXT_X + 2, 40);
   tft.setTextColor(TEXT_TCOLOR, ILI9341_BLACK);
