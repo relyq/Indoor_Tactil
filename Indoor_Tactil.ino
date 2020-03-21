@@ -256,13 +256,28 @@ void setup() {
   }
 
   tft.begin(identifier);
+
+  float h = dht.readHumidity();
+  // Read temperature as Celsius (the default)
+  float t = dht.readTemperature();
+  if (t < temperatureSP.toFloat()) {
+    heaterOn = true;
+  } else {
+    heaterOn = false;
+  }
+
+  if (h > humiditySP.toFloat()) {
+    fanOn = true;
+  } else {
+    fanOn = false;
+  }
+  HomeScreen(String(t), String(h), temperatureSP, humiditySP, heaterOn, fanOn);
 }
 
 #define MINPRESSURE 10
 #define MAXPRESSURE 1000
 
 void loop() {
-
   Serial.println("void loop()");
 
   TSPoint p = ts.getPoint();
@@ -273,142 +288,14 @@ void loop() {
   pinMode(YP, OUTPUT);
   // pinMode(YM, OUTPUT);
 
+  // si la pantalla está siendo presionada se mappea el resultado de getPoint()
+  // a un punto valido del cursor en la pantalla
 
-  // si la pantalla está siendo presionada se mappea el resultado de getPoint() a un punto valido del cursor en la pantalla
-  if (p.z > MINPRESSURE && p.z < MAXPRESSURE) {
-    // scale from 0->1023 to tft.width
-    p.x = map(p.x, TS_MINX, TS_MAXX, tft.width(), 0);
-    p.y = map(p.y, TS_MINY, TS_MAXY, tft.height(), 0);
-
-    // if the screen is being touched show cursor position
-    Serial.print("(");
-    Serial.print(p.x);
-    Serial.print(", ");
-    Serial.print(p.y);
-    Serial.print(", ");
-    Serial.print(p.z);
-    Serial.println(") ");
-  }
-
-  if (screens[0]) {
-    float h = dht.readHumidity();
-    // Read temperature as Celsius (the default)
-    float t = dht.readTemperature();
-    if (t < temperatureSP.toFloat()) {
-      heaterOn = true;
-    } else {
-      heaterOn = false;
-    }
-
-    if (h > humiditySP.toFloat()) {
-      fanOn = true;
-    } else {
-      fanOn = false;
-    }
-    HomeScreen(String(t), String(h), temperatureSP, humiditySP, heaterOn,
-               fanOn);
-  }
-
-
-  /////////////////////////
-  /////  Acciones del menu
-
-  if (screens[2]) {
-    SettingsScreen(temperatureSP, humiditySP);
-  }
-
-  else if (screens[1]) {
-    MenuScreen();
-  }
-
-  else if (screens[6]) {
-    Opcion1Screen();
-  }
-
-  else if (screens[7]) {
-    Opcion2Screen();
-  }
-  /*
-    if(screens[8]){
-      //initAllScreens();
-      Opcion3Screen(temperatureSP, humiditySP);
-      }
-  */
-  else if (screens[9]) {
-    Opcion4Screen();
-  }
-  /*
-    if(screens[10]){
-      //initAllScreens();
-      Opcion5Screen(temperatureSP, humiditySP);
-      }
-  */
-  else if (screens[11]) {
-    Veranoz1Screen();
-  }
-
-  else if (screens[12]) {
-    Otonioz1Screen();
-  }
-
-  else if (screens[13]) {
-    Inviernoz1Screen();
-  }
-
-  else if (screens[14]) {
-    Primaveraz1Screen();
-  }
-
-  else if (screens[15]) {
-    Veranoz2Screen();
-  }
-
-  else if (screens[16]) {
-    Otonioz2Screen();
-  }
-
-  else if (screens[17]) {
-    Inviernoz2Screen();
-  }
-
-  else if (screens[18]) {
-    Primaveraz2Screen();
-  }
-
-  else if (screens[19]) {
-    Controlz1Screen();
-  }
-
-  else if (screens[20]) {
-    Controlz2Screen();
-  }
-
-  else if (screens[3]) {
-    AlarmasScreen();
-  }
-
-  else if (screens[4]) {
-    WiFiScreen();
-  }
-
-  else if (screens[5]) {
-    IotScreen();
-  }
-
-  else if (screens[22] || screens[23]) {
-    NumericKeyboardScreen(p);
-  }
-
-  // no es necesario refrescar la pantalla si no cambio nada ni está siendo presionada
-  while(!hasTHChanged() && !(p.z > MINPRESSURE && p.z < MAXPRESSURE)){
-    p = ts.getPoint();
-  }
-
-
-  // necesito volver a tomar la posicion del cursor para que la pantalla tenga buena respuesta
-  p = ts.getPoint();
+  // scale from 0->1023 to tft.width
   p.x = map(p.x, TS_MINX, TS_MAXX, tft.width(), 0);
   p.y = map(p.y, TS_MINY, TS_MAXY, tft.height(), 0);
+
+  // if the screen is being touched show cursor position
   Serial.print("(");
   Serial.print(p.x);
   Serial.print(", ");
@@ -417,251 +304,393 @@ void loop() {
   Serial.print(p.z);
   Serial.println(") ");
 
+  /////////////////////////
+  /////  Acciones del menu
+
+  if (screens[2]) {
+    SettingsScreen(temperatureSP, humiditySP);
+  }
+
+  else if (screens[22] || screens[23]) {
+    NumericKeyboardScreen(p);
+  }
 
   //////////////////////////
   /////  Botones del menu
 
-  // home screen
-  if (screens[0] && p.x > 10 && p.x < 230 && p.y > 30 && p.y < 70) {
-    Serial.println("Configuracion ON");
-    changeActiveScreenTo(0x01);
-    initAllScreens();
+  // screen 0 - home screen
+  if (screens[0]) {
+    if (p.x > 10 && p.x < 230 && p.y > 30 && p.y < 70) {
+      Serial.println("menu");
+      changeActiveScreenTo(0x01);
+      initAllScreens();
+      MenuScreen();
+    }
   }
 
-  // Opcion 1 Button - zona 1
-  else if (screens[1] && p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
-    Serial.println("Opcion 1 ON");
-    changeActiveScreenTo(0x06);
-    initAllScreens();
+  // screen 1 - menu
+  else if (screens[1]) {
+    // volver a home
+    if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("BackHome ON");
+      changeActiveScreenTo(0x00);
+      initAllScreens();
+      float h = dht.readHumidity();
+      // Read temperature as Celsius (the default)
+      float t = dht.readTemperature();
+      if (t < temperatureSP.toFloat()) {
+        heaterOn = true;
+      } else {
+        heaterOn = false;
+      }
+
+      if (h > humiditySP.toFloat()) {
+        fanOn = true;
+      } else {
+        fanOn = false;
+      }
+      HomeScreen(String(t), String(h), temperatureSP, humiditySP, heaterOn,
+                 fanOn);
+    }
+    // Opcion 1 Button - zona 1
+    else if (p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
+      Serial.println("Opcion 1");
+      changeActiveScreenTo(0x06);
+      initAllScreens();
+      Opcion1Screen();
+    }
+    // Opcion 2 Button - zona 2
+    else if (p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
+      Serial.println("Opcion 2");
+      changeActiveScreenTo(0x07);
+      initAllScreens();
+      Opcion2Screen();
+    }
+    // Opcion 4 Button - opciones
+    else if (p.x > 10 && p.x < 230 && p.y > 190 && p.y < 230) {
+      Serial.println("Opcion 4");
+      changeActiveScreenTo(0x09);
+      initAllScreens();
+      Opcion4Screen();
+    }
   }
 
-  // Opcion 2 Button - zona 2
-  else if (screens[1] && p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
-    Serial.println("Opcion 2 ON");
-    changeActiveScreenTo(0x07);
-    initAllScreens();
-  }
-
-  // Opcion 3 Button
-  /*if(screens[1] && p.x>10 && p.x<230 && p.y>145 && p.y<185){
-      Serial.println("Opcion 3 ON");
-      screens[11] = false;
-      screens[12] = false;
-      screens[13] = false;
-      screens[14] = false;
-      screens[15] = false;
-      screens[16] = false;
-      screens[17] = false;
-      screens[18] = false;
-      screens[19] = false;
-      screens[20] = false;
-      screens[6] = false;
-      screens[7] = false;
-      screens[8] = true;
-      screens[9] = false;
-      screens[10] = false;
-      screens[3] = false;
-      screens[4] = false;
-      screens[5] = false;
-      screens[1] = false;
-      screens[22] = false;
+  // screen 2 - settings
+  else if (screens[2]) {
+    // Temperature TextBox
+    if (p.x > 10 && p.x < 230 && p.y > 40 && p.y < 80) {
+      Serial.println("boton temp");
+      screens[22] = true;
+      screens[23] = false;
       screens[2] = false;
-      screens[21] = false;
       screens[0] = false;
       initAllScreens();
-  }*/
-
-  // Opcion 4 Button - opciones
-  else if (screens[1] && p.x > 10 && p.x < 230 && p.y > 190 && p.y < 230) {
-    Serial.println("Opcion 4 ON");
-    changeActiveScreenTo(0x09);
-    initAllScreens();
+    }
+    // Humidity TextBox
+    else if (p.x > 10 && p.x < 230 && p.y > 130 && p.y < 170) {
+      Serial.println("boton hum");
+      screens[22] = false;
+      screens[23] = true;
+      screens[2] = false;
+      screens[0] = false;
+      initAllScreens();
+    }
   }
 
-  // Opcion 5 Button
-
-  /*if(screens[1] && p.x>10 && p.x<230 && p.y>235 && p.y<275){
-    Serial.println("Opcion 5 ON");
-    screens[11] = false;
-    screens[12] = false;
-    screens[13] = false;
-    screens[14] = false;
-    screens[15] = false;
-    screens[16] = false;
-    screens[17] = false;
-    screens[18] = false;
-    screens[19] = false;
-    screens[20] = false;
-    screens[6] = false;
-    screens[7] = false;
-    screens[8] = false;
-    screens[9] = false;
-    screens[10] = true;
-    screens[3] = false;
-    screens[4] = false;
-    screens[5] = false;
-    screens[1] = false;
-    screens[22] = false;
-    screens[2] = false;
-    screens[21] = false;
-    screens[0] = false;
-    initAllScreens();
-  }*/
-
-  // verano Z1 Button
-
-  else if (screens[6] && p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
-    Serial.println("verano Z1 ON");
-    changeActiveScreenTo(0x0b);
-    initAllScreens();
+  // screen 3
+  else if (screens[3]) {
+    // back
+    if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("back opciones");
+      changeActiveScreenTo(0x09);
+      initAllScreens();
+      Opcion4Screen();
+    }
   }
 
-  // Otoño Z1 Button
-  else if (screens[6] && p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
-    Serial.println("Otonio Z1 ON");
-    changeActiveScreenTo(0x0c);
-    initAllScreens();
+  // screen 4
+  else if (screens[4]) {
+    // back
+    if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("back opciones");
+      changeActiveScreenTo(0x09);
+      initAllScreens();
+      Opcion4Screen();
+    }
   }
 
-  // Invierno Z1 Button
-  else if (screens[6] && p.x > 10 && p.x < 230 && p.y > 145 && p.y < 185) {
-    Serial.println("Invierno Z1 ON");
-    changeActiveScreenTo(0x0d);
-    initAllScreens();
+  // screen 5
+  else if (screens[5]) {
+    // back
+    if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("back opciones");
+      changeActiveScreenTo(0x09);
+      initAllScreens();
+      Opcion4Screen();
+    }
   }
 
-  // Primavera Z1 Button
-  else if (screens[6] && p.x > 10 && p.x < 230 && p.y > 190 && p.y < 230) {
-    Serial.println("Primavera Z1 ON");
-    changeActiveScreenTo(0x0e);
-    initAllScreens();
+  // screen 6 - z1
+  else if (screens[6]) {
+    // verano Z1 Button
+    if (p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
+      Serial.println("verano Z1");
+      changeActiveScreenTo(0x0b);
+      initAllScreens();
+      Veranoz1Screen();
+    }
+    // Otoño Z1 Button
+    else if (p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
+      Serial.println("Otonio Z1 ON");
+      changeActiveScreenTo(0x0c);
+      initAllScreens();
+      Otonioz1Screen();
+    }
+    // Invierno Z1 Button
+    else if (p.x > 10 && p.x < 230 && p.y > 145 && p.y < 185) {
+      Serial.println("Invierno Z1 ON");
+      changeActiveScreenTo(0x0d);
+      initAllScreens();
+      Inviernoz1Screen();
+    }
+    // Primavera Z1 Button
+    else if (p.x > 10 && p.x < 230 && p.y > 190 && p.y < 230) {
+      Serial.println("Primavera Z1 ON");
+      changeActiveScreenTo(0x0e);
+      initAllScreens();
+      Primaveraz1Screen();
+    }
+    // Control Z1 Button
+    else if (p.x > 10 && p.x < 230 && p.y > 235 && p.y < 275) {
+      Serial.println("Control Z1 ON");
+      changeActiveScreenTo(0x13);
+      initAllScreens();
+      Controlz1Screen();
+    }
+    // back
+    else if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("BackMenu ON");
+      changeActiveScreenTo(0x01);
+      initAllScreens();
+      MenuScreen();
+    }
   }
 
-  // Verano Z2 Button
-  else if (screens[7] && p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
-    Serial.println("Verano Z2 ON");
-    changeActiveScreenTo(0x0f);
-    initAllScreens();
+  // screen 7 - z2
+  else if (screens[7]) {
+    // Verano Z2 Button
+    if (p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
+      Serial.println("Verano Z2 ON");
+      changeActiveScreenTo(0x0f);
+      initAllScreens();
+      Veranoz2Screen();
+    }
+    // Otoño Z2 Button
+    else if (p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
+      Serial.println("Otonio Z2 ON");
+      changeActiveScreenTo(0x10);
+      initAllScreens();
+      Otonioz2Screen();
+    }
+    // Invierno Z2 Button
+    else if (p.x > 10 && p.x < 230 && p.y > 145 && p.y < 185) {
+      Serial.println("Invierno Z2 ON");
+      changeActiveScreenTo(0x11);
+      initAllScreens();
+      Inviernoz2Screen();
+    }
+    // Primavera Z2 Button
+    else if (p.x > 10 && p.x < 230 && p.y > 190 && p.y < 230) {
+      Serial.println("Primavera Z2 ON");
+      changeActiveScreenTo(0x12);
+      initAllScreens();
+      Primaveraz2Screen();
+    }
+    // Control Z2 Button
+    else if (p.x > 10 && p.x < 230 && p.y > 235 && p.y < 275) {
+      Serial.println("Control Z2 ON");
+      changeActiveScreenTo(0x14);
+      initAllScreens();
+      Controlz2Screen();
+    }
+    // back
+    else if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("BackMenu ON");
+      changeActiveScreenTo(0x01);
+      initAllScreens();
+      MenuScreen();
+    }
   }
 
-  // Otoño Z2 Button
-  else if (screens[7] && p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
-    Serial.println("Otonio Z2 ON");
-    changeActiveScreenTo(0x10);
-    initAllScreens();
+  // screen 8
+  else if (screens[8]) {
+    // back
+    if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("BackMenu ON");
+      changeActiveScreenTo(0x01);
+      initAllScreens();
+      MenuScreen();
+    }
   }
 
-  // Invierno Z2 Button
-  else if (screens[7] && p.x > 10 && p.x < 230 && p.y > 145 && p.y < 185) {
-    Serial.println("Invierno Z2 ON");
-    changeActiveScreenTo(0x11);
-    initAllScreens();
+  // screen 9 - opciones
+  else if (screens[9]) {
+    // Alarmas Button
+    if (p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
+      Serial.println("Alarmas ON");
+      changeActiveScreenTo(0x03);
+      initAllScreens();
+      AlarmasScreen();
+    }
+    // WiFi Button
+    else if (p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
+      Serial.println("WiFi ON");
+      changeActiveScreenTo(0x04);
+      initAllScreens();
+      WiFiScreen();
+    }
+    // Iot Button
+    else if (p.x > 10 && p.x < 230 && p.y > 145 && p.y < 185) {
+      Serial.println("Iot ON");
+      changeActiveScreenTo(0x05);
+      initAllScreens();
+      IotScreen();
+    }
+    // back
+    else if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("BackMenu ON");
+      changeActiveScreenTo(0x01);
+      initAllScreens();
+      MenuScreen();
+    }
   }
 
-  // Primavera Z2 Button
-  else if (screens[7] && p.x > 10 && p.x < 230 && p.y > 190 && p.y < 230) {
-    Serial.println("Primavera Z2 ON");
-    changeActiveScreenTo(0x12);
-    initAllScreens();
+  // screen 10
+  else if (screens[10]) {
+    // back
+    if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("BackMenu ON");
+      changeActiveScreenTo(0x01);
+      initAllScreens();
+      MenuScreen();
+    }
   }
 
-  // Control Z1 Button
-  else if (screens[6] && p.x > 10 && p.x < 230 && p.y > 235 && p.y < 275) {
-    Serial.println("Control Z1 ON");
-    changeActiveScreenTo(0x13);
-    initAllScreens();
+  // screen 11
+  else if (screens[11]) {
+    // back
+    if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("BackOpcion1 ON");
+      changeActiveScreenTo(0x06);
+      initAllScreens();
+      Opcion1Screen();
+    }
   }
 
-  // Control Z2 Button
-  else if (screens[7] && p.x > 10 && p.x < 230 && p.y > 235 && p.y < 275) {
-    Serial.println("Control Z2 ON");
-    changeActiveScreenTo(0x14);
-    initAllScreens();
+  // screen 12
+  else if (screens[12]) {
+    // back
+    if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("BackOpcion1 ON");
+      changeActiveScreenTo(0x06);
+      initAllScreens();
+      Opcion1Screen();
+    }
   }
 
-  // Alarmas Button
-  else if (screens[9] && p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
-    Serial.println("Alarmas ON");
-    changeActiveScreenTo(0x03);
-    initAllScreens();
+  // screen 13
+  else if (screens[13]) {
+    // back
+    if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("BackOpcion1 ON");
+      changeActiveScreenTo(0x06);
+      initAllScreens();
+      Opcion1Screen();
+    }
   }
 
-  // WiFi Button
-  else if (screens[9] && p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
-    Serial.println("WiFi ON");
-    changeActiveScreenTo(0x04);
-    initAllScreens();
+  // screen 14
+  else if (screens[14]) {
+    // back
+    if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("BackOpcion1 ON");
+      changeActiveScreenTo(0x06);
+      initAllScreens();
+      Opcion1Screen();
+    }
   }
 
-  // Iot Button
-  else if (screens[9] && p.x > 10 && p.x < 230 && p.y > 145 && p.y < 185) {
-    Serial.println("Iot ON");
-    changeActiveScreenTo(0x05);
-    initAllScreens();
+  // screen 15
+  else if (screens[15]) {
+    // volver a zona 2
+    if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("BackOpcion2 ON");
+      changeActiveScreenTo(0x07);
+      initAllScreens();
+      Opcion2Screen();
+    }
   }
 
-  // volver a home
-  else if (screens[1] && p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
-    Serial.println("BackHome ON");
-    changeActiveScreenTo(0x00);
-    initAllScreens();
+  // screen 16
+  else if (screens[16]) {
+    // volver a zona 2
+    if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("BackOpcion2 ON");
+      changeActiveScreenTo(0x07);
+      initAllScreens();
+      Opcion2Screen();
+    }
   }
 
-  // volver al menu principal
-  else if ((screens[6] || screens[7] || screens[8] || screens[9] ||
-            screens[10]) &&
-           p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
-    Serial.println("BackMenu ON");
-    changeActiveScreenTo(0x01);
-    initAllScreens();
+  // screen 17
+  else if (screens[17]) {
+    // volver a zona 2
+    if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("BackOpcion2 ON");
+      changeActiveScreenTo(0x07);
+      initAllScreens();
+      Opcion2Screen();
+    }
   }
 
-  // volver a opciones
-  else if ((screens[3] || screens[4] || screens[5]) && p.x > 10 && p.x < 230 &&
-           p.y > 300 && p.y < 340) {
-    Serial.println("back opciones");
-    changeActiveScreenTo(0x09);
-    initAllScreens();
+  // screen 18
+  else if (screens[18]) {
+    // volver a zona 2
+    if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("BackOpcion2 ON");
+      changeActiveScreenTo(0x07);
+      initAllScreens();
+      Opcion2Screen();
+    }
   }
 
-  // volver a zona 1
-  else if ((screens[11] || screens[12] || screens[13] || screens[14] ||
-            screens[19]) &&
-           p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
-    Serial.println("BackOpcion1 ON");
-    changeActiveScreenTo(0x06);
-    initAllScreens();
+  // screen 19
+  else if (screens[19]) {
+    // back
+    if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("BackOpcion1 ON");
+      changeActiveScreenTo(0x06);
+      initAllScreens();
+      Opcion1Screen();
+    }
   }
 
-  // volver a zona 2
-  else if ((screens[15] || screens[16] || screens[17] || screens[18] ||
-            screens[20]) &&
-           p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
-    Serial.println("BackOpcion2 ON");
-    changeActiveScreenTo(0x07);
-    initAllScreens();
+  // screen 20
+  else if(screens[20]){
+    // volver a zona 2
+    if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+      Serial.println("BackOpcion2 ON");
+      changeActiveScreenTo(0x07);
+      initAllScreens();
+      Opcion2Screen();
+    }
   }
 
-  // Temperature TextBox
-  else if (screens[2] && p.x > 10 && p.x < 230 && p.y > 40 && p.y < 80) {
-    // Serial.println("Home ON");
-    screens[22] = true;
-    screens[23] = false;
-    screens[2] = false;
-    screens[0] = false;
-    initAllScreens();
+  // no es necesario refrescar la pantalla si no cambió nada ni está siendo
+  // presionada
+  while (!hasTHChanged() && !(p.z > MINPRESSURE && p.z < MAXPRESSURE)) {
+    p = ts.getPoint();
   }
-
-  // Humidity TextBox
-  else if (screens[2] && p.x > 10 && p.x < 230 && p.y > 130 && p.y < 170) {
-    // Serial.println("Home ON");
-    screens[22] = false;
-    screens[23] = true;
-    screens[2] = false;
-    screens[0] = false;
-    initAllScreens();
-  }
-
 }
 
 // Print something in the mini status bar with either flashstring
@@ -699,29 +728,32 @@ void changeActiveScreenTo(uint8_t newActiveScreen) {
 }
 
 // se fija si cambio la h o la t; si cambio devuelve true
-bool hasTHChanged(){
-  //float h = dht.readHumidity();
-  //float t = dht.readTemperature();
+bool hasTHChanged() {
+  // float h = dht.readHumidity();
+  // float t = dht.readTemperature();
 
   float h = 50;
   float t = 25;
 
   float lastH = h;
   float lastT = t;
-  //h = dht.readHumidity();
-  //t = dht.readTemperature();
+  // h = dht.readHumidity();
+  // t = dht.readTemperature();
 
   h = 50;
   t = 25;
 
-  if(h != lastH || t != lastT) return true;
-  else return false;
+  if (h != lastH || t != lastT)
+    return true;
+  else
+    return false;
 }
 
-// se fija si la pantalla está siendo presionada, si está siendo presionada devuelte true y mappea las coordenadas
-bool isScreenPressed(){
+// se fija si la pantalla está siendo presionada, si está siendo presionada
+// devuelte true y mappea las coordenadas
+bool isScreenPressed() {
   TSPoint p = ts.getPoint();
-  if (p.z > MINPRESSURE && p.z < MAXPRESSURE){
+  if (p.z > MINPRESSURE && p.z < MAXPRESSURE) {
     p.x = map(p.x, TS_MINX, TS_MAXX, tft.width(), 0);
     p.y = map(p.y, TS_MINY, TS_MAXY, tft.height(), 0);
 
@@ -733,8 +765,7 @@ bool isScreenPressed(){
     Serial.print(p.z);
     Serial.println(") ");
 
-
     return true;
-  }
-  else false;
+  } else
+    false;
 }
