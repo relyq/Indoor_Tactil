@@ -118,7 +118,7 @@ void NumericKeyboardScreen(TSPoint p) {
         // temperatureSP,screens[2],settingsScreenInit
       }
 
-      delay(50);  // UI debouncing
+      delay(100);  // UI debouncing
     }
   }
 }
@@ -229,7 +229,7 @@ void HomeScreen(String temperature, String humidity, String tempSP,
   tft.setTextColor(ILI9341_WHITE, BLACK);
   tft.print(humidity + " %");
 
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
 
 /////  Pantalla Menu  /////
@@ -275,7 +275,7 @@ void MenuScreen(String temp, String hum) {
 
     menuScreenInit = true;
   }
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
 
 /////  Pantalla Opcion 1 - zona 1  /////
@@ -337,7 +337,7 @@ void Opcion1Screen(String temp, String hum) {
 
     opcion1ScreenInit = true;
   }
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
 
 /////  Pantalla Opcion 2 - zona 2  /////
@@ -399,7 +399,7 @@ void Opcion2Screen(String temp, String hum) {
 
     opcion2ScreenInit = true;
   }
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
 
 /*/////////////////////////////////////////////////////////////////////////////
@@ -481,7 +481,7 @@ void Opcion4Screen(String temp, String hum) {
 
     opcion4ScreenInit = true;
   }
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
 
 /*
@@ -541,7 +541,7 @@ void Veranoz1Screen(String temp, String hum) {
 
     veranoz1ScreenInit = true;
   }
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
 
 /////  Pantalla Otoño Z1  //////
@@ -563,7 +563,7 @@ void Otonioz1Screen(String temp, String hum) {
 
     otonioz1ScreenInit = true;
   }
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
 
 /////  Pantalla Invierno Z1  ///
@@ -585,7 +585,7 @@ void Inviernoz1Screen(String temp, String hum) {
 
     inviernoz1ScreenInit = true;
   }
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
 
 /////  Pantalla Primavera Z1  ////
@@ -607,7 +607,7 @@ void Primaveraz1Screen(String temp, String hum) {
 
     primaveraz1ScreenInit = true;
   }
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
 
 /////  Pantalla Verano Z2  /////
@@ -629,7 +629,7 @@ void Veranoz2Screen(String temp, String hum) {
 
     veranoz2ScreenInit = true;
   }
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
 
 /////  Pantalla Otoño Z2  /////
@@ -651,7 +651,7 @@ void Otonioz2Screen(String temp, String hum) {
 
     otonioz2ScreenInit = true;
   }
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
 
 /////  Pantalla Invierno Z2  /////
@@ -673,7 +673,7 @@ void Inviernoz2Screen(String temp, String hum) {
 
     inviernoz2ScreenInit = true;
   }
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
 
 /////  Pantalla Primavera Z2  /////
@@ -695,7 +695,7 @@ void Primaveraz2Screen(String temp, String hum) {
 
     primaveraz2ScreenInit = true;
   }
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
 
 /////  Pantalla control Z1    /////
@@ -717,7 +717,7 @@ void Controlz1Screen(String temp, String hum) {
 
     controlz1ScreenInit = true;
   }
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
 
 /////  Pantalla control Z2    /////
@@ -739,7 +739,7 @@ void Controlz2Screen(String temp, String hum) {
 
     controlz2ScreenInit = true;
   }
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
 
 /////  Pantalla Alarmas       /////
@@ -761,7 +761,7 @@ void AlarmasScreen(String temp, String hum) {
 
     alarmasScreenInit = true;
   }
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
 
 /////  Pantalla WiFi          /////
@@ -783,7 +783,7 @@ void WiFiScreen(String temp, String hum) {
 
     wifiScreenInit = true;
   }
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
 
 /////  Pantalla Iot           /////
@@ -805,7 +805,7 @@ void IotScreen(String temp, String hum) {
 
     iotScreenInit = true;
   }
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
 
 /////  Pantalla Configuracion temp hum  /////
@@ -839,5 +839,5 @@ void SettingsScreen(String temp, String hum) {
   tft.setTextSize(TEXT_TSIZE);
   tft.print(hum);
 
-  delay(50);  // debouncing
+  delay(100);  // debouncing
 }
