@@ -154,14 +154,14 @@ const uint8_t screensTotal = 24;    // cantidad de pantallas
 bool screens[screensTotal] = {      // array donde se guarda la pantalla activa - entonces, screens[1] = true significa menuScreenOn = true
   1,                                // 0 - homeScreenOn
   0,                                // 1 - menuScreenOn
-  0,                                // 2 - settingsScreenOn
+  0,                                // 2 - settingsScreenOn - configuracion temp hum
   0,                                // 3 - alarmasScreenOn
   0,                                // 4 - wifiScreenOn
   0,                                // 5 - iotScreenOn
-  0,                                // 6 - opcion1ScreenOn
-  0,                                // 7 - opcion2ScreenOn
+  0,                                // 6 - opcion1ScreenOn - zona 1
+  0,                                // 7 - opcion2ScreenOn - zona 2
   0,                                // 8 - opcion3ScreenOn
-  0,                                // 9 - opcion4ScreenOn
+  0,                                // 9 - opcion4ScreenOn - opciones
   0,                                // 10 - opcion5ScreenOn
   0,                                // 11 - veranoz1ScreenOn
   0,                                // 12 - otonioz1ScreenOn
@@ -179,78 +179,28 @@ bool screens[screensTotal] = {      // array donde se guarda la pantalla activa 
 };
 
 
-
-
-////////////////////////////////////
-// screens[21] = false;
 bool numericScreenInit = false;
-////////////////////////////////////
-// screens[0] = true;                    // homeScreenOn
 bool homeScreenInit = false;
-////////////////////////////////////
-// screens[1] = false;                   // menuScreenOn
 bool menuScreenInit = false;
-////////////////////////////////////
-// screens[2] = false;
 bool settingsScreenInit = false;
-////////////////////////////////////
-// screens[6] = false;
 bool opcion1ScreenInit = false;
-////////////////////////////////////
-// screens[7] = false;
 bool opcion2ScreenInit = false;
-////////////////////////////////////
-// screens[8] = false;
 bool opcion3ScreenInit = false;
-////////////////////////////////////
-// screens[9] = false;
 bool opcion4ScreenInit = false;
-////////////////////////////////////
-// screens[10] = false;
 bool opcion5ScreenInit = false;
-////////////////////////////////////
-// screens[11] = false;
 bool veranoz1ScreenInit = false;
-////////////////////////////////////
-// screens[12] = false;
 bool otonioz1ScreenInit = false;
-////////////////////////////////////
-// screens[13] = false;
 bool inviernoz1ScreenInit = false;
-////////////////////////////////////
-// screens[14] = false;
 bool primaveraz1ScreenInit = false;
-////////////////////////////////////
-// screens[15] = false;
 bool veranoz2ScreenInit = false;
-////////////////////////////////////
-// screens[16] = false;
 bool otonioz2ScreenInit = false;
-////////////////////////////////////
-// screens[17] = false;
 bool inviernoz2ScreenInit = false;
-////////////////////////////////////
-// screens[18] = false;
 bool primaveraz2ScreenInit = false;
-////////////////////////////////////
-// screens[19] = false;
 bool controlz1ScreenInit = false;
-////////////////////////////////////
-// screens[20] = false;
 bool controlz2ScreenInit = false;
-////////////////////////////////////
-// screens[3] = false;
 bool alarmasScreenInit = false;
-////////////////////////////////////
-// screens[4] = false;
 bool wifiScreenInit = false;
-////////////////////////////////////
-// screens[5] = false;
 bool iotScreenInit = false;
-////////////////////////////////////
-bool numericScreenOnTemperature = false;
-bool numericScreenOnHumidity = false;
-////////////////////////////////////
 
 String serialTemp;
 String oldData = "";
@@ -311,61 +261,11 @@ void setup(void) {
   tft.begin(identifier);
 }
 
-// Imprime algo en la mini barra de estado con cualquiera de las cadenas de
-// flash
-void status(const __FlashStringHelper *msg) {
-  tft.fillRect(STATUS_X, STATUS_Y, 240, 8, ILI9341_BLACK);
-  tft.setCursor(STATUS_X, STATUS_Y);
-  tft.setTextColor(ILI9341_WHITE);
-  tft.setTextSize(1);
-  tft.print(msg);
-}
 
-// o caracteres
-void status(char *msg) {
-  tft.fillRect(STATUS_X, STATUS_Y, 240, 8, ILI9341_BLACK);
-  tft.setCursor(STATUS_X, STATUS_Y);
-  tft.setTextColor(ILI9341_WHITE);
-  tft.setTextSize(1);
-  tft.print(msg);
-}
 #define MINPRESSURE 10
 #define MAXPRESSURE 250
 
 
-////// screens
-
-
-
-void initAllScreens() {
-  veranoz1ScreenInit = false;
-  otonioz1ScreenInit = false;
-  inviernoz1ScreenInit = false;
-  primaveraz1ScreenInit = false;
-  veranoz2ScreenInit = false;
-  otonioz2ScreenInit = false;
-  inviernoz2ScreenInit = false;
-  primaveraz2ScreenInit = false;
-  controlz1ScreenInit = false;
-  controlz2ScreenInit = false;
-  opcion1ScreenInit = false;
-  opcion2ScreenInit = false;
-  opcion3ScreenInit = false;
-  opcion4ScreenInit = false;
-  opcion5ScreenInit = false;
-  alarmasScreenInit = false;
-  wifiScreenInit = false;
-  iotScreenInit = false;
-  numericScreenInit = false;
-  homeScreenInit = false;
-  menuScreenInit = false;
-  settingsScreenInit = false;
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////  Loop Principal
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void loop(void) {
   /*TSPoint p;
@@ -417,16 +317,7 @@ void loop(void) {
     Serial.print(", ");
     Serial.print(p.z);
     Serial.println(") ");
-
-    // delay(100);
-  } /*
-  else{
-   pt = 1
-   if (p.z == 0) {
-   pt = 0SS
-   }
   }
-  */
   /*
    if(Serial.available()){
     serialTemp = Serial.readString();
@@ -458,27 +349,25 @@ void loop(void) {
     // HomeScreen("14.5","20",temperatureSP,humiditySP);
   }
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////
   /////  Acciones del menu
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   if (screens[2]) {
     // initAllScreens();
     SettingsScreen(temperatureSP, humiditySP);
   }
 
-  if (screens[1]) {
+  else if (screens[1]) {
     // initAllScreens();
     MenuScreen(temperatureSP, humiditySP);
   }
 
-  if (screens[6]) {
+  else if (screens[6]) {
     // initAllScreens();
     Opcion1Screen(temperatureSP, humiditySP);
   }
 
-  if (screens[7]) {
+  else if (screens[7]) {
     // initAllScreens();
     Opcion2Screen(temperatureSP, humiditySP);
   }
@@ -488,7 +377,7 @@ void loop(void) {
       Opcion3Screen(temperatureSP, humiditySP);
       }
   */
-  if (screens[9]) {
+  else if (screens[9]) {
     // initAllScreens();
     Opcion4Screen(temperatureSP, humiditySP);
   }
@@ -498,98 +387,95 @@ void loop(void) {
       Opcion5Screen(temperatureSP, humiditySP);
       }
   */
-  if (screens[11]) {
+  else if (screens[11]) {
     // initAllScreens();
     Veranoz1Screen(temperatureSP, humiditySP);
   }
 
-  if (screens[12]) {
+  else if (screens[12]) {
     // initAllScreens();
     Otonioz1Screen(temperatureSP, humiditySP);
   }
 
-  if (screens[13]) {
+  else if (screens[13]) {
     // initAllScreens();
     Inviernoz1Screen(temperatureSP, humiditySP);
   }
 
-  if (screens[14]) {
+  else if (screens[14]) {
     // initAllScreens();
     Primaveraz1Screen(temperatureSP, humiditySP);
   }
 
-  if (screens[15]) {
+  else if (screens[15]) {
     // initAllScreens();
     Veranoz2Screen(temperatureSP, humiditySP);
   }
 
-  if (screens[16]) {
+  else if (screens[16]) {
     // initAllScreens();
     Otonioz2Screen(temperatureSP, humiditySP);
   }
 
-  if (screens[17]) {
+  else if (screens[17]) {
     // initAllScreens();
     Inviernoz2Screen(temperatureSP, humiditySP);
   }
 
-  if (screens[18]) {
+  else if (screens[18]) {
     // initAllScreens();
     Primaveraz2Screen(temperatureSP, humiditySP);
   }
 
-  if (screens[19]) {
+  else if (screens[19]) {
     // initAllScreens();
     Controlz1Screen(temperatureSP, humiditySP);
   }
 
-  if (screens[20]) {
+  else if (screens[20]) {
     // initAllScreens();
     Controlz2Screen(temperatureSP, humiditySP);
   }
 
-  if (screens[3]) {
+  else if (screens[3]) {
     // initAllScreens();
     AlarmasScreen(temperatureSP, humiditySP);
   }
 
-  if (screens[4]) {
+  else if (screens[4]) {
     // initAllScreens();
     WiFiScreen(temperatureSP, humiditySP);
   }
 
-  if (screens[5]) {
+  else if (screens[5]) {
     // initAllScreens();
     IotScreen(temperatureSP, humiditySP);
   }
 
-  // Serial.println("Temp. SP "+temperatureSP+"settingsScreen
-  // "+screens[2]);
-  if (screens[22] || screens[23]) {
+  // Serial.println("Temp. SP "+temperatureSP+"settingsScreen"+screens[2]);
+  else if (screens[22] || screens[23]) {
     NumericKeyboardScreen(p);
   }
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////
   /////  Botones del menu
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  // Configuracion Button
+  // home screen
   if (screens[0] && p.x > 10 && p.x < 230 && p.y > 30 && p.y < 70) {
     Serial.println("Configuracion ON");
     changeActiveScreenTo(0x01);
     initAllScreens();
   }
 
-  // Opcion 1 Button
-  if (screens[1] && p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
+  // Opcion 1 Button - zona 1
+  else if (screens[1] && p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
     Serial.println("Opcion 1 ON");
     changeActiveScreenTo(0x06);
     initAllScreens();
   }
 
-  // Opcion 2 Button
-  if (screens[1] && p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
+  // Opcion 2 Button - zona 2
+  else if (screens[1] && p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
     Serial.println("Opcion 2 ON");
     changeActiveScreenTo(0x07);
     initAllScreens();
@@ -624,8 +510,8 @@ void loop(void) {
       initAllScreens();
   }*/
 
-  // Opcion 4 Button
-  if (screens[1] && p.x > 10 && p.x < 230 && p.y > 190 && p.y < 230) {
+  // Opcion 4 Button - opciones
+  else if (screens[1] && p.x > 10 && p.x < 230 && p.y > 190 && p.y < 230) {
     Serial.println("Opcion 4 ON");
     changeActiveScreenTo(0x09);
     initAllScreens();
@@ -663,114 +549,122 @@ void loop(void) {
 
   // verano Z1 Button
 
-  if (screens[6] && p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
+  else if (screens[6] && p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
     Serial.println("verano Z1 ON");
     changeActiveScreenTo(0x0b);
     initAllScreens();
   }
 
   // Otoño Z1 Button
-  if (screens[6] && p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
+  else if (screens[6] && p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
     Serial.println("Otonio Z1 ON");
     changeActiveScreenTo(0x0c);
     initAllScreens();
   }
 
   // Invierno Z1 Button
-  if (screens[6] && p.x > 10 && p.x < 230 && p.y > 145 && p.y < 185) {
+  else if (screens[6] && p.x > 10 && p.x < 230 && p.y > 145 && p.y < 185) {
     Serial.println("Invierno Z1 ON");
     changeActiveScreenTo(0x0d);
     initAllScreens();
   }
 
   // Primavera Z1 Button
-  if (screens[6] && p.x > 10 && p.x < 230 && p.y > 190 && p.y < 230) {
+  else if (screens[6] && p.x > 10 && p.x < 230 && p.y > 190 && p.y < 230) {
     Serial.println("Primavera Z1 ON");
     changeActiveScreenTo(0x0e);
     initAllScreens();
   }
 
   // Verano Z2 Button
-  if (screens[7] && p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
+  else if (screens[7] && p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
     Serial.println("Verano Z2 ON");
     changeActiveScreenTo(0x0f);
     initAllScreens();
   }
 
   // Otoño Z2 Button
-  if (screens[7] && p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
+  else if (screens[7] && p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
     Serial.println("Otonio Z2 ON");
     changeActiveScreenTo(0x10);
     initAllScreens();
   }
 
   // Invierno Z2 Button
-  if (screens[7] && p.x > 10 && p.x < 230 && p.y > 145 && p.y < 185) {
+  else if (screens[7] && p.x > 10 && p.x < 230 && p.y > 145 && p.y < 185) {
     Serial.println("Invierno Z2 ON");
     changeActiveScreenTo(0x11);
     initAllScreens();
   }
 
   // Primavera Z2 Button
-  if (screens[7] && p.x > 10 && p.x < 230 && p.y > 190 && p.y < 230) {
+  else if (screens[7] && p.x > 10 && p.x < 230 && p.y > 190 && p.y < 230) {
     Serial.println("Primavera Z2 ON");
     changeActiveScreenTo(0x12);
     initAllScreens();
   }
 
   // Control Z1 Button
-  if (screens[6] && p.x > 10 && p.x < 230 && p.y > 235 && p.y < 275) {
+  else if (screens[6] && p.x > 10 && p.x < 230 && p.y > 235 && p.y < 275) {
     Serial.println("Control Z1 ON");
     changeActiveScreenTo(0x13);
     initAllScreens();
   }
 
   // Control Z2 Button
-  if (screens[7] && p.x > 10 && p.x < 230 && p.y > 235 && p.y < 275) {
+  else if (screens[7] && p.x > 10 && p.x < 230 && p.y > 235 && p.y < 275) {
     Serial.println("Control Z2 ON");
     changeActiveScreenTo(0x14);
     initAllScreens();
   }
 
   // Alarmas Button
-  if (screens[9] && p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
+  else if (screens[9] && p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
     Serial.println("Alarmas ON");
     changeActiveScreenTo(0x03);
     initAllScreens();
   }
 
   // WiFi Button
-  if (screens[9] && p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
+  else if (screens[9] && p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
     Serial.println("WiFi ON");
     changeActiveScreenTo(0x04);
     initAllScreens();
   }
 
   // Iot Button
-  if (screens[9] && p.x > 10 && p.x < 230 && p.y > 145 && p.y < 185) {
+  else if (screens[9] && p.x > 10 && p.x < 230 && p.y > 145 && p.y < 185) {
     Serial.println("Iot ON");
     changeActiveScreenTo(0x05);
     initAllScreens();
   }
 
-  // BackHome Button
-  if (screens[1] && p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+  // volver a home
+  else if (screens[1] && p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
     Serial.println("BackHome ON");
     changeActiveScreenTo(0x00);
     initAllScreens();
   }
 
-  // BackMenu Button
-  if ((screens[6] || screens[7] || screens[8] ||
-       screens[9] || screens[10] || screens[3] || wifiScreenInit || iotScreenInit) &&
+  // volver al menu principal
+  else if ((screens[6] || screens[7] || screens[8] ||
+       screens[9] || screens[10]) &&
       p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
     Serial.println("BackMenu ON");
     changeActiveScreenTo(0x01);
     initAllScreens();
   }
 
-  // BackOpcion1 Button
-  if ((screens[11] || screens[12] || screens[13] ||
+  // volver a opciones
+  else if ((screens[3] || screens[4] || screens[5]) &&
+      p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
+    Serial.println("back opciones");
+    changeActiveScreenTo(0x09);
+    initAllScreens();
+  }
+
+  // volver a zona 1
+  else if ((screens[11] || screens[12] || screens[13] ||
        screens[14] || screens[19]) &&
       p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
     Serial.println("BackOpcion1 ON");
@@ -778,8 +672,8 @@ void loop(void) {
     initAllScreens();
   }
 
-  // BackOpcion2 Button
-  if ((screens[15] || screens[16] || screens[17] ||
+  // volver a zona 2
+  else if ((screens[15] || screens[16] || screens[17] ||
        screens[18] || screens[20]) &&
       p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
     Serial.println("BackOpcion2 ON");
@@ -788,7 +682,7 @@ void loop(void) {
   }
 
   // Temperature TextBox
-  if (screens[2] && p.x > 10 && p.x < 230 && p.y > 40 && p.y < 80) {
+  else if (screens[2] && p.x > 10 && p.x < 230 && p.y > 40 && p.y < 80) {
     // Serial.println("Home ON");
     screens[22] = true;
     screens[23] = false;
@@ -798,7 +692,7 @@ void loop(void) {
   }
 
   // Humidity TextBox
-  if (screens[2] && p.x > 10 && p.x < 230 && p.y > 130 && p.y < 170) {
+  else if (screens[2] && p.x > 10 && p.x < 230 && p.y > 130 && p.y < 170) {
     // Serial.println("Home ON");
     screens[22] = false;
     screens[23] = true;
@@ -808,14 +702,52 @@ void loop(void) {
   }
 
   // NumericKeyboardScreen(p);
-  // delay(300);
+  // delay(100);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////  Fin Loop Principal
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Imprime algo en la mini barra de estado con cualquiera de las cadenas de flash
+void status(const __FlashStringHelper *msg) {
+  tft.fillRect(STATUS_X, STATUS_Y, 240, 8, ILI9341_BLACK);
+  tft.setCursor(STATUS_X, STATUS_Y);
+  tft.setTextColor(ILI9341_WHITE);
+  tft.setTextSize(1);
+  tft.print(msg);
+}
+
+// o caracteres
+void status(char *msg) {
+  tft.fillRect(STATUS_X, STATUS_Y, 240, 8, ILI9341_BLACK);
+  tft.setCursor(STATUS_X, STATUS_Y);
+  tft.setTextColor(ILI9341_WHITE);
+  tft.setTextSize(1);
+  tft.print(msg);
+}
+
+void initAllScreens() {
+  veranoz1ScreenInit = false;
+  otonioz1ScreenInit = false;
+  inviernoz1ScreenInit = false;
+  primaveraz1ScreenInit = false;
+  veranoz2ScreenInit = false;
+  otonioz2ScreenInit = false;
+  inviernoz2ScreenInit = false;
+  primaveraz2ScreenInit = false;
+  controlz1ScreenInit = false;
+  controlz2ScreenInit = false;
+  opcion1ScreenInit = false;
+  opcion2ScreenInit = false;
+  opcion3ScreenInit = false;
+  opcion4ScreenInit = false;
+  opcion5ScreenInit = false;
+  alarmasScreenInit = false;
+  wifiScreenInit = false;
+  iotScreenInit = false;
+  numericScreenInit = false;
+  homeScreenInit = false;
+  menuScreenInit = false;
+  settingsScreenInit = false;
+}
 
 // cambia la pantalla activa
 void changeActiveScreenTo(uint8_t newActiveScreen){

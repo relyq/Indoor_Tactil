@@ -2,7 +2,7 @@ void NumericKeyboardScreen(TSPoint p) {
   if (!numericScreenInit) {
     tft.fillScreen(BLACK);
 
-    // crear botones
+    // create buttons
     for (uint8_t row = 0; row < 5; row++) {
       for (uint8_t col = 0; col < 3; col++) {
         buttons[col + row * 3].initButton(
@@ -16,12 +16,12 @@ void NumericKeyboardScreen(TSPoint p) {
       }
     }
 
-    // crear 'campo de texto'
+    // create 'text field'
     tft.drawRect(TEXT_X, TEXT_Y, TEXT_W, TEXT_H, ILI9341_WHITE);
     numericScreenInit = true;
   }
 
-  // Ir a través de todos los botones, comprobando si fueron presionados
+  // go thru all the buttons, checking if they were pressed
   for (uint8_t b = 0; b < 15; b++) {
     if (buttons[b].contains(p.x, p.y)) {
       // Serial.print("Pressing: "); Serial.println(b);
@@ -31,7 +31,7 @@ void NumericKeyboardScreen(TSPoint p) {
     }
   }
 
-  // Ahora podemos preguntar a los botones si su estado ha cambiado.
+  // now we can ask the buttons if their state has changed
   for (uint8_t b = 0; b < 15; b++) {
     if (buttons[b].justReleased()) {
       // Serial.print("Released: "); Serial.println(b);
@@ -118,7 +118,7 @@ void NumericKeyboardScreen(TSPoint p) {
         // temperatureSP,screens[2],settingsScreenInit
       }
 
-      delay(100);  // UI debouncing
+      delay(50);  // UI debouncing
     }
   }
 }
@@ -228,6 +228,8 @@ void HomeScreen(String temperature, String humidity, String tempSP,
   tft.setTextSize(5);
   tft.setTextColor(ILI9341_WHITE, BLACK);
   tft.print(humidity + " %");
+
+  delay(50);  // debouncing
 }
 
 /////  Pantalla Menu  /////
@@ -273,9 +275,10 @@ void MenuScreen(String temp, String hum) {
 
     menuScreenInit = true;
   }
+  delay(50);  // debouncing
 }
 
-/////  Pantalla Opcion 1  /////
+/////  Pantalla Opcion 1 - zona 1  /////
 void Opcion1Screen(String temp, String hum) {
   if (!opcion1ScreenInit) {
     tft.fillScreen(BLACK);
@@ -334,9 +337,10 @@ void Opcion1Screen(String temp, String hum) {
 
     opcion1ScreenInit = true;
   }
+  delay(50);  // debouncing
 }
 
-/////  Pantalla Opcion 2  /////
+/////  Pantalla Opcion 2 - zona 2  /////
 void Opcion2Screen(String temp, String hum) {
   if (!opcion2ScreenInit) {
     tft.fillScreen(BLACK);
@@ -395,6 +399,7 @@ void Opcion2Screen(String temp, String hum) {
 
     opcion2ScreenInit = true;
   }
+  delay(50);  // debouncing
 }
 
 /*/////////////////////////////////////////////////////////////////////////////
@@ -434,7 +439,7 @@ BUTTON_TEXTSIZE); backMenuButton.drawButton();
 /////////////////////////////////////////////////////////////////////////////
 */
 
-/////  Pantalla Opcion 4  //////
+/////  Pantalla Opcion 4 - opciones  //////
 void Opcion4Screen(String temp, String hum) {
   if (!opcion4ScreenInit) {
     tft.fillScreen(BLACK);
@@ -476,6 +481,7 @@ void Opcion4Screen(String temp, String hum) {
 
     opcion4ScreenInit = true;
   }
+  delay(50);  // debouncing
 }
 
 /*
@@ -535,6 +541,7 @@ void Veranoz1Screen(String temp, String hum) {
 
     veranoz1ScreenInit = true;
   }
+  delay(50);  // debouncing
 }
 
 /////  Pantalla Otoño Z1  //////
@@ -556,6 +563,7 @@ void Otonioz1Screen(String temp, String hum) {
 
     otonioz1ScreenInit = true;
   }
+  delay(50);  // debouncing
 }
 
 /////  Pantalla Invierno Z1  ///
@@ -577,6 +585,7 @@ void Inviernoz1Screen(String temp, String hum) {
 
     inviernoz1ScreenInit = true;
   }
+  delay(50);  // debouncing
 }
 
 /////  Pantalla Primavera Z1  ////
@@ -598,6 +607,7 @@ void Primaveraz1Screen(String temp, String hum) {
 
     primaveraz1ScreenInit = true;
   }
+  delay(50);  // debouncing
 }
 
 /////  Pantalla Verano Z2  /////
@@ -619,6 +629,7 @@ void Veranoz2Screen(String temp, String hum) {
 
     veranoz2ScreenInit = true;
   }
+  delay(50);  // debouncing
 }
 
 /////  Pantalla Otoño Z2  /////
@@ -640,6 +651,7 @@ void Otonioz2Screen(String temp, String hum) {
 
     otonioz2ScreenInit = true;
   }
+  delay(50);  // debouncing
 }
 
 /////  Pantalla Invierno Z2  /////
@@ -661,6 +673,7 @@ void Inviernoz2Screen(String temp, String hum) {
 
     inviernoz2ScreenInit = true;
   }
+  delay(50);  // debouncing
 }
 
 /////  Pantalla Primavera Z2  /////
@@ -682,6 +695,7 @@ void Primaveraz2Screen(String temp, String hum) {
 
     primaveraz2ScreenInit = true;
   }
+  delay(50);  // debouncing
 }
 
 /////  Pantalla control Z1    /////
@@ -703,6 +717,7 @@ void Controlz1Screen(String temp, String hum) {
 
     controlz1ScreenInit = true;
   }
+  delay(50);  // debouncing
 }
 
 /////  Pantalla control Z2    /////
@@ -724,6 +739,7 @@ void Controlz2Screen(String temp, String hum) {
 
     controlz2ScreenInit = true;
   }
+  delay(50);  // debouncing
 }
 
 /////  Pantalla Alarmas       /////
@@ -745,6 +761,7 @@ void AlarmasScreen(String temp, String hum) {
 
     alarmasScreenInit = true;
   }
+  delay(50);  // debouncing
 }
 
 /////  Pantalla WiFi          /////
@@ -766,9 +783,10 @@ void WiFiScreen(String temp, String hum) {
 
     wifiScreenInit = true;
   }
+  delay(50);  // debouncing
 }
 
-/////  Pantalla Iot           //
+/////  Pantalla Iot           /////
 void IotScreen(String temp, String hum) {
   if (!iotScreenInit) {
     tft.fillScreen(BLACK);
@@ -787,9 +805,10 @@ void IotScreen(String temp, String hum) {
 
     iotScreenInit = true;
   }
+  delay(50);  // debouncing
 }
 
-/////  Pantalla Configuracion  /
+/////  Pantalla Configuracion temp hum  /////
 void SettingsScreen(String temp, String hum) {
   if (!settingsScreenInit) {
     tft.fillScreen(BLACK);
@@ -819,4 +838,6 @@ void SettingsScreen(String temp, String hum) {
   tft.setTextColor(TEXT_TCOLOR, ILI9341_BLACK);
   tft.setTextSize(TEXT_TSIZE);
   tft.print(hum);
+
+  delay(50);  // debouncing
 }
