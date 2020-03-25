@@ -70,6 +70,36 @@ void tsMenu() {
     } else if (currentScreen == "z1") {
       if (z1Buttons[5].contains(p.x, p.y)) {
         MenuScreen();
+      } else if (z1Buttons[0].contains(p.x, p.y)) {
+        Z1F1Screen();
+      } else if (z1Buttons[1].contains(p.x, p.y)) {
+        Z1F2Screen();
+      } else if (z1Buttons[2].contains(p.x, p.y)) {
+        Z1F3Screen();
+      } else if (z1Buttons[3].contains(p.x, p.y)) {
+        Z1F4Screen();
+      } else if (z1Buttons[4].contains(p.x, p.y)) {
+        Z1ControlScreen();
+      }
+    } else if (currentScreen == "z1f1") {
+      if (z1f1Buttons[4].contains(p.x, p.y)) {
+        Z1Screen();
+      }
+    } else if (currentScreen == "z1f2") {
+      if (z1f2Buttons[4].contains(p.x, p.y)) {
+        Z1Screen();
+      }
+    } else if (currentScreen == "z1f3") {
+      if (z1f3Buttons[4].contains(p.x, p.y)) {
+        Z1Screen();
+      }
+    } else if (currentScreen == "z1f4") {
+      if (z1f4Buttons[4].contains(p.x, p.y)) {
+        Z1Screen();
+      }
+    } else if (currentScreen == "z1control") {
+      if (z1ControlButtons[2].contains(p.x, p.y)) {
+        Z1Screen();
       }
     }
   }

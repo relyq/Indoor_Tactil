@@ -46,3 +46,32 @@ void Z1Screen(){
   prevScreen = currentScreen;
 }
 
+void Z1F1Screen(){
+  currentScreen = "z1f1";
+  drawZ1F1Screen();
+  prevScreen = currentScreen;
+}
+
+void Z1F2Screen(){
+  currentScreen = "z1f2";
+  drawZ1F2Screen();
+  prevScreen = currentScreen;
+}
+
+void Z1F3Screen(){
+  currentScreen = "z1f3";
+  drawZ1F3Screen();
+  prevScreen = currentScreen;
+}
+
+void Z1F4Screen(){
+  currentScreen = "z1f4";
+  drawZ1F4Screen();
+  prevScreen = currentScreen;
+}
+
+void Z1ControlScreen(){
+  currentScreen = "z1control";
+  drawZ1ControlScreen();
+  prevScreen = currentScreen;
+}
