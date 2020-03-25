@@ -1,0 +1,176 @@
+Adafruit_GFX_Button buttons[15];
+
+/* create 15 buttons, in classic candybar phone style */
+char buttonlabels[15][5] = {"Ent.", "Clr.", "Esc.", "1", "2", "3", "4", "5",
+                            "6",    "7",    "8",    "9", "*", "0", "#"};
+uint16_t buttoncolors[15] = {
+    ILI9341_DARKGREEN, ILI9341_DARKGREY, ILI9341_RED,   ILI9341_BLUE,
+    ILI9341_BLUE,      ILI9341_BLUE,     ILI9341_BLUE,  ILI9341_BLUE,
+    ILI9341_BLUE,      ILI9341_BLUE,     ILI9341_BLUE,  ILI9341_BLUE,
+    ILI9341_ORANGE,    ILI9341_BLUE,     ILI9341_ORANGE};
+
+
+
+
+
+
+  void NumericKeyboardScreen(TSPoint p) {
+  if (!screensInit[21]) {
+    tft.fillScreen(BLACK);
+
+    // create buttons
+    for (uint8_t row = 0; row < 5; row++) {
+      for (uint8_t col = 0; col < 3; col++) {
+        buttons[col + row * 3].initButton(
+            &tft, BUTTON_X + col * (BUTTON_W + BUTTON_SPACING_X),
+            BUTTON_Y +
+                row * (BUTTON_H + BUTTON_SPACING_Y),  // x, y, w, h,
+                                                      // outline, fill, text
+            BUTTON_W, BUTTON_H, ILI9341_WHITE, buttoncolors[col + row * 3],
+            ILI9341_WHITE, buttonlabels[col + row * 3], BUTTON_TEXTSIZE1);
+        buttons[col + row * 3].drawButton();
+      }
+    }
+
+    // create 'text field'
+    tft.drawRect(TEXT_X, TEXT_Y, TEXT_W, TEXT_H, ILI9341_WHITE);
+    screensInit[21] = true;
+  }
+
+  // go thru all the buttons, checking if they were pressed
+  for (uint8_t b = 0; b < 15; b++) {
+    if (buttons[b].contains(p.x, p.y)) {
+      // Serial.print("Pressing: "); Serial.println(b);
+      buttons[b].press(true);  // tell the button it is pressed
+    } else {
+      buttons[b].press(false);  // tell the button it is NOT pressed
+    }
+  }
+
+  // now we can ask the buttons if their state has changed
+  for (uint8_t b = 0; b < 15; b++) {
+    if (buttons[b].justReleased()) {
+      // Serial.print("Released: "); Serial.println(b);
+      buttons[b].drawButton();  // draw normal
+    }
+
+    if (buttons[b].justPressed()) {
+      buttons[b].drawButton(true);  // draw invert!
+
+      // if a numberpad button, append the relevant # to the textfield
+      if (b >= 3) {
+        if (textfield_i < TEXT_LEN) {
+          textfield[textfield_i] = buttonlabels[b][0];
+          textfield_i++;
+          textfield[textfield_i] = 0;  // zero terminate
+
+          // fona.playDTMF(buttonlabels[b][0]);
+        }
+      }
+
+      // clr button! delete char
+      if (b == 1) {
+        textfield[textfield_i] = 0;
+        if (textfield > 0) {
+          textfield_i--;
+          textfield[textfield_i] = ' ';
+        }
+      }
+
+      // update the current text field
+      Serial.println(textfield);
+      tft.setCursor(TEXT_X + 2, TEXT_Y + 10);
+      tft.setTextColor(TEXT_TCOLOR, ILI9341_BLACK);
+      tft.setTextSize(TEXT_TSIZE);
+      tft.print(textfield);
+
+      // Esc. Button
+      if (b == 2) {
+        // status(F("Hanging up"));
+        // fona.hangUp();
+        if (screens[22]) {
+          // temperatureSP = textfield;
+          screens[2] = true;
+          screensInit[2] = false;
+          screens[22] = false;
+        }
+
+        if (screens[23]) {
+          // temperatureSP = textfield;
+          screens[2] = true;
+          screensInit[2] = false;
+          screens[23] = false;
+        }
+
+        for (int i = 0; i <= 12; i++) {
+          textfield[i] = ' ';
+        }
+        textfield_i = 0;
+      }
+      // Enter Button
+      if (b == 0) {
+        // status(F("Calling"));
+        // Serial.print("Calling "); Serial.print(textfield);
+        if (screens[22]) {
+          temperatureSP = textfield;
+          screens[2] = true;
+          screensInit[2] = false;
+          screens[22] = false;
+        }
+
+        if (screens[23]) {
+          humiditySP = textfield;
+          screens[2] = true;
+          screensInit[2] = false;
+          screens[23] = false;
+        }
+
+        for (int i = 0; i <= 12; i++) {
+          textfield[i] = ' ';
+        }
+        textfield_i = 0;
+
+        // fona.callPhone(textfield);
+        // temperatureSP,screens[2],screensInit[2]
+      }
+
+      delay(250);  // UI debouncing
+    }
+  }
+}
+
+
+
+/////  Pantalla Configuracion temp hum  /////
+void SettingsScreen(String temp, String hum) {
+  if (!screensInit[2]) {
+    tft.fillScreen(BLACK);
+    tft.setCursor(10, 10);
+    tft.setTextColor(ILI9341_WHITE);
+    tft.setTextSize(2);
+    tft.print("Temp. Setpoint");
+    tft.drawRect(10, 30, TEXT_W, TEXT_H, ILI9341_WHITE);
+    tft.setCursor(10, 90);
+    tft.print("Humidity Setpoint");
+    tft.drawRect(10, 120, TEXT_W, TEXT_H, ILI9341_WHITE);
+
+    backHomeButton.initButton(&tft, 120,
+                              300,  // x, y, w, h, outline, fill, text
+                              230, 40, ILI9341_WHITE, ILI9341_LIGHTGREY,
+                              ILI9341_WHITE, "Salir", BUTTON_TEXTSIZE);
+    backHomeButton.drawButton();
+
+    screensInit[2] = true;
+  }
+  tft.setCursor(TEXT_X + 2, 40);
+  tft.setTextColor(TEXT_TCOLOR, ILI9341_BLACK);
+  tft.setTextSize(TEXT_TSIZE);
+  tft.print(temp);
+
+  tft.setCursor(TEXT_X + 2, 130);
+  tft.setTextColor(TEXT_TCOLOR, ILI9341_BLACK);
+  tft.setTextSize(TEXT_TSIZE);
+  tft.print(hum);
+
+  delay(250);  // debouncing
+}
