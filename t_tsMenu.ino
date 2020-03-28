@@ -24,7 +24,7 @@ void tsMenu() {
     Serial.print(p.z);
     Serial.println(") ");
 
-    if (currentScreen == "home") {
+    if (currentScreen == "home") {      // deberia usar un switch
       if (p.x > (120 - 115) && p.x < (120 + 115) && p.y > 10 && p.y < 50) {
         MenuScreen();
       }

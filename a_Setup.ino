@@ -8,6 +8,11 @@ void setup() {
 
   pinMode(13, OUTPUT);
   pinMode(DHTPIN, INPUT_PULLUP);
+  pinMode(FANPIN, OUTPUT);
+  pinMode(VAPPIN, OUTPUT);
+  pinMode(RIEGOPIN, OUTPUT);
+  digitalWrite(RIEGOPIN, 0);
+  pinMode(SENSORTIERRAPIN, INPUT_PULLUP);
 
   dht.begin();
 

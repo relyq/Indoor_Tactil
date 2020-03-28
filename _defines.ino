@@ -105,6 +105,8 @@ Adafruit_GFX_Button relojButtons[1];
 Adafruit_GFX_Button programasButtons[1];
 Adafruit_GFX_Button resetButtons[1];
 
+
+// estos dos deberian ser char[]
 char* currentScreen;  // acá guardo la pantalla activa
 char* prevScreen;     // acá guardo la pantalla anterior
 
@@ -126,3 +128,14 @@ char humedad[8];
 
 char temperaturaSP[15];
 char humedadSP[12];
+
+uint8_t hTierra;
+uint8_t lastRIEGOPIN;
+
+uint8_t hTierraSPl = 40;
+uint8_t hTierraSPh = 60;
+
+const uint8_t FANPIN = 33;
+const uint8_t VAPPIN = 35;
+const uint8_t SENSORTIERRAPIN = A8;
+const uint8_t RIEGOPIN = 37;

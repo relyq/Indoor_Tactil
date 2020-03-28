@@ -18,24 +18,37 @@ void drawHomeScreen() {
   tft.setTextColor(WHITE, BLACK);
   tft.print("Ventilacion   ");
 
-  tft.fillCircle(180, 94, 10, RED);
+  if (digitalRead(FANPIN)) {
+    tft.fillCircle(180, 94, 10, GREEN);
+  } else {
+    tft.fillCircle(180, 94, 10, RED);
+  }
 
   tft.setCursor(10, 115);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
   tft.print("Vaporizacion   ");
 
-  tft.fillCircle(180, 119, 10, GREEN);
+  if (digitalRead(VAPPIN)) {
+    tft.fillCircle(180, 119, 10, GREEN);
+  } else {
+    tft.fillCircle(180, 119, 10, RED);
+  }
 
   tft.setCursor(10, 140);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
   tft.print("Riego   ");
 
-  tft.fillCircle(180, 144, 10, RED);
+  if (digitalRead(RIEGOPIN)) {
+    tft.fillCircle(180, 144, 10, GREEN);
+  } else {
+    tft.fillCircle(180, 144, 10, RED);
+  }
 
   dtostrf(tempSP, 5, 1, temperaturaSP);
-  sprintf(humedadSP, "%d", humSP);      // sprintf(*str, format, value1, value2, etc...)
+  sprintf(humedadSP, "%d",
+          humSP);  // sprintf(*str, format, value1, value2, etc...)
 
   tft.setCursor(10, 175);
   tft.setTextColor(WHITE);
@@ -221,7 +234,7 @@ void drawZ1Screen() {
   Serial.println("z1 dibujado");
 }
 
-void drawZ1F1Screen(){
+void drawZ1F1Screen() {
   tft.fillScreen(BLACK);
   tft.setCursor(35, 10);
   tft.setTextColor(WHITE);
@@ -229,29 +242,29 @@ void drawZ1F1Screen(){
   tft.print("Zona 1 - Fase 1");
 
   z1f1Buttons[0].initButton(&tft, 120, 55, 230, 40, WHITE, ORANGE, YELLOW,
-                          "Dias", BUTTON_TEXTSIZE);
+                            "Dias", BUTTON_TEXTSIZE);
   z1f1Buttons[0].drawButton();
 
   z1f1Buttons[1].initButton(&tft, 120, 100, 230, 40, WHITE, ORANGE, YELLOW,
-                          "Horas luz", BUTTON_TEXTSIZE);
+                            "Horas luz", BUTTON_TEXTSIZE);
   z1f1Buttons[1].drawButton();
 
   z1f1Buttons[2].initButton(&tft, 120, 145, 230, 40, WHITE, ORANGE, YELLOW,
-                          "Temp.", BUTTON_TEXTSIZE);
+                            "Temp.", BUTTON_TEXTSIZE);
   z1f1Buttons[2].drawButton();
 
   z1f1Buttons[3].initButton(&tft, 120, 190, 230, 40, WHITE, ORANGE, YELLOW,
-                          "H. Tierra", BUTTON_TEXTSIZE);
+                            "H. Tierra", BUTTON_TEXTSIZE);
   z1f1Buttons[3].drawButton();
 
   z1f1Buttons[4].initButton(&tft, 120, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                          "Volver", BUTTON_TEXTSIZE);
+                            "Volver", BUTTON_TEXTSIZE);
   z1f1Buttons[4].drawButton();
 
   Serial.println("z1f1 dibujado");
 }
 
-void drawZ1F2Screen(){
+void drawZ1F2Screen() {
   tft.fillScreen(BLACK);
   tft.setCursor(35, 10);
   tft.setTextColor(WHITE);
@@ -259,29 +272,29 @@ void drawZ1F2Screen(){
   tft.print("Zona 1 - Fase 2");
 
   z1f2Buttons[0].initButton(&tft, 120, 55, 230, 40, WHITE, ORANGE, YELLOW,
-                          "Dias", BUTTON_TEXTSIZE);
+                            "Dias", BUTTON_TEXTSIZE);
   z1f2Buttons[0].drawButton();
 
   z1f2Buttons[1].initButton(&tft, 120, 100, 230, 40, WHITE, ORANGE, YELLOW,
-                          "Horas luz", BUTTON_TEXTSIZE);
+                            "Horas luz", BUTTON_TEXTSIZE);
   z1f2Buttons[1].drawButton();
 
   z1f2Buttons[2].initButton(&tft, 120, 145, 230, 40, WHITE, ORANGE, YELLOW,
-                          "Temp.", BUTTON_TEXTSIZE);
+                            "Temp.", BUTTON_TEXTSIZE);
   z1f2Buttons[2].drawButton();
 
   z1f2Buttons[3].initButton(&tft, 120, 190, 230, 40, WHITE, ORANGE, YELLOW,
-                          "H. Tierra", BUTTON_TEXTSIZE);
+                            "H. Tierra", BUTTON_TEXTSIZE);
   z1f2Buttons[3].drawButton();
 
   z1f2Buttons[4].initButton(&tft, 120, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                          "Volver", BUTTON_TEXTSIZE);
+                            "Volver", BUTTON_TEXTSIZE);
   z1f2Buttons[4].drawButton();
 
   Serial.println("z1f2 dibujado");
 }
 
-void drawZ1F3Screen(){
+void drawZ1F3Screen() {
   tft.fillScreen(BLACK);
   tft.setCursor(35, 10);
   tft.setTextColor(WHITE);
@@ -289,29 +302,29 @@ void drawZ1F3Screen(){
   tft.print("Zona 1 - Fase 3");
 
   z1f3Buttons[0].initButton(&tft, 120, 55, 230, 40, WHITE, ORANGE, YELLOW,
-                          "Dias", BUTTON_TEXTSIZE);
+                            "Dias", BUTTON_TEXTSIZE);
   z1f3Buttons[0].drawButton();
 
   z1f3Buttons[1].initButton(&tft, 120, 100, 230, 40, WHITE, ORANGE, YELLOW,
-                          "Horas luz", BUTTON_TEXTSIZE);
+                            "Horas luz", BUTTON_TEXTSIZE);
   z1f3Buttons[1].drawButton();
 
   z1f3Buttons[2].initButton(&tft, 120, 145, 230, 40, WHITE, ORANGE, YELLOW,
-                          "Temp.", BUTTON_TEXTSIZE);
+                            "Temp.", BUTTON_TEXTSIZE);
   z1f3Buttons[2].drawButton();
 
   z1f3Buttons[3].initButton(&tft, 120, 190, 230, 40, WHITE, ORANGE, YELLOW,
-                          "H. Tierra", BUTTON_TEXTSIZE);
+                            "H. Tierra", BUTTON_TEXTSIZE);
   z1f3Buttons[3].drawButton();
 
   z1f3Buttons[4].initButton(&tft, 120, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                          "Volver", BUTTON_TEXTSIZE);
+                            "Volver", BUTTON_TEXTSIZE);
   z1f3Buttons[4].drawButton();
 
   Serial.println("z1f3 dibujado");
 }
 
-void drawZ1F4Screen(){
+void drawZ1F4Screen() {
   tft.fillScreen(BLACK);
   tft.setCursor(35, 10);
   tft.setTextColor(WHITE);
@@ -319,29 +332,29 @@ void drawZ1F4Screen(){
   tft.print("Zona 1 - Fase 4");
 
   z1f4Buttons[0].initButton(&tft, 120, 55, 230, 40, WHITE, ORANGE, YELLOW,
-                          "Dias", BUTTON_TEXTSIZE);
+                            "Dias", BUTTON_TEXTSIZE);
   z1f4Buttons[0].drawButton();
 
   z1f4Buttons[1].initButton(&tft, 120, 100, 230, 40, WHITE, ORANGE, YELLOW,
-                          "Horas luz", BUTTON_TEXTSIZE);
+                            "Horas luz", BUTTON_TEXTSIZE);
   z1f4Buttons[1].drawButton();
 
   z1f4Buttons[2].initButton(&tft, 120, 145, 230, 40, WHITE, ORANGE, YELLOW,
-                          "Temp.", BUTTON_TEXTSIZE);
+                            "Temp.", BUTTON_TEXTSIZE);
   z1f4Buttons[2].drawButton();
 
   z1f4Buttons[3].initButton(&tft, 120, 190, 230, 40, WHITE, ORANGE, YELLOW,
-                          "H. Tierra", BUTTON_TEXTSIZE);
+                            "H. Tierra", BUTTON_TEXTSIZE);
   z1f4Buttons[3].drawButton();
 
   z1f4Buttons[4].initButton(&tft, 120, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                          "Volver", BUTTON_TEXTSIZE);
+                            "Volver", BUTTON_TEXTSIZE);
   z1f4Buttons[4].drawButton();
 
   Serial.println("z1f4 dibujado");
 }
 
-void drawZ1ControlScreen(){
+void drawZ1ControlScreen() {
   tft.fillScreen(BLACK);
   tft.setCursor(35, 10);
   tft.setTextColor(WHITE);
@@ -349,15 +362,15 @@ void drawZ1ControlScreen(){
   tft.print("Zona 1 - Control");
 
   z1ControlButtons[0].initButton(&tft, 120, 55, 230, 40, WHITE, ORANGE, YELLOW,
-                          "Inicio", BUTTON_TEXTSIZE);
+                                 "Inicio", BUTTON_TEXTSIZE);
   z1ControlButtons[0].drawButton();
 
   z1ControlButtons[1].initButton(&tft, 120, 100, 230, 40, WHITE, ORANGE, YELLOW,
-                          "Terminar", BUTTON_TEXTSIZE);
+                                 "Terminar", BUTTON_TEXTSIZE);
   z1ControlButtons[1].drawButton();
 
-  z1ControlButtons[2].initButton(&tft, 120, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                          "Volver", BUTTON_TEXTSIZE);
+  z1ControlButtons[2].initButton(&tft, 120, 280, 230, 40, WHITE, LIGHTGREY,
+                                 WHITE, "Volver", BUTTON_TEXTSIZE);
   z1ControlButtons[2].drawButton();
 
   Serial.println("z1control dibujado");
