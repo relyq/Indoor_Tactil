@@ -1,7 +1,7 @@
 # Indoor_Tactil
 todo:
 
-podria cambiar todos los digitalWrite() por manipulacion manual de puertos
+podria cambiar todos los digitalWrite() y digitalRead() por manipulacion manual de puertos
 
 parece que las acciones de los botones están corridas hacia arriba
 
