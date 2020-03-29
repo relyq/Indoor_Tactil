@@ -5,6 +5,8 @@ probar rotaciones
 
 configurar sistema de setpoints por fase y zona
 
+guardar setpoints en eeprom
+
 agregar pantalla de teclado numerico
 
 RTC
