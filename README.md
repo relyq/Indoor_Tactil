@@ -1,6 +1,12 @@
 # Indoor_Tactil
 todo:
 
+probar rotaciones
+
+configurar sistema de setpoints por fase y zona
+
+agregar pantalla de teclado numerico
+
 RTC
 
 formularios para elegir los threshold
