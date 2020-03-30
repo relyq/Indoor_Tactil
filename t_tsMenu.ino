@@ -13,9 +13,20 @@ void tsMenu() {
   // presionada
   if (p.z > MINPRESSURE) {
     // scale from 0->1023 to tft.width
+    Serial.print("Unmapped p: ");
+    Serial.print("(");
+    Serial.print(p.x);
+    Serial.print(", ");
+    Serial.print(p.y);
+    Serial.print(", ");
+    Serial.print(p.z);
+    Serial.print(") ");
+
     p.x = map(p.x, TS_MINX, TS_MAXX, tft.width(), 0);
-    p.y = map(p.y, TS_MINY, TS_MAXY, tft.height(), 0);
+    p.y = map(p.y, TS_MINY, TS_MAXY, tft.height(), -25); // 12px de diferencia entre ts y gfx
     // if the screen is being touched show cursor position
+
+    Serial.print("Mapped p: ");
     Serial.print("(");
     Serial.print(p.x);
     Serial.print(", ");
@@ -25,7 +36,7 @@ void tsMenu() {
     Serial.println(") ");
 
     if (currentScreen == "home") {      // deberia usar un switch
-      if (p.x > (120 - 115) && p.x < (120 + 115) && p.y > 10 && p.y < 50) {
+      if ((p.x > 5 && p.x < 235) && (p.y > 10 && p.y < 50)) {
         MenuScreen();
       }
       /*if (homeButtons[0].contains(p.x, p.y)) {

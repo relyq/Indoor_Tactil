@@ -68,10 +68,11 @@ uint8_t textfield_i = 0;
 #define YM 9   // can be a digital pin
 #define XP 8   // can be a digital pin
 
-#define TS_MINX 150
-#define TS_MINY 120
-#define TS_MAXX 920
-#define TS_MAXY 940
+// puntos maximos y minimos de la pantalla tactil, contando el espacio no-dibujable
+#define TS_MINX 120
+#define TS_MINY 80
+#define TS_MAXX 900
+#define TS_MAXY 950
 
 // We have a status line for like, is FONA working
 #define STATUS_X 10
@@ -120,20 +121,20 @@ float hi; // sensación térmica
 float lastT;
 float lastH;
 
-float tempSP = 30.0;
-uint8_t humSP = 80;
+uint8_t tempSP = 30;  // temperatura limite
+uint8_t humSP = 80;   // humedad aire limite
 
 char temperatura[8];
 char humedad[8];
 
-char temperaturaSP[15];
-char humedadSP[12];
+char tempSPstr[15];
+char humSPstr[12];
 
-uint8_t hTierra;
+uint8_t hTierra;      // humedad tierra
 uint8_t lastRIEGOPIN;
 
-uint8_t hTierraSPl = 40;
-uint8_t hTierraSPh = 60;
+uint8_t hTierraSPl = 40;  // humedad tierra limite inferior
+uint8_t hTierraSPh = 60;  // humedad tierra limite superior
 
 const uint8_t FANPIN = 33;
 const uint8_t VAPPIN = 35;

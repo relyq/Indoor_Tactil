@@ -18,6 +18,7 @@ void setup() {
 
   tft.reset();
   tft.begin(0x9341);
+  tft.setRotation(0);
   tft.fillScreen(BLACK);
 
   HomeScreen();

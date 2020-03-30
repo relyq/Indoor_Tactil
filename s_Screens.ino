@@ -46,8 +46,8 @@ void drawHomeScreen() {
     tft.fillCircle(180, 144, 10, RED);
   }
 
-  dtostrf(tempSP, 5, 1, temperaturaSP);
-  sprintf(humedadSP, "%d",
+  sprintf(tempSPstr, "%d", tempSP);
+  sprintf(humSPstr, "%d",
           humSP);  // sprintf(*str, format, value1, value2, etc...)
 
   tft.setCursor(10, 175);
@@ -55,14 +55,14 @@ void drawHomeScreen() {
   tft.setTextSize(2);
   tft.print("Temp. ");
   tft.setTextColor(ORANGE);
-  tft.print(strcat(temperaturaSP, " C"));  // temperatura configurada
+  tft.print(strcat(tempSPstr, "C"));  // temperatura configurada
 
   tft.setCursor(10, 250);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
-  tft.print("Humidity ");
+  tft.print("Humedad ");
   tft.setTextColor(BLUE);
-  tft.print(strcat(humedadSP, "%"));  // humedad configurada
+  tft.print(strcat(humSPstr, "%"));  // humedad configurada
 
   dtostrf(t, 5, 1, temperatura);
   dtostrf(h, 5, 0, humedad);
@@ -241,21 +241,35 @@ void drawZ1F1Screen() {
   tft.setTextSize(2);
   tft.print("Zona 1 - Fase 1");
 
-  z1f1Buttons[0].initButton(&tft, 120, 55, 230, 40, WHITE, ORANGE, YELLOW,
-                            "Dias", BUTTON_TEXTSIZE);
-  z1f1Buttons[0].drawButton();
+  tft.drawRect(5, 35, 230, 40, WHITE);
+  tft.setCursor(15, 40);
+  tft.print("Dias");
 
-  z1f1Buttons[1].initButton(&tft, 120, 100, 230, 40, WHITE, ORANGE, YELLOW,
-                            "Horas luz", BUTTON_TEXTSIZE);
-  z1f1Buttons[1].drawButton();
+  tft.drawRect(5, 80, 230, 40, WHITE);
+  tft.setCursor(15, 85);
+  tft.print("Horas luz");
 
-  z1f1Buttons[2].initButton(&tft, 120, 145, 230, 40, WHITE, ORANGE, YELLOW,
-                            "Temp.", BUTTON_TEXTSIZE);
-  z1f1Buttons[2].drawButton();
+  tft.drawRect(5, 125, 230, 40, WHITE);
+  tft.setCursor(15, 130);
+  tft.print("Temp.");
 
-  z1f1Buttons[3].initButton(&tft, 120, 190, 230, 40, WHITE, ORANGE, YELLOW,
-                            "H. Tierra", BUTTON_TEXTSIZE);
-  z1f1Buttons[3].drawButton();
+  tft.drawRect(5, 170, 230, 40, WHITE);
+  tft.setCursor(15, 175);
+  tft.print("Riego");
+
+  tft.setTextSize(3);
+
+  tft.setCursor(175, 45);
+  tft.print("90");
+
+  tft.setCursor(175, 90);
+  tft.print("16");
+
+  tft.setCursor(175, 135);
+  tft.print(tempSPstr);
+
+  tft.setCursor(175, 180);
+  tft.print("60%");
 
   z1f1Buttons[4].initButton(&tft, 120, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                             "Volver", BUTTON_TEXTSIZE);
