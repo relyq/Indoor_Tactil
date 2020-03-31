@@ -1,9 +1,5 @@
 # Indoor_Tactil
-ARREGLE LAS LIBRERIAS ACTUALIZADAS, PINMAGIC ESTA ROTO CON MI CONFIGURACION.
-
-TENGO QUE ELEGIR QUE LIBRERIAS VOY A USAR:
-
-TOUCHSCREEN - STMPE610
+las librerias actualizadas no funcionaban por pin_magic.h
 
 todo:
 
