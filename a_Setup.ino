@@ -16,6 +16,8 @@ void setup() {
 
   dht.begin();
 
+  Serial.println(tft.readID(), HEX);
+
   tft.reset();
   tft.begin(0x9341);
   tft.setRotation(0);

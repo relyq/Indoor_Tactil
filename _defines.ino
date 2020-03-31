@@ -63,10 +63,10 @@
 char textfield[TEXT_LEN + 1] = "";
 uint8_t textfield_i = 0;
 
-#define YP A3  // must be an analog pin, use "An" notation!
-#define XM A2  // must be an analog pin, use "An" notation!
-#define YM 9   // can be a digital pin
-#define XP 8   // can be a digital pin
+#define YP A3  // must be an analog pin, use "An" notation! // LCD CS
+#define XM A2  // must be an analog pin, use "An" notation! // LCD RS - COMMAND/DATA
+#define YM 9   // can be a digital pin                      // LCD D1
+#define XP 8   // can be a digital pin                      // LCD D0
 
 // puntos maximos y minimos de la pantalla tactil, contando el espacio no-dibujable
 #define TS_MINX 120
