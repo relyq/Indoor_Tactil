@@ -105,6 +105,7 @@ Adafruit_GFX_Button alarmasButtons[1];
 Adafruit_GFX_Button relojButtons[1];
 Adafruit_GFX_Button programasButtons[1];
 Adafruit_GFX_Button resetButtons[1];
+Adafruit_GFX_Button numericKeyboardButtons[16];
 
 
 // estos dos deberian ser char[]
@@ -124,11 +125,28 @@ float lastH;
 uint8_t tempSP = 30;  // temperatura limite
 uint8_t humSP = 80;   // humedad aire limite
 
-char temperatura[8];
-char humedad[8];
+char tempSPstr[3] = "30";
+char humSPstr[3] = "80";
 
-char tempSPstr[15] = "30";
-char humSPstr[12] = "80";
+char z1f1diasSPstr[4] = "90";
+char z1f1hluzSPstr[3] = "16";
+char z1f1tempSPstr[3] = "25";
+char z1f1riegoSPstr[3] = "60";
+
+char z1f2diasSPstr[4] = "90";
+char z1f2hluzSPstr[3] = "16";
+char z1f2tempSPstr[3] = "25";
+char z1f2riegoSPstr[3] = "60";
+
+char z1f3diasSPstr[4] = "90";
+char z1f3hluzSPstr[3] = "16";
+char z1f3tempSPstr[3] = "25";
+char z1f3riegoSPstr[3] = "60";
+
+char z1f4diasSPstr[4] = "90";
+char z1f4hluzSPstr[3] = "16";
+char z1f4tempSPstr[3] = "25";
+char z1f4riegoSPstr[3] = "60";
 
 char buffer[50];
 
@@ -142,3 +160,9 @@ const uint8_t FANPIN = 33;
 const uint8_t VAPPIN = 35;
 const uint8_t SENSORTIERRAPIN = A8;
 const uint8_t RIEGOPIN = 37;
+
+char numKBstr[10];
+char* numKBPrevScreen;
+char* numKBvarptr;
+uint8_t numKBstrLength;
+uint8_t numKBbufferSize;

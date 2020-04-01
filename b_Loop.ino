@@ -25,21 +25,31 @@ void loop() {
   }
 
   if (currentScreen == "home" &&
-      (lastT != t || lastH != h || lastRIEGOPIN != digitalRead(RIEGOPIN))) {   // TENGO QUE CAMBIAR ESTO PORQUE ME VA A TRAER PROBLEMAS
+      (lastT != t || lastH != h ||
+       lastRIEGOPIN !=
+           digitalRead(RIEGOPIN))) {  // TENGO QUE CAMBIAR ESTO PORQUE ME VA A
+                                      // TRAER PROBLEMAS
     lastT = t;
     lastH = h;
-    dtostrf(t, 5, 1, temperatura);  // convierte double a char[]
-    dtostrf(h, 5, 0,
-            humedad);  // dtostrf(double, strlength, precision, charbuf)
+
+    // dtostrf(double, strlength, precision, charbuff)
+    // convierte double a char[]
+
+    dtostrf(t, 5, 1, buffer);
+    strcat(buffer, " C");
+
     tft.setCursor(10, 200);
     tft.setTextSize(5);
     tft.setTextColor(WHITE, BLACK);
-    tft.print(strcat(temperatura, " C"));  // temperatura leida por el DHT
+    tft.print(buffer);  // temperatura leida por el DHT
+
+    dtostrf(h, 5, 0, buffer);
+    strcat(buffer, " %");
 
     tft.setCursor(10, 275);
     tft.setTextSize(5);
     tft.setTextColor(WHITE, BLACK);
-    tft.print(strcat(humedad, " %"));  // humedad leida por el DHT
+    tft.print(buffer);  // humedad leida por el DHT
 
     if (digitalRead(FANPIN)) {
       tft.fillCircle(180, 94, 10, GREEN);

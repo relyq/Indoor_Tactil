@@ -1686,6 +1686,36 @@ void Adafruit_GFX_Button::drawButton(boolean inverted) {
 
 /**************************************************************************/
 /*!
+   @brief    MODIFIED DRAWBUTTON - DRAWS RECTANGLE BUTTON ON SCREEN
+   @param    inverted Whether to draw with fill/text swapped to indicate
+   'pressed'
+*/
+/**************************************************************************/
+void Adafruit_GFX_Button::drawRectButton(boolean inverted) {
+  uint16_t fill, outline, text;
+
+  if (!inverted) {
+    fill = _fillcolor;
+    outline = _outlinecolor;
+    text = _textcolor;
+  } else {
+    fill = _textcolor;
+    outline = _outlinecolor;
+    text = _fillcolor;
+  }
+
+  _gfx->fillRect(_x1, _y1, _w, _h, fill);
+  _gfx->drawRect(_x1, _y1, _w, _h, outline);
+
+  _gfx->setCursor(_x1 + (_w / 2) - (strlen(_label) * 3 * _textsize_x),
+                  _y1 + (_h / 2) - (4 * _textsize_y));
+  _gfx->setTextColor(text);
+  _gfx->setTextSize(_textsize_x, _textsize_y);
+  _gfx->print(_label);
+}
+
+/**************************************************************************/
+/*!
     @brief    Helper to let us know if a coordinate is within the bounds of the
    button
     @param    x       The X coordinate to check

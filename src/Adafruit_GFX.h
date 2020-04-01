@@ -260,6 +260,7 @@ public:
                     uint16_t textcolor, char *label, uint8_t textsize_x,
                     uint8_t textsize_y);
   void drawButton(boolean inverted = false);
+  void drawRectButton(boolean inverted = false); // modified
   boolean contains(int16_t x, int16_t y);
 
   /**********************************************************************/

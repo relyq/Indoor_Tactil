@@ -64,17 +64,21 @@ void drawHomeScreen() {
   tft.setTextColor(BLUE);
   tft.print(buffer);  // humedad configurada
 
-  dtostrf(t, 5, 1, temperatura);
-  dtostrf(h, 5, 0, humedad);
+  dtostrf(t, 5, 1, buffer);
+  strcat(buffer, " C");
+
   tft.setCursor(10, 200);
   tft.setTextSize(5);
   tft.setTextColor(WHITE, BLACK);
-  tft.print(strcat(temperatura, " C"));  // temperatura leida por el DHT
+  tft.print(buffer);  // temperatura leida por el DHT
+
+  dtostrf(h, 5, 0, buffer);
+  strcat(buffer, " %");
 
   tft.setCursor(10, 275);
   tft.setTextSize(5);
   tft.setTextColor(WHITE, BLACK);
-  tft.print(strcat(humedad, " %"));  // humedad leida por el DHT
+  tft.print(buffer);  // humedad leida por el DHT
 
   Serial.println("home dibujada");
 }
@@ -241,35 +245,53 @@ void drawZ1F1Screen() {
   tft.setTextSize(2);
   tft.print("Zona 1 - Fase 1");
 
-  tft.drawRect(5, 35, 230, 40, WHITE);
+  z1f1Buttons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, BLACK, WHITE, "", 2);
+  z1f1Buttons[0].drawRectButton();
   tft.setCursor(15, 40);
   tft.print("Dias");
 
-  tft.drawRect(5, 80, 230, 40, WHITE);
+  z1f1Buttons[1].initButtonUL(&tft, 5, 80, 230, 40, WHITE, BLACK, WHITE, "", 2);
+  z1f1Buttons[1].drawRectButton();
   tft.setCursor(15, 85);
   tft.print("Horas luz");
 
-  tft.drawRect(5, 125, 230, 40, WHITE);
+  z1f1Buttons[2].initButtonUL(&tft, 5, 125, 230, 40, WHITE, BLACK, WHITE, "",
+                              2);
+  z1f1Buttons[2].drawRectButton();
+
   tft.setCursor(15, 130);
   tft.print("Temp.");
 
-  tft.drawRect(5, 170, 230, 40, WHITE);
+  z1f1Buttons[3].initButtonUL(&tft, 5, 170, 230, 40, WHITE, BLACK, WHITE, "",
+                              2);
+  z1f1Buttons[3].drawRectButton();
   tft.setCursor(15, 175);
   tft.print("Riego");
 
   tft.setTextSize(3);
 
+  strcpy(buffer, z1f1diasSPstr);
+
   tft.setCursor(175, 45);
-  tft.print("90");
+  tft.print(buffer);
+
+  strcpy(buffer, z1f1hluzSPstr);
+  strcat(buffer, "H");
 
   tft.setCursor(175, 90);
-  tft.print("16");
+  tft.print(buffer);
+
+  strcpy(buffer, z1f1tempSPstr);
+  strcat(buffer, "C");
 
   tft.setCursor(175, 135);
-  tft.print(tempSPstr);
+  tft.print(buffer);
+
+  strcpy(buffer, z1f1riegoSPstr);
+  strcat(buffer, "%");
 
   tft.setCursor(175, 180);
-  tft.print("60%");
+  tft.print(buffer);
 
   z1f1Buttons[4].initButton(&tft, 120, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                             "Volver", BUTTON_TEXTSIZE);
@@ -285,21 +307,53 @@ void drawZ1F2Screen() {
   tft.setTextSize(2);
   tft.print("Zona 1 - Fase 2");
 
-  z1f2Buttons[0].initButton(&tft, 120, 55, 230, 40, WHITE, ORANGE, YELLOW,
-                            "Dias", BUTTON_TEXTSIZE);
-  z1f2Buttons[0].drawButton();
+  z1f2Buttons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, BLACK, WHITE, "", 2);
+  z1f2Buttons[0].drawRectButton();
+  tft.setCursor(15, 40);
+  tft.print("Dias");
 
-  z1f2Buttons[1].initButton(&tft, 120, 100, 230, 40, WHITE, ORANGE, YELLOW,
-                            "Horas luz", BUTTON_TEXTSIZE);
-  z1f2Buttons[1].drawButton();
+  z1f2Buttons[1].initButtonUL(&tft, 5, 80, 230, 40, WHITE, BLACK, WHITE, "", 2);
+  z1f2Buttons[1].drawRectButton();
+  tft.setCursor(15, 85);
+  tft.print("Horas luz");
 
-  z1f2Buttons[2].initButton(&tft, 120, 145, 230, 40, WHITE, ORANGE, YELLOW,
-                            "Temp.", BUTTON_TEXTSIZE);
-  z1f2Buttons[2].drawButton();
+  z1f2Buttons[2].initButtonUL(&tft, 5, 125, 230, 40, WHITE, BLACK, WHITE, "",
+                              2);
+  z1f2Buttons[2].drawRectButton();
 
-  z1f2Buttons[3].initButton(&tft, 120, 190, 230, 40, WHITE, ORANGE, YELLOW,
-                            "H. Tierra", BUTTON_TEXTSIZE);
-  z1f2Buttons[3].drawButton();
+  tft.setCursor(15, 130);
+  tft.print("Temp.");
+
+  z1f2Buttons[3].initButtonUL(&tft, 5, 170, 230, 40, WHITE, BLACK, WHITE, "",
+                              2);
+  z1f2Buttons[3].drawRectButton();
+  tft.setCursor(15, 175);
+  tft.print("Riego");
+
+  tft.setTextSize(3);
+
+  strcpy(buffer, z1f2diasSPstr);
+
+  tft.setCursor(175, 45);
+  tft.print(buffer);
+
+  strcpy(buffer, z1f2hluzSPstr);
+  strcat(buffer, "H");
+
+  tft.setCursor(175, 90);
+  tft.print(buffer);
+
+  strcpy(buffer, z1f2tempSPstr);
+  strcat(buffer, "C");
+
+  tft.setCursor(175, 135);
+  tft.print(buffer);
+
+  strcpy(buffer, z1f2riegoSPstr);
+  strcat(buffer, "%");
+
+  tft.setCursor(175, 180);
+  tft.print(buffer);
 
   z1f2Buttons[4].initButton(&tft, 120, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                             "Volver", BUTTON_TEXTSIZE);
@@ -315,21 +369,53 @@ void drawZ1F3Screen() {
   tft.setTextSize(2);
   tft.print("Zona 1 - Fase 3");
 
-  z1f3Buttons[0].initButton(&tft, 120, 55, 230, 40, WHITE, ORANGE, YELLOW,
-                            "Dias", BUTTON_TEXTSIZE);
-  z1f3Buttons[0].drawButton();
+  z1f3Buttons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, BLACK, WHITE, "", 2);
+  z1f3Buttons[0].drawRectButton();
+  tft.setCursor(15, 40);
+  tft.print("Dias");
 
-  z1f3Buttons[1].initButton(&tft, 120, 100, 230, 40, WHITE, ORANGE, YELLOW,
-                            "Horas luz", BUTTON_TEXTSIZE);
-  z1f3Buttons[1].drawButton();
+  z1f3Buttons[1].initButtonUL(&tft, 5, 80, 230, 40, WHITE, BLACK, WHITE, "", 2);
+  z1f3Buttons[1].drawRectButton();
+  tft.setCursor(15, 85);
+  tft.print("Horas luz");
 
-  z1f3Buttons[2].initButton(&tft, 120, 145, 230, 40, WHITE, ORANGE, YELLOW,
-                            "Temp.", BUTTON_TEXTSIZE);
-  z1f3Buttons[2].drawButton();
+  z1f3Buttons[2].initButtonUL(&tft, 5, 125, 230, 40, WHITE, BLACK, WHITE, "",
+                              2);
+  z1f3Buttons[2].drawRectButton();
 
-  z1f3Buttons[3].initButton(&tft, 120, 190, 230, 40, WHITE, ORANGE, YELLOW,
-                            "H. Tierra", BUTTON_TEXTSIZE);
-  z1f3Buttons[3].drawButton();
+  tft.setCursor(15, 130);
+  tft.print("Temp.");
+
+  z1f3Buttons[3].initButtonUL(&tft, 5, 170, 230, 40, WHITE, BLACK, WHITE, "",
+                              2);
+  z1f3Buttons[3].drawRectButton();
+  tft.setCursor(15, 175);
+  tft.print("Riego");
+
+  tft.setTextSize(3);
+
+  strcpy(buffer, z1f3diasSPstr);
+
+  tft.setCursor(175, 45);
+  tft.print(buffer);
+
+  strcpy(buffer, z1f3hluzSPstr);
+  strcat(buffer, "H");
+
+  tft.setCursor(175, 90);
+  tft.print(buffer);
+
+  strcpy(buffer, z1f3tempSPstr);
+  strcat(buffer, "C");
+
+  tft.setCursor(175, 135);
+  tft.print(buffer);
+
+  strcpy(buffer, z1f3riegoSPstr);
+  strcat(buffer, "%");
+
+  tft.setCursor(175, 180);
+  tft.print(buffer);
 
   z1f3Buttons[4].initButton(&tft, 120, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                             "Volver", BUTTON_TEXTSIZE);
@@ -345,21 +431,53 @@ void drawZ1F4Screen() {
   tft.setTextSize(2);
   tft.print("Zona 1 - Fase 4");
 
-  z1f4Buttons[0].initButton(&tft, 120, 55, 230, 40, WHITE, ORANGE, YELLOW,
-                            "Dias", BUTTON_TEXTSIZE);
-  z1f4Buttons[0].drawButton();
+  z1f4Buttons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, BLACK, WHITE, "", 2);
+  z1f4Buttons[0].drawRectButton();
+  tft.setCursor(15, 40);
+  tft.print("Dias");
 
-  z1f4Buttons[1].initButton(&tft, 120, 100, 230, 40, WHITE, ORANGE, YELLOW,
-                            "Horas luz", BUTTON_TEXTSIZE);
-  z1f4Buttons[1].drawButton();
+  z1f4Buttons[1].initButtonUL(&tft, 5, 80, 230, 40, WHITE, BLACK, WHITE, "", 2);
+  z1f4Buttons[1].drawRectButton();
+  tft.setCursor(15, 85);
+  tft.print("Horas luz");
 
-  z1f4Buttons[2].initButton(&tft, 120, 145, 230, 40, WHITE, ORANGE, YELLOW,
-                            "Temp.", BUTTON_TEXTSIZE);
-  z1f4Buttons[2].drawButton();
+  z1f4Buttons[2].initButtonUL(&tft, 5, 125, 230, 40, WHITE, BLACK, WHITE, "",
+                              2);
+  z1f4Buttons[2].drawRectButton();
 
-  z1f4Buttons[3].initButton(&tft, 120, 190, 230, 40, WHITE, ORANGE, YELLOW,
-                            "H. Tierra", BUTTON_TEXTSIZE);
-  z1f4Buttons[3].drawButton();
+  tft.setCursor(15, 130);
+  tft.print("Temp.");
+
+  z1f4Buttons[3].initButtonUL(&tft, 5, 170, 230, 40, WHITE, BLACK, WHITE, "",
+                              2);
+  z1f4Buttons[3].drawRectButton();
+  tft.setCursor(15, 175);
+  tft.print("Riego");
+
+  tft.setTextSize(3);
+
+  strcpy(buffer, z1f4diasSPstr);
+
+  tft.setCursor(175, 45);
+  tft.print(buffer);
+
+  strcpy(buffer, z1f4hluzSPstr);
+  strcat(buffer, "H");
+
+  tft.setCursor(175, 90);
+  tft.print(buffer);
+
+  strcpy(buffer, z1f4tempSPstr);
+  strcat(buffer, "C");
+
+  tft.setCursor(175, 135);
+  tft.print(buffer);
+
+  strcpy(buffer, z1f4riegoSPstr);
+  strcat(buffer, "%");
+
+  tft.setCursor(175, 180);
+  tft.print(buffer);
 
   z1f4Buttons[4].initButton(&tft, 120, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                             "Volver", BUTTON_TEXTSIZE);
@@ -388,4 +506,67 @@ void drawZ1ControlScreen() {
   z1ControlButtons[2].drawButton();
 
   Serial.println("z1control dibujado");
+}
+
+void drawNumericKeyboardScreen() {
+  numKBPrevScreen = prevScreen;
+  Serial.println(numKBPrevScreen);
+
+  tft.fillScreen(BLACK);
+
+  tft.setTextSize(BUTTON_TEXTSIZE);
+
+  numericKeyboardButtons[0].initButtonUL(&tft, 5, 5, 60, 30, WHITE, ORANGE,
+                                         WHITE, "<", BUTTON_TEXTSIZE);
+  numericKeyboardButtons[0].drawButton();
+
+  tft.drawRect(5, 40, 230, 40, WHITE);
+
+  tft.setCursor(15, 60 - ((7 * BUTTON_TEXTSIZE) / 2));
+  tft.print(numKBstr);
+
+  numericKeyboardButtons[1].initButtonUL(&tft, 30, 82, 40, 40, WHITE, BLACK,
+                                         WHITE, "0", BUTTON_TEXTSIZE);
+  numericKeyboardButtons[1].drawButton();
+  numericKeyboardButtons[2].initButtonUL(&tft, 100, 82, 40, 40, WHITE, BLACK,
+                                         WHITE, "-", BUTTON_TEXTSIZE);
+  numericKeyboardButtons[2].drawButton();
+  numericKeyboardButtons[3].initButtonUL(&tft, 155, 82, 80, 40, WHITE, BLACK,
+                                         WHITE, "Del", BUTTON_TEXTSIZE);
+  numericKeyboardButtons[3].drawButton();
+
+  numericKeyboardButtons[4].initButtonUL(&tft, 30, 125, 40, 40, WHITE, BLACK,
+                                         WHITE, "1", BUTTON_TEXTSIZE);
+  numericKeyboardButtons[4].drawButton();
+  numericKeyboardButtons[5].initButtonUL(&tft, 100, 125, 40, 40, WHITE, BLACK,
+                                         WHITE, "2", BUTTON_TEXTSIZE);
+  numericKeyboardButtons[5].drawButton();
+  numericKeyboardButtons[6].initButtonUL(&tft, 175, 125, 40, 40, WHITE, BLACK,
+                                         WHITE, "3", BUTTON_TEXTSIZE);
+  numericKeyboardButtons[6].drawButton();
+
+  numericKeyboardButtons[7].initButtonUL(&tft, 30, 177, 40, 40, WHITE, BLACK,
+                                         WHITE, "4", BUTTON_TEXTSIZE);
+  numericKeyboardButtons[7].drawButton();
+  numericKeyboardButtons[8].initButtonUL(&tft, 100, 177, 40, 40, WHITE, BLACK,
+                                         WHITE, "5", BUTTON_TEXTSIZE);
+  numericKeyboardButtons[8].drawButton();
+  numericKeyboardButtons[9].initButtonUL(&tft, 175, 177, 40, 40, WHITE, BLACK,
+                                         WHITE, "6", BUTTON_TEXTSIZE);
+  numericKeyboardButtons[9].drawButton();
+
+  numericKeyboardButtons[10].initButtonUL(&tft, 30, 230, 40, 40, WHITE, BLACK,
+                                          WHITE, "7", BUTTON_TEXTSIZE);
+  numericKeyboardButtons[10].drawButton();
+  numericKeyboardButtons[11].initButtonUL(&tft, 100, 230, 40, 40, WHITE, BLACK,
+                                          WHITE, "8", BUTTON_TEXTSIZE);
+  numericKeyboardButtons[11].drawButton();
+  numericKeyboardButtons[12].initButtonUL(&tft, 175, 230, 40, 40, WHITE, BLACK,
+                                          WHITE, "9", BUTTON_TEXTSIZE);
+  numericKeyboardButtons[12].drawButton();
+
+  numericKeyboardButtons[13].initButtonUL(&tft, 5, 280, 230, 40, WHITE,
+                                          DARKCYAN, WHITE, "Aceptar",
+                                          BUTTON_TEXTSIZE);
+  numericKeyboardButtons[13].drawButton();
 }

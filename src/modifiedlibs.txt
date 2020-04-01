@@ -1,0 +1,7 @@
+pìn_magic.h
+
+--------------
+Adafruit_GFX.h
+Adafruit_GFX.cpp
+
+added Adafruit_GFX_Button::drawRectButton() to draw rectangle buttons

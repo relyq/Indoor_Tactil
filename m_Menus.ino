@@ -75,3 +75,17 @@ void Z1ControlScreen(){
   drawZ1ControlScreen();
   prevScreen = currentScreen;
 }
+
+
+
+// pantalla de teclado numerico para modificar valores
+// str          string a modificar
+// bufferSize   el tamaño maximo de la string a modificar
+void NumericKeyboardScreen(char* str, uint8_t bufferSize){
+  currentScreen = "numKB";
+  strcpy(numKBstr, str);
+  numKBvarptr = str;
+  numKBbufferSize = bufferSize;
+  drawNumericKeyboardScreen();
+  prevScreen = currentScreen;
+}
