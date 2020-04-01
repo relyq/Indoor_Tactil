@@ -1,6 +1,12 @@
 # Indoor_Tactil
 las librerias actualizadas no funcionaban por pin_magic.h
 
+deberia empezar a regar en cuanto la humedad en tierra esta por debajo del setpoint?
+
+de misma forma, deberia prender el ventilador ni bien la temperatura sube, o deberia tener una tolerancia de temperatura?
+
+etc
+
 todo:
 
 sistema de control de fases, de forma que al inicar una fase los setpoints de esa fase se conviertan en los setpoints activos del programa
