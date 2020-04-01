@@ -9,14 +9,14 @@ void drawHomeScreen() {
   tft.setCursor(10, 65);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
-  tft.print("Iluminacion   ");
+  tft.print("Iluminacion");
 
   tft.fillCircle(180, 69, 10, RED);
 
   tft.setCursor(10, 90);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
-  tft.print("Ventilacion   ");
+  tft.print("Ventilacion");
 
   if (digitalRead(FANPIN)) {
     tft.fillCircle(180, 94, 10, GREEN);
@@ -27,7 +27,7 @@ void drawHomeScreen() {
   tft.setCursor(10, 115);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
-  tft.print("Vaporizacion   ");
+  tft.print("Vaporizacion");
 
   if (digitalRead(VAPPIN)) {
     tft.fillCircle(180, 119, 10, GREEN);
@@ -38,7 +38,7 @@ void drawHomeScreen() {
   tft.setCursor(10, 140);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
-  tft.print("Riego   ");
+  tft.print("Riego");
 
   if (digitalRead(RIEGOPIN)) {
     tft.fillCircle(180, 144, 10, GREEN);
@@ -46,23 +46,23 @@ void drawHomeScreen() {
     tft.fillCircle(180, 144, 10, RED);
   }
 
-  sprintf(tempSPstr, "%d", tempSP);
-  sprintf(humSPstr, "%d",
-          humSP);  // sprintf(*str, format, value1, value2, etc...)
-
+  strcpy(buffer, tempSPstr);
+  strcat(buffer, "C");
   tft.setCursor(10, 175);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
   tft.print("Temp. ");
   tft.setTextColor(ORANGE);
-  tft.print(strcat(tempSPstr, "C"));  // temperatura configurada
+  tft.print(buffer);  // temperatura configurada
 
+  strcpy(buffer, humSPstr);
+  strcat(buffer, "%");
   tft.setCursor(10, 250);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
   tft.print("Humedad ");
   tft.setTextColor(BLUE);
-  tft.print(strcat(humSPstr, "%"));  // humedad configurada
+  tft.print(buffer);  // humedad configurada
 
   dtostrf(t, 5, 1, temperatura);
   dtostrf(h, 5, 0, humedad);

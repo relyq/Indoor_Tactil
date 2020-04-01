@@ -23,7 +23,7 @@ void tsMenu() {
     Serial.print(") ");
 
     p.x = map(p.x, TS_MINX, TS_MAXX, tft.width(), 0);
-    p.y = map(p.y, TS_MINY, TS_MAXY, tft.height(), -25); // 12px de diferencia entre ts y gfx
+    p.y = map(p.y, TS_MINY, TS_MAXY - 60, tft.height(), 0);
     // if the screen is being touched show cursor position
 
     Serial.print("Mapped p: ");
@@ -36,12 +36,9 @@ void tsMenu() {
     Serial.println(") ");
 
     if (currentScreen == "home") {      // deberia usar un switch
-      if ((p.x > 5 && p.x < 235) && (p.y > 10 && p.y < 50)) {
+      if (homeButtons[0].contains(p.x, p.y)) {
         MenuScreen();
       }
-      /*if (homeButtons[0].contains(p.x, p.y)) {
-        MenuScreen();
-      }*/
     } else if (currentScreen == "menu") {
       if (menuButtons[0].contains(p.x, p.y)) {
         Z1Screen();

@@ -70,7 +70,7 @@ uint8_t textfield_i = 0;
 
 // puntos maximos y minimos de la pantalla tactil, contando el espacio no-dibujable
 #define TS_MINX 120
-#define TS_MINY 80
+#define TS_MINY 75
 #define TS_MAXX 900
 #define TS_MAXY 950
 
@@ -127,8 +127,10 @@ uint8_t humSP = 80;   // humedad aire limite
 char temperatura[8];
 char humedad[8];
 
-char tempSPstr[15];
-char humSPstr[12];
+char tempSPstr[15] = "30";
+char humSPstr[12] = "80";
+
+char buffer[50];
 
 uint8_t hTierra;      // humedad tierra
 uint8_t lastRIEGOPIN;
