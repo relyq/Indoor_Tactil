@@ -7,9 +7,11 @@ de misma forma, deberia prender el ventilador ni bien la temperatura sube, o deb
 
 etc
 
+por la noche la temperatura baja, deberia la temperatura estar mas cerca del punto bajo y por el dia del alto?
+
 todo:
 
-sistema de control de fases, de forma que al inicar una fase los setpoints de esa fase se conviertan en los setpoints activos del programa
+sistema de control de fases, de forma que al iniciar una fase los setpoints de esa fase se conviertan en los setpoints activos del programa
 
 arreglar los valores maximos de los setpoints, ahora mismo es posible configurar mas de 24h luz por dia
 
