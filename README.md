@@ -13,6 +13,10 @@ por la noche la temperatura baja, deberia la temperatura estar mas cerca del pun
 
 todo:
 
+boton que lleve de vuelta al dashboard
+
+status bar
+
 guardar setpoints en eeprom
 
 podria (TENGO QUE) cambiar todos los digitalWrite() y digitalRead() por manipulacion manual de puertos
