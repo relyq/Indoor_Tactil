@@ -13,6 +13,10 @@ por la noche la temperatura baja, deberia la temperatura estar mas cerca del pun
 
 todo:
 
+RTC - configuracion de fecha y hora
+
+fin de fase y comienzo de la siguiente (cuando los dias llegan a 0)
+
 boton que lleve de vuelta al dashboard
 
 status bar
@@ -22,8 +26,6 @@ guardar setpoints en eeprom
 podria (TENGO QUE) cambiar todos los digitalWrite() y digitalRead() por manipulacion manual de puertos
 
 sistema de alarmas para detectar si no esta funcionando un i/o
-
-RTC - configuracion de fecha y hora
 
 hard reset
 
