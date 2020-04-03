@@ -93,55 +93,66 @@ void tsMenu() {
       if (z1f1Buttons[4].contains(p.x, p.y)) {
         Z1Screen();
       } else if (z1f1Buttons[0].contains(p.x, p.y)) {
-        NumericKeyboardScreen(z1f1diasSPstr, 3);
+        NumericKeyboardScreen(z1f1diasSPstr, 3, "Dias");
       } else if (z1f1Buttons[1].contains(p.x, p.y)) {
-        NumericKeyboardScreen(z1f1hluzSPstr, 2);
+        NumericKeyboardScreen(z1f1hluzSPstr, 2, "Horas luz");
       } else if (z1f1Buttons[2].contains(p.x, p.y)) {
-        NumericKeyboardScreen(z1f1tempSPstr, 2);
+        NumericKeyboardScreen(z1f1tempSPstr, 2, "Temp.");
       } else if (z1f1Buttons[3].contains(p.x, p.y)) {
-        NumericKeyboardScreen(z1f1riegoSPstr, 2);
+        NumericKeyboardScreen(z1f1riegoSPstr, 2, "Riego");
       }
     } else if (currentScreen == "z1f2") {
       if (z1f2Buttons[4].contains(p.x, p.y)) {
         Z1Screen();
       } else if (z1f2Buttons[0].contains(p.x, p.y)) {
-        NumericKeyboardScreen(z1f2diasSPstr, 3);
+        NumericKeyboardScreen(z1f2diasSPstr, 3, "Dias");
       } else if (z1f2Buttons[1].contains(p.x, p.y)) {
-        NumericKeyboardScreen(z1f2hluzSPstr, 2);
+        NumericKeyboardScreen(z1f2hluzSPstr, 2, "Horas luz");
       } else if (z1f2Buttons[2].contains(p.x, p.y)) {
-        NumericKeyboardScreen(z1f2tempSPstr, 2);
+        NumericKeyboardScreen(z1f2tempSPstr, 2, "Temp.");
       } else if (z1f2Buttons[3].contains(p.x, p.y)) {
-        NumericKeyboardScreen(z1f2riegoSPstr, 2);
+        NumericKeyboardScreen(z1f2riegoSPstr, 2, "Riego");
       }
     } else if (currentScreen == "z1f3") {
       if (z1f3Buttons[4].contains(p.x, p.y)) {
         Z1Screen();
       } else if (z1f2Buttons[0].contains(p.x, p.y)) {
-        NumericKeyboardScreen(z1f3diasSPstr, 3);
+        NumericKeyboardScreen(z1f3diasSPstr, 3, "Dias");
       } else if (z1f2Buttons[1].contains(p.x, p.y)) {
-        NumericKeyboardScreen(z1f3hluzSPstr, 2);
+        NumericKeyboardScreen(z1f3hluzSPstr, 2, "Horas luz");
       } else if (z1f2Buttons[2].contains(p.x, p.y)) {
-        NumericKeyboardScreen(z1f3tempSPstr, 2);
+        NumericKeyboardScreen(z1f3tempSPstr, 2, "Temp.");
       } else if (z1f2Buttons[3].contains(p.x, p.y)) {
-        NumericKeyboardScreen(z1f3riegoSPstr, 2);
+        NumericKeyboardScreen(z1f3riegoSPstr, 2, "Riego");
       }
     } else if (currentScreen == "z1f4") {
       if (z1f4Buttons[4].contains(p.x, p.y)) {
         Z1Screen();
       } else if (z1f2Buttons[0].contains(p.x, p.y)) {
-        NumericKeyboardScreen(z1f4diasSPstr, 3);
+        NumericKeyboardScreen(z1f4diasSPstr, 3, "Dias");
       } else if (z1f2Buttons[1].contains(p.x, p.y)) {
-        NumericKeyboardScreen(z1f4hluzSPstr, 2);
+        NumericKeyboardScreen(z1f4hluzSPstr, 2, "Horas luz");
       } else if (z1f2Buttons[2].contains(p.x, p.y)) {
-        NumericKeyboardScreen(z1f4tempSPstr, 2);
+        NumericKeyboardScreen(z1f4tempSPstr, 2, "Temp.");
       } else if (z1f2Buttons[3].contains(p.x, p.y)) {
-        NumericKeyboardScreen(z1f4riegoSPstr, 2);
+        NumericKeyboardScreen(z1f4riegoSPstr, 2, "Riego");
       }
     } else if (currentScreen == "z1control") {
       if (z1ControlButtons[2].contains(p.x, p.y)) {
+        z1TerminarConfirmar = 0;
         Z1Screen();
       } else if (z1ControlButtons[0].contains(p.x, p.y)) {
+        z1TerminarConfirmar = 0;
         Z1InicioScreen();
+      } else if (z1ControlButtons[1].contains(p.x, p.y) && z1TerminarConfirmar == 0) {
+        z1ControlButtons[3].initButtonUL(&tft, 20, 170, 200, 40, WHITE, RED, WHITE,
+                                   "Confirmar", BUTTON_TEXTSIZE);
+        z1ControlButtons[3].drawButton();
+        z1TerminarConfirmar = 1;
+      } else if(z1TerminarConfirmar == 1 && z1ControlButtons[3].contains(p.x, p.y)){
+        z1fActiva = 0;
+        z1TerminarConfirmar = 0;
+        tft.fillRect(5, 170, 230, 40, BLACK);
       }
     } else if (currentScreen == "z1inicio") {
       if (z1InicioButtons[5].contains(p.x, p.y)) {

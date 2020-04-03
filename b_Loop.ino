@@ -5,6 +5,43 @@ void loop() {
   DEBUG();
   tsMenu();
 
+  if (z1fActivalast != z1fActiva) {
+    Serial.println("fase activa cambiada");
+    switch (z1fActiva) {
+      case 1:
+        strcpy(tempSPstr, z1f1tempSPstr);
+        strcpy(humSPstr, z1f1humSPstr);
+        strcpy(diasSPstr, z1f1diasSPstr);
+        strcpy(riegoSPstr, z1f1riegoSPstr);
+        break;
+      case 2:
+        strcpy(tempSPstr, z1f2tempSPstr);
+        strcpy(humSPstr, z1f2humSPstr);
+        strcpy(diasSPstr, z1f2diasSPstr);
+        strcpy(riegoSPstr, z1f2riegoSPstr);
+        break;
+      case 3:
+        strcpy(tempSPstr, z1f3tempSPstr);
+        strcpy(humSPstr, z1f3humSPstr);
+        strcpy(diasSPstr, z1f3diasSPstr);
+        strcpy(riegoSPstr, z1f3riegoSPstr);
+        break;
+      case 4:
+        strcpy(tempSPstr, z1f4tempSPstr);
+        strcpy(humSPstr, z1f4humSPstr);
+        strcpy(diasSPstr, z1f4diasSPstr);
+        strcpy(riegoSPstr, z1f4riegoSPstr);
+        break;
+    }
+
+    tempSP = strtol(tempSPstr, 0, 10);
+    humSP = strtol(humSPstr, 0, 10);
+    diasSP = strtol(diasSPstr, 0, 10);
+    riegoSP = strtol(riegoSPstr, 0, 10);
+
+    z1fActivalast = z1fActiva;
+  }
+
   if (t >= tempSP) {
     digitalWrite(FANPIN, 1);
   } else {
@@ -17,7 +54,6 @@ void loop() {
     digitalWrite(VAPPIN, 0);
   }
 
-  lastRIEGOPIN = digitalRead(RIEGOPIN);
   if (hTierra <= hTierraSPl) {
     digitalWrite(RIEGOPIN, 1);
   } else if (hTierra >= hTierraSPh) {
@@ -26,28 +62,41 @@ void loop() {
 
   if (currentScreen == "home" &&
       (lastT != t || lastH != h ||
-       lastRIEGOPIN !=
-           digitalRead(RIEGOPIN))) {  // TENGO QUE CAMBIAR ESTO PORQUE ME VA A
-                                      // TRAER PROBLEMAS
+       lasthTierra !=
+           hTierra || lastdias != dias)) {
     lastT = t;
     lastH = h;
+    lasthTierra = hTierra;
+    lastdias = dias;
 
-    // dtostrf(double, strlength, precision, charbuff)
-    // convierte double a char[]
+    sprintf(buffer, "%d", dias);
 
-    dtostrf(t, 5, 1, buffer);
-    strcat(buffer, " C");
+    tft.setCursor(65, 230);
+    tft.setTextSize(3);
+    tft.setTextColor(WHITE, BLACK);
+    tft.print(buffer);
 
-    tft.setCursor(10, 200);
-    tft.setTextSize(5);
+    sprintf(buffer, "%d", hTierra);
+    strcat(buffer, "%");
+
+    tft.setCursor(185, 230);
+    tft.setTextSize(3);
+    tft.setTextColor(WHITE, BLACK);
+    tft.print(buffer);
+
+    dtostrf(t, 4, 1, buffer);
+    strcat(buffer, "C");
+
+    tft.setCursor(30, 285);
+    tft.setTextSize(3);
     tft.setTextColor(WHITE, BLACK);
     tft.print(buffer);  // temperatura leida por el DHT
 
-    dtostrf(h, 5, 0, buffer);
-    strcat(buffer, " %");
+    sprintf(buffer, "%d", (uint8_t)h);
+    strcat(buffer, "%");
 
-    tft.setCursor(10, 275);
-    tft.setTextSize(5);
+    tft.setCursor(185, 285);
+    tft.setTextSize(3);
     tft.setTextColor(WHITE, BLACK);
     tft.print(buffer);  // humedad leida por el DHT
 
@@ -123,6 +172,10 @@ void DEBUG() {
         val += msgval[1] - '0';
         hTierra = val;
         break;
+      case 'D':  // dias
+        val = (msgval[0] - '0') * 10;
+        val += msgval[1] - '0';
+        dias = val;
     }
 
     Serial.print(msg[0]);

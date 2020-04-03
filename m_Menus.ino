@@ -88,11 +88,11 @@ void Z1InicioScreen(){
 // pantalla de teclado numerico para modificar valores
 // str          string a modificar
 // bufferSize   el tamaño maximo de la string a modificar
-void NumericKeyboardScreen(char* str, uint8_t bufferSize){
+void NumericKeyboardScreen(char* str, uint8_t bufferSize, char* title){
   currentScreen = "numKB";
   strcpy(numKBstr, str);
   numKBvarptr = str;
   numKBbufferSize = bufferSize;
-  drawNumericKeyboardScreen();
+  drawNumericKeyboardScreen(title);
   prevScreen = currentScreen;
 }

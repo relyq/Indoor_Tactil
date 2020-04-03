@@ -99,7 +99,7 @@ Adafruit_GFX_Button z1f1Buttons[5];
 Adafruit_GFX_Button z1f2Buttons[5];
 Adafruit_GFX_Button z1f3Buttons[5];
 Adafruit_GFX_Button z1f4Buttons[5];
-Adafruit_GFX_Button z1ControlButtons[2];
+Adafruit_GFX_Button z1ControlButtons[4];
 Adafruit_GFX_Button z1InicioButtons[6];
 Adafruit_GFX_Button ajustesButtons[5];
 Adafruit_GFX_Button alarmasButtons[1];
@@ -118,9 +118,11 @@ unsigned long time;     // acá guardo el tiempo que lleva el programa
 unsigned long lastTime; // acá guardo el tiempo de programa en el que
                         // llamé al dht por última vez
 
-
-uint8_t z1fActiva = 1;
+uint8_t z1fActiva = 0;
+uint8_t z1fActivalast = z1fActiva;
 uint8_t z1fSeleccionada = z1fActiva; // fase seleccionada en la pantalla de inicio de fases
+
+bool z1TerminarConfirmar = 0;
 
 //// valores default
 char z1f1diasSPstr[4] = "90";
@@ -149,11 +151,23 @@ char z1f4humSPstr[3] = "80";
 
 char buffer[50];
 
-char tempSPstr[3];
-char humSPstr[3];
+#define tempSPdef "30"
+#define humSPdef "80"
+#define diasSPdef "90"
+#define riegoSPdef "60"
 
-uint8_t tempSP;  // temperatura limite
-uint8_t humSP;   // humedad aire limite
+char tempSPstr[3] = tempSPdef;
+char humSPstr[3] = humSPdef;
+char diasSPstr[4] = diasSPdef;
+char riegoSPstr[3] = riegoSPdef;
+
+uint8_t tempSP;   // temperatura limite
+uint8_t humSP;    // humedad aire limite
+uint8_t riegoSP;  // riego limite
+uint16_t diasSP;  // dias de la fase
+
+uint16_t dias;
+uint16_t lastdias;
 
 float t;  // temperatura
 float h;  // humedad
@@ -162,7 +176,7 @@ float lastT;
 float lastH;
 
 uint8_t hTierra;      // humedad tierra
-uint8_t lastRIEGOPIN;
+uint8_t lasthTierra;
 
 uint8_t hTierraSPl = 40;  // humedad tierra limite inferior
 uint8_t hTierraSPh = 60;  // humedad tierra limite superior
