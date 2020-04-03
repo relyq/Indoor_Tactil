@@ -140,6 +140,184 @@ void tsMenu() {
     } else if (currentScreen == "z1control") {
       if (z1ControlButtons[2].contains(p.x, p.y)) {
         Z1Screen();
+      } else if (z1ControlButtons[0].contains(p.x, p.y)) {
+        Z1InicioScreen();
+      }
+    } else if (currentScreen == "z1inicio") {
+      if (z1InicioButtons[5].contains(p.x, p.y)) {
+        Z1ControlScreen();
+      } else if (z1InicioButtons[0].contains(p.x, p.y) &&
+                 (z1fActiva != 1 && z1fSeleccionada != 1)) {
+        z1fSeleccionada = 1;
+        z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, YELLOW,
+                                        WHITE, "1", BUTTON_TEXTSIZE);
+
+        z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE, DARKGREY,
+                                        WHITE, "2", BUTTON_TEXTSIZE);
+
+        z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE, DARKGREY,
+                                        WHITE, "3", BUTTON_TEXTSIZE);
+
+        z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE, DARKGREY,
+                                        WHITE, "4", BUTTON_TEXTSIZE);
+        switch (z1fActiva) {
+          break;
+          case 2:
+            z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE, OLIVE,
+                                            WHITE, "2", BUTTON_TEXTSIZE);
+            break;
+          case 3:
+            z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE, OLIVE,
+                                            WHITE, "3", BUTTON_TEXTSIZE);
+            break;
+          case 4:
+            z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
+                                            OLIVE, WHITE, "4", BUTTON_TEXTSIZE);
+            break;
+        }
+        z1InicioButtons[0].drawRectButton();
+        z1InicioButtons[1].drawRectButton();
+        z1InicioButtons[2].drawRectButton();
+        z1InicioButtons[3].drawRectButton();
+
+      } else if (z1InicioButtons[1].contains(p.x, p.y) &&
+                 (z1fActiva != 2 && z1fSeleccionada != 2)) {
+        z1fSeleccionada = 2;
+        z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE, YELLOW,
+                                        WHITE, "2", BUTTON_TEXTSIZE);
+
+        z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, DARKGREY,
+                                        WHITE, "1", BUTTON_TEXTSIZE);
+
+        z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE, DARKGREY,
+                                        WHITE, "3", BUTTON_TEXTSIZE);
+
+        z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE, DARKGREY,
+                                        WHITE, "4", BUTTON_TEXTSIZE);
+
+        switch (z1fActiva) {
+          case 1:
+            z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, OLIVE,
+                                            WHITE, "1", BUTTON_TEXTSIZE);
+            break;
+          case 3:
+            z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE, OLIVE,
+                                            WHITE, "3", BUTTON_TEXTSIZE);
+            break;
+          case 4:
+            z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
+                                            OLIVE, WHITE, "4", BUTTON_TEXTSIZE);
+            break;
+        }
+        z1InicioButtons[0].drawRectButton();
+        z1InicioButtons[1].drawRectButton();
+        z1InicioButtons[2].drawRectButton();
+        z1InicioButtons[3].drawRectButton();
+
+      } else if (z1InicioButtons[2].contains(p.x, p.y) &&
+                 (z1fActiva != 3 && z1fSeleccionada != 3)) {
+        z1fSeleccionada = 3;
+        z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE, YELLOW,
+                                        WHITE, "3", BUTTON_TEXTSIZE);
+
+        z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, DARKGREY,
+                                        WHITE, "1", BUTTON_TEXTSIZE);
+
+        z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE, DARKGREY,
+                                        WHITE, "2", BUTTON_TEXTSIZE);
+
+        z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE, DARKGREY,
+                                        WHITE, "4", BUTTON_TEXTSIZE);
+
+        switch (z1fActiva) {
+          case 1:
+            z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, OLIVE,
+                                            WHITE, "1", BUTTON_TEXTSIZE);
+            break;
+          case 2:
+            z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE, OLIVE,
+                                            WHITE, "2", BUTTON_TEXTSIZE);
+            break;
+          case 4:
+            z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
+                                            OLIVE, WHITE, "4", BUTTON_TEXTSIZE);
+            break;
+        }
+        z1InicioButtons[0].drawRectButton();
+        z1InicioButtons[1].drawRectButton();
+        z1InicioButtons[2].drawRectButton();
+        z1InicioButtons[3].drawRectButton();
+
+      } else if (z1InicioButtons[3].contains(p.x, p.y) &&
+                 (z1fActiva != 4 && z1fSeleccionada != 4)) {
+        z1fSeleccionada = 4;
+        z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE, YELLOW,
+                                        WHITE, "4", BUTTON_TEXTSIZE);
+
+        z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, DARKGREY,
+                                        WHITE, "1", BUTTON_TEXTSIZE);
+
+        z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE, DARKGREY,
+                                        WHITE, "2", BUTTON_TEXTSIZE);
+
+        z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE, DARKGREY,
+                                        WHITE, "3", BUTTON_TEXTSIZE);
+
+        switch (z1fActiva) {
+          case 1:
+            z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, OLIVE,
+                                            WHITE, "1", BUTTON_TEXTSIZE);
+            break;
+          case 2:
+            z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE, OLIVE,
+                                            WHITE, "2", BUTTON_TEXTSIZE);
+            break;
+          case 3:
+            z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE, OLIVE,
+                                            WHITE, "3", BUTTON_TEXTSIZE);
+            break;
+        }
+        z1InicioButtons[0].drawRectButton();
+        z1InicioButtons[1].drawRectButton();
+        z1InicioButtons[2].drawRectButton();
+        z1InicioButtons[3].drawRectButton();
+
+      } else if (z1InicioButtons[4].contains(p.x, p.y) &&
+                 (z1fActiva != z1fSeleccionada)) {
+        z1fActiva = z1fSeleccionada;
+        z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, DARKGREY,
+                                        WHITE, "1", BUTTON_TEXTSIZE);
+
+        z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE, DARKGREY,
+                                        WHITE, "2", BUTTON_TEXTSIZE);
+
+        z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE, DARKGREY,
+                                        WHITE, "3", BUTTON_TEXTSIZE);
+
+        z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE, DARKGREY,
+                                        WHITE, "4", BUTTON_TEXTSIZE);
+        switch (z1fActiva) {
+          case 1:
+            z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, OLIVE,
+                                            WHITE, "1", BUTTON_TEXTSIZE);
+            break;
+          case 2:
+            z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE, OLIVE,
+                                            WHITE, "2", BUTTON_TEXTSIZE);
+            break;
+          case 3:
+            z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE, OLIVE,
+                                            WHITE, "3", BUTTON_TEXTSIZE);
+            break;
+          case 4:
+            z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
+                                            OLIVE, WHITE, "4", BUTTON_TEXTSIZE);
+            break;
+        }
+        z1InicioButtons[0].drawRectButton();
+        z1InicioButtons[1].drawRectButton();
+        z1InicioButtons[2].drawRectButton();
+        z1InicioButtons[3].drawRectButton();
       }
     } else if (currentScreen == "numKB") {
       numKBstrLength = strlen(numKBstr);
@@ -164,71 +342,62 @@ void tsMenu() {
           tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                         60 - ((7 * BUTTON_TEXTSIZE) / 2));
           tft.print('0');
-          delay(150);
         } else if (numericKeyboardButtons[4].contains(p.x, p.y)) {
           numKBstr[numKBstrLength] = '1';
 
           tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                         60 - ((7 * BUTTON_TEXTSIZE) / 2));
           tft.print('1');
-          delay(150);
         } else if (numericKeyboardButtons[5].contains(p.x, p.y)) {
           numKBstr[numKBstrLength] = '2';
 
           tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                         60 - ((7 * BUTTON_TEXTSIZE) / 2));
           tft.print('2');
-          delay(150);
         } else if (numericKeyboardButtons[6].contains(p.x, p.y)) {
           numKBstr[numKBstrLength] = '3';
 
           tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                         60 - ((7 * BUTTON_TEXTSIZE) / 2));
           tft.print('3');
-          delay(150);
         } else if (numericKeyboardButtons[7].contains(p.x, p.y)) {
           numKBstr[numKBstrLength] = '4';
 
           tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                         60 - ((7 * BUTTON_TEXTSIZE) / 2));
           tft.print('4');
-          delay(150);
         } else if (numericKeyboardButtons[8].contains(p.x, p.y)) {
           numKBstr[numKBstrLength] = '5';
 
           tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                         60 - ((7 * BUTTON_TEXTSIZE) / 2));
           tft.print('5');
-          delay(150);
         } else if (numericKeyboardButtons[9].contains(p.x, p.y)) {
           numKBstr[numKBstrLength] = '6';
 
           tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                         60 - ((7 * BUTTON_TEXTSIZE) / 2));
           tft.print('6');
-          delay(150);
         } else if (numericKeyboardButtons[10].contains(p.x, p.y)) {
           numKBstr[numKBstrLength] = '7';
 
           tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                         60 - ((7 * BUTTON_TEXTSIZE) / 2));
           tft.print('7');
-          delay(150);
         } else if (numericKeyboardButtons[11].contains(p.x, p.y)) {
           numKBstr[numKBstrLength] = '8';
 
           tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                         60 - ((7 * BUTTON_TEXTSIZE) / 2));
           tft.print('8');
-          delay(150);
         } else if (numericKeyboardButtons[12].contains(p.x, p.y)) {
           numKBstr[numKBstrLength] = '9';
 
           tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                         60 - ((7 * BUTTON_TEXTSIZE) / 2));
           tft.print('9');
-          delay(150);
         }
+        delay(150);
       }
       // aca van cada una de las pantallas en las que hay un teclado
       {

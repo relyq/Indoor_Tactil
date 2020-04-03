@@ -100,6 +100,7 @@ Adafruit_GFX_Button z1f2Buttons[5];
 Adafruit_GFX_Button z1f3Buttons[5];
 Adafruit_GFX_Button z1f4Buttons[5];
 Adafruit_GFX_Button z1ControlButtons[2];
+Adafruit_GFX_Button z1InicioButtons[6];
 Adafruit_GFX_Button ajustesButtons[5];
 Adafruit_GFX_Button alarmasButtons[1];
 Adafruit_GFX_Button relojButtons[1];
@@ -116,39 +117,49 @@ unsigned long time;     // acá guardo el tiempo que lleva el programa
                         // MILLIS() LLEGA A SU OVERFLOW A LOS 50 DIAS
 unsigned long lastTime; // acá guardo el tiempo de programa en el que
                         // llamé al dht por última vez
-float t;  // temperatura
-float h;  // humedad
-float hi; // sensación térmica
-float lastT;
-float lastH;
 
-uint8_t tempSP = 30;  // temperatura limite
-uint8_t humSP = 80;   // humedad aire limite
 
-char tempSPstr[3] = "30";
-char humSPstr[3] = "80";
+uint8_t z1fActiva = 1;
+uint8_t z1fSeleccionada = z1fActiva; // fase seleccionada en la pantalla de inicio de fases
 
+//// valores default
 char z1f1diasSPstr[4] = "90";
 char z1f1hluzSPstr[3] = "16";
 char z1f1tempSPstr[3] = "25";
 char z1f1riegoSPstr[3] = "60";
+char z1f1humSPstr[3] = "80";
 
 char z1f2diasSPstr[4] = "90";
 char z1f2hluzSPstr[3] = "16";
 char z1f2tempSPstr[3] = "25";
 char z1f2riegoSPstr[3] = "60";
+char z1f2humSPstr[3] = "80";
 
 char z1f3diasSPstr[4] = "90";
 char z1f3hluzSPstr[3] = "16";
 char z1f3tempSPstr[3] = "25";
 char z1f3riegoSPstr[3] = "60";
+char z1f3humSPstr[3] = "80";
 
 char z1f4diasSPstr[4] = "90";
 char z1f4hluzSPstr[3] = "16";
 char z1f4tempSPstr[3] = "25";
 char z1f4riegoSPstr[3] = "60";
+char z1f4humSPstr[3] = "80";
 
 char buffer[50];
+
+char tempSPstr[3];
+char humSPstr[3];
+
+uint8_t tempSP;  // temperatura limite
+uint8_t humSP;   // humedad aire limite
+
+float t;  // temperatura
+float h;  // humedad
+//float hi; // sensación térmica
+float lastT;
+float lastH;
 
 uint8_t hTierra;      // humedad tierra
 uint8_t lastRIEGOPIN;

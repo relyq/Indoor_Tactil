@@ -14,9 +14,29 @@ void setup() {
   digitalWrite(RIEGOPIN, 0);
   pinMode(SENSORTIERRAPIN, INPUT_PULLUP);
 
-  dht.begin();
+  switch (z1fActiva) {
+    case 1:
+      strcpy(tempSPstr, z1f1tempSPstr);
+      strcpy(humSPstr, z1f1humSPstr);
+      break;
+    case 2:
+      strcpy(tempSPstr, z1f2tempSPstr);
+      strcpy(humSPstr, z1f2humSPstr);
+      break;
+    case 3:
+      strcpy(tempSPstr, z1f3tempSPstr);
+      strcpy(humSPstr, z1f3humSPstr);
+      break;
+    case 4:
+      strcpy(tempSPstr, z1f4tempSPstr);
+      strcpy(humSPstr, z1f4humSPstr);
+      break;
+  }
 
-  Serial.println(tft.readID(), HEX);
+  tempSP = strtol(tempSPstr, 0, 10);
+  humSP = strtol(humSPstr, 0, 10);
+
+  dht.begin();
 
   tft.reset();
   tft.begin(0x9341);

@@ -76,6 +76,13 @@ void Z1ControlScreen(){
   prevScreen = currentScreen;
 }
 
+void Z1InicioScreen(){
+  currentScreen = "z1inicio";
+  z1fSeleccionada = z1fActiva;
+  drawZ1InicioScreen();
+  prevScreen = currentScreen;
+}
+
 
 
 // pantalla de teclado numerico para modificar valores
