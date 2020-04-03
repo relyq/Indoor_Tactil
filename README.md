@@ -13,6 +13,8 @@ por la noche la temperatura baja, deberia la temperatura estar mas cerca del pun
 
 todo:
 
+agregar pantalla de startup
+
 RTC - configuracion de fecha y hora
 
 fin de fase y comienzo de la siguiente (cuando los dias llegan a 0)
