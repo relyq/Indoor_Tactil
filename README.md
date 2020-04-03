@@ -1,4 +1,6 @@
 # Indoor_Tactil
+cuando termine no puedo olvidarme de eliminar todos los set de texto etc que no necesito volver a repetir
+
 las librerias actualizadas no funcionaban por pin_magic.h
 
 hay plantas que crezcan en temperaturas negativas?
