@@ -15,6 +15,8 @@ por la noche la temperatura baja, deberia la temperatura estar mas cerca del pun
 
 todo:
 
+agregar low sp de temp, hum, y riego
+
 si no hay fase activa, forzar todas las salidas a estar apagadas
 
 agregar pantalla de startup
