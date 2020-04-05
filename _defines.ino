@@ -95,10 +95,10 @@ DHT dht(DHTPIN, DHTTYPE);
 Adafruit_GFX_Button homeButtons[1];
 Adafruit_GFX_Button menuButtons[3];
 Adafruit_GFX_Button z1Buttons[6];
-Adafruit_GFX_Button z1f1Buttons[5];
-Adafruit_GFX_Button z1f2Buttons[5];
-Adafruit_GFX_Button z1f3Buttons[5];
-Adafruit_GFX_Button z1f4Buttons[5];
+Adafruit_GFX_Button z1f1Buttons[12];
+Adafruit_GFX_Button z1f2Buttons[12];
+Adafruit_GFX_Button z1f3Buttons[12];
+Adafruit_GFX_Button z1f4Buttons[12];
 Adafruit_GFX_Button z1ControlButtons[4];
 Adafruit_GFX_Button z1InicioButtons[6];
 Adafruit_GFX_Button ajustesButtons[5];
@@ -127,43 +127,64 @@ bool z1TerminarConfirmar = 0;
 //// valores default
 char z1f1diasSPstr[4] = "90";
 char z1f1hluzSPstr[3] = "16";
-char z1f1tempSPstr[3] = "25";
-char z1f1riegoSPstr[3] = "60";
-char z1f1humSPstr[3] = "80";
+char z1f1templSPstr[3] = "20";
+char z1f1temphSPstr[3] = "25";
+char z1f1riegolSPstr[3] = "20";
+char z1f1riegohSPstr[3] = "60";
+char z1f1humlSPstr[3] = "60";
+char z1f1humhSPstr[3] = "80";
 
 char z1f2diasSPstr[4] = "90";
 char z1f2hluzSPstr[3] = "16";
-char z1f2tempSPstr[3] = "25";
-char z1f2riegoSPstr[3] = "60";
-char z1f2humSPstr[3] = "80";
+char z1f2templSPstr[3] = "20";
+char z1f2temphSPstr[3] = "25";
+char z1f2riegolSPstr[3] = "20";
+char z1f2riegohSPstr[3] = "60";
+char z1f2humlSPstr[3] = "60";
+char z1f2humhSPstr[3] = "80";
 
 char z1f3diasSPstr[4] = "90";
 char z1f3hluzSPstr[3] = "16";
-char z1f3tempSPstr[3] = "25";
-char z1f3riegoSPstr[3] = "60";
-char z1f3humSPstr[3] = "80";
+char z1f3templSPstr[3] = "20";
+char z1f3temphSPstr[3] = "25";
+char z1f3riegolSPstr[3] = "20";
+char z1f3riegohSPstr[3] = "60";
+char z1f3humlSPstr[3] = "60";
+char z1f3humhSPstr[3] = "80";
 
 char z1f4diasSPstr[4] = "90";
 char z1f4hluzSPstr[3] = "16";
-char z1f4tempSPstr[3] = "25";
-char z1f4riegoSPstr[3] = "60";
-char z1f4humSPstr[3] = "80";
+char z1f4templSPstr[3] = "20";
+char z1f4temphSPstr[3] = "25";
+char z1f4riegolSPstr[3] = "20";
+char z1f4riegohSPstr[3] = "60";
+char z1f4humlSPstr[3] = "60";
+char z1f4humhSPstr[3] = "80";
 
 char buffer[50];
 
-#define tempSPdef "30"
-#define humSPdef "80"
+#define templSPdef "20"
+#define temphSPdef "30"
+#define humlSPdef "60"
+#define humhSPdef "80"
 #define diasSPdef "90"
-#define riegoSPdef "60"
+#define riegolSPdef "20"
+#define riegohSPdef "60"
 
-char tempSPstr[3] = tempSPdef;
-char humSPstr[3] = humSPdef;
+char templSPstr[3] = templSPdef;
+char temphSPstr[3] = temphSPdef;
+char humlSPstr[3] = humlSPdef;
+char humhSPstr[3] = humhSPdef;
 char diasSPstr[4] = diasSPdef;
-char riegoSPstr[3] = riegoSPdef;
+char riegolSPstr[3] = riegolSPdef;
+char riegohSPstr[3] = riegohSPdef;
 
-uint8_t tempSP;   // temperatura limite
-uint8_t humSP;    // humedad aire limite
-uint8_t riegoSP;  // riego limite
+uint8_t templSP;   // temperatura limite l
+uint8_t temphSP;   // temperatura limite h
+uint8_t humlSP;    // humedad aire limite l
+uint8_t humhSP;    // humedad aire limite h
+uint8_t riegolSP;  // riego limite l
+uint8_t riegohSP;  // riego limite h
 uint16_t diasSP;  // dias de la fase
 
 uint16_t dias;
@@ -177,9 +198,6 @@ float lastH;
 
 uint8_t hTierra;      // humedad tierra
 uint8_t lasthTierra;
-
-uint8_t hTierraSPl = 40;  // humedad tierra limite inferior
-uint8_t hTierraSPh = 60;  // humedad tierra limite superior
 
 const uint8_t FANPIN = 33;
 const uint8_t VAPPIN = 35;
