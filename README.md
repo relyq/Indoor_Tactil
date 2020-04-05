@@ -3,19 +3,15 @@ cuando termine no puedo olvidarme de eliminar todos los set de texto etc que no 
 
 las librerias actualizadas no funcionaban por pin_magic.h
 
-hay plantas que crezcan en temperaturas negativas?
-
-deberia empezar a regar en cuanto la humedad en tierra esta por debajo del setpoint?
-
-de misma forma, deberia prender el ventilador ni bien la temperatura sube, o deberia tener una tolerancia de temperatura?
-
-etc
-
-por la noche la temperatura baja, deberia la temperatura estar mas cerca del punto bajo y por el dia del alto?
-
 todo:
 
+eliminar botones y variables que no necesite para ahorrar memoria
+
+temp maxima 80 (dht22 max)
+
 agregar low sp de temp, hum, y riego
+
+prender el ventilador x tiempo por la noche para refrigerar y cambiar el aire
 
 si no hay fase activa, forzar todas las salidas a estar apagadas
 
