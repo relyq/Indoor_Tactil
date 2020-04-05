@@ -5,6 +5,8 @@ las librerias actualizadas no funcionaban por pin_magic.h
 
 todo:
 
+temp maxima 80 (dht22 max)
+
 agregar low sp de temp, hum, y riego
 
 prender el ventilador x tiempo por la noche para refrigerar y cambiar el aire
