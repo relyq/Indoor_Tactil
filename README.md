@@ -9,9 +9,7 @@ eliminar botones y variables que no necesite para ahorrar memoria
 
 temp maxima 80 (dht22 max)
 
-agregar low sp de temp, hum, y riego
-
-prender el ventilador x tiempo por la noche para refrigerar y cambiar el aire
+prender el ventilador por x tiempo por la noche para refrigerar y cambiar el aire
 
 si no hay fase activa, forzar todas las salidas a estar apagadas
 
