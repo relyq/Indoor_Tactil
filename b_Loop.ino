@@ -79,7 +79,7 @@ void loop() {
   }
 
   if (currentScreen == "home") {
-    if (now.unixtime() - prevTime >= 60) {
+    if (now.second() == 0 && now.unixtime() - prevTime >=2) {
       prevTime = now.unixtime();
       Serial.print(now.year(), DEC);
       Serial.print('/');

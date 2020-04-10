@@ -80,9 +80,9 @@ void setup() {
   tft.setRotation(0);
   tft.fillScreen(BLACK);
 
-  HomeScreen();
   Serial.println("Starting Loop");
 
   now = rtc.now();
-  prevTime = now.unixtime();
+  prevTime = now.unixtime() + 61;
+  HomeScreen();
 }

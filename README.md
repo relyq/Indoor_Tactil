@@ -5,6 +5,8 @@ las librerias actualizadas no funcionaban por pin_magic.h
 
 todo:
 
+agregar puntos medios de los setpoints
+
 usar operador ternario para if/else simples
 
 eliminar botones (los que no tienen texto o no lo tienen centrado) y variables que no necesite para ahorrar memoria
@@ -16,8 +18,6 @@ prender el ventilador por x tiempo por la noche para refrigerar y cambiar el air
 si no hay fase activa, forzar todas las salidas a estar apagadas
 
 agregar pantalla de startup
-
-RTC - configuracion de fecha y hora
 
 fin de fase y comienzo de la siguiente (cuando los dias llegan a 0)
 
