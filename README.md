@@ -5,6 +5,8 @@ las librerias actualizadas no funcionaban por pin_magic.h
 
 todo:
 
+deberia cambiar todas las strings que guardan setpoints por ints de forma que al teclado le entren y salgan numeros y cuando necesito imprimirlos los cargo al buffer como al resto de numeros
+
 agregar puntos medios de los setpoints
 
 usar operador ternario para if/else simples
