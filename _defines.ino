@@ -1,11 +1,12 @@
 
+#include <DHT.h>
+#include <RTClib.h>
+#include <SPI.h>
+#include <string.h>
+
 #include "src/Adafruit_GFX.h"     // Core graphics library
 #include "src/Adafruit_TFTLCD.h"  // Hardware-specific library
 #include "src/TouchScreen.h"
-#include <SPI.h>
-#include <DHT.h>
-#include <string.h>
-
 
 #define DHTPIN 31
 #define DHTTYPE DHT11
@@ -64,11 +65,13 @@ char textfield[TEXT_LEN + 1] = "";
 uint8_t textfield_i = 0;
 
 #define YP A3  // must be an analog pin, use "An" notation! // LCD CS
-#define XM A2  // must be an analog pin, use "An" notation! // LCD RS - COMMAND/DATA
-#define YM 9   // can be a digital pin                      // LCD D1
-#define XP 8   // can be a digital pin                      // LCD D0
+#define XM \
+  A2  // must be an analog pin, use "An" notation! // LCD RS - COMMAND/DATA
+#define YM 9  // can be a digital pin                      // LCD D1
+#define XP 8  // can be a digital pin                      // LCD D0
 
-// puntos maximos y minimos de la pantalla tactil, contando el espacio no-dibujable
+// puntos maximos y minimos de la pantalla tactil, contando el espacio
+// no-dibujable
 #define TS_MINX 120
 #define TS_MINY 75
 #define TS_MAXX 900
@@ -91,6 +94,7 @@ TouchScreen ts = TouchScreen(XP, YP, XM, YM, 10);
 
 DHT dht(DHTPIN, DHTTYPE);
 
+RTC_DS3231 rtc;
 
 Adafruit_GFX_Button homeButtons[1];
 Adafruit_GFX_Button menuButtons[3];
@@ -103,24 +107,19 @@ Adafruit_GFX_Button z1ControlButtons[4];
 Adafruit_GFX_Button z1InicioButtons[6];
 Adafruit_GFX_Button ajustesButtons[5];
 Adafruit_GFX_Button alarmasButtons[1];
-Adafruit_GFX_Button relojButtons[1];
+Adafruit_GFX_Button relojButtons[2];
 Adafruit_GFX_Button programasButtons[1];
 Adafruit_GFX_Button resetButtons[1];
 Adafruit_GFX_Button numericKeyboardButtons[16];
-
 
 // estos dos deberian ser char[]
 char* currentScreen;  // acá guardo la pantalla activa
 char* prevScreen;     // acá guardo la pantalla anterior
 
-unsigned long time;     // acá guardo el tiempo que lleva el programa
-                        // MILLIS() LLEGA A SU OVERFLOW A LOS 50 DIAS
-unsigned long lastTime; // acá guardo el tiempo de programa en el que
-                        // llamé al dht por última vez
-
 uint8_t z1fActiva = 0;
 uint8_t z1fActivalast = z1fActiva;
-uint8_t z1fSeleccionada = z1fActiva; // fase seleccionada en la pantalla de inicio de fases
+uint8_t z1fSeleccionada =
+    z1fActiva;  // fase seleccionada en la pantalla de inicio de fases
 
 bool z1TerminarConfirmar = 0;
 
@@ -161,8 +160,6 @@ char z1f4riegohSPstr[3] = "60";
 char z1f4humlSPstr[3] = "60";
 char z1f4humhSPstr[3] = "80";
 
-char buffer[50];
-
 #define templSPdef "20"
 #define temphSPdef "30"
 #define humlSPdef "60"
@@ -185,23 +182,23 @@ uint8_t humlSP;    // humedad aire limite l
 uint8_t humhSP;    // humedad aire limite h
 uint8_t riegolSP;  // riego limite l
 uint8_t riegohSP;  // riego limite h
-uint16_t diasSP;  // dias de la fase
+uint16_t diasSP;   // dias de la fase
 
 uint16_t dias;
-uint16_t lastdias;
+uint16_t lastdias = 0xffff;
 
 float t;  // temperatura
 float h;  // humedad
-//float hi; // sensación térmica
-float lastT;
-float lastH;
+float lastT = 255;
+float lastH = 255;
 
-uint8_t hTierra;      // humedad tierra
-uint8_t lasthTierra;
+uint8_t hTierra;  // humedad tierra
+uint8_t lasthTierra = 255;
+
+const uint8_t SENSORTIERRAPIN = A8;
 
 const uint8_t FANPIN = 33;
 const uint8_t VAPPIN = 35;
-const uint8_t SENSORTIERRAPIN = A8;
 const uint8_t RIEGOPIN = 37;
 
 char numKBstr[10];
@@ -209,3 +206,25 @@ char* numKBPrevScreen;
 char* numKBvarptr;
 uint8_t numKBstrLength;
 uint8_t numKBbufferSize;
+
+unsigned long time;      // acá guardo el tiempo que lleva el programa
+                         // MILLIS() LLEGA A SU OVERFLOW A LOS 50 DIAS
+unsigned long lastTime;  // acá guardo el tiempo de programa en el que
+// llamé al dht por última vez
+
+const char daysOfTheWeek[7][10] = {"Domingo", "Lunes",   "Martes", "Miercoles",
+                                   "Jueves",  "Viernes", "Sabado"};
+
+DateTime now;
+uint32_t prevTime;
+uint16_t relojYYYY;
+uint8_t relojMM;
+uint8_t relojDD;
+uint8_t relojhh;
+uint8_t relojmm;
+
+char buffer[50];
+
+/*
+
+*/

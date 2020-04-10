@@ -56,6 +56,13 @@ void drawHomeScreen() {
     tft.print("-");
   }
 
+  strcpy(buffer, "MM/DD/YY hh:mm");
+  now.toString(buffer);
+  tft.setTextSize(2);
+  tft.setTextColor(WHITE, BLACK);
+  tft.setCursor(10, 181);
+  tft.print(buffer);
+
   tft.setCursor(10, 200);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
@@ -224,6 +231,54 @@ void drawRelojScreen() {
   tft.setTextSize(2);
   tft.setCursor(120 - (((6 * 2 * 5) - 3) / 2), 10);
   tft.print("Reloj");
+
+  now = rtc.now();
+
+  relojYYYY = now.year();
+  relojMM = now.month();
+  relojDD = now.day();
+  relojhh = now.hour();
+  relojmm = now.minute();
+
+  tft.setTextSize(3);
+
+  tft.fillTriangle(61, 34, 49, 50, 73, 50, ORANGE);     // año++
+  tft.fillTriangle(136, 34, 124, 50, 148, 50, ORANGE);  // mes++
+  tft.fillTriangle(192, 34, 180, 50, 204, 50, ORANGE);  // dia++
+
+  sprintf(buffer, "%d", relojYYYY);
+  tft.setCursor(28, 60);
+  tft.print(buffer);
+
+  sprintf(buffer, "%02d", relojMM);
+  tft.setCursor(28 + 72 + 20, 60);
+  tft.print(buffer);
+
+  sprintf(buffer, "%02d", relojDD);
+  tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+  tft.print(buffer);
+
+  tft.fillTriangle(61, 107, 49, 91, 73, 91, ORANGE);     // año--
+  tft.fillTriangle(136, 107, 124, 91, 148, 91, ORANGE);  // mes--
+  tft.fillTriangle(192, 107, 180, 91, 204, 91, ORANGE);  // dia--
+
+  tft.fillTriangle(89, 124, 77, 140, 101, 140, ORANGE);    // hora++
+  tft.fillTriangle(146, 124, 134, 140, 158, 140, ORANGE);  // minuto++
+
+  sprintf(buffer, "%02d", relojhh);
+  tft.setCursor(74, 150);
+  tft.print(buffer);
+
+  sprintf(buffer, "%02d", relojmm);
+  tft.setCursor(74 + 36 + 20, 150);
+  tft.print(buffer);
+
+  tft.fillTriangle(89, 197, 77, 181, 101, 181, ORANGE);    // hora--
+  tft.fillTriangle(146, 197, 134, 181, 158, 181, ORANGE);  // minuto--
+
+  relojButtons[1].initButtonUL(&tft, 20, 210, 200, 40, WHITE, DARKGREEN, WHITE,
+                               "Aceptar", BUTTON_TEXTSIZE);
+  relojButtons[1].drawButton();
 
   relojButtons[0].initButtonUL(&tft, 5, 260, 230, 40, WHITE, LIGHTGREY, WHITE,
                                "Volver", BUTTON_TEXTSIZE);

@@ -64,9 +64,310 @@ void tsMenu() {
         AjustesScreen();
       }
     } else if (currentScreen == "reloj") {
+      tft.setTextColor(WHITE, BLACK);
       if (relojButtons[0].contains(p.x, p.y)) {
         AjustesScreen();
+      } else if (relojButtons[1].contains(p.x, p.y)) {
+          rtc.adjust(DateTime(relojYYYY, relojMM, relojDD, relojhh, relojmm, 0));
+          AjustesScreen();
+      } else if ((p.x > 39 && p.x < 83) && (p.y > 24 && p.y < 60)) {
+        relojYYYY++;
+        sprintf(buffer, "%d", relojYYYY);
+        tft.setCursor(28, 60);
+        tft.print(buffer);
+        if (relojMM == 2) {
+          if ((relojYYYY % 4 == 0 && relojYYYY % 100 != 0) ||
+              relojYYYY % 400 == 0) {
+            if (relojDD > 29) {
+              relojDD = 29;
+              sprintf(buffer, "%02d", relojDD);
+              tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+              tft.print(buffer);
+            }
+          } else {
+            if (relojDD > 28) {
+              relojDD = 28;
+              sprintf(buffer, "%02d", relojDD);
+              tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+              tft.print(buffer);
+            }
+          }
+        }
+      } else if ((p.x > 39 && p.x < 83) && (p.y > 81 && p.y < 114)) {
+        if (relojYYYY > 1970) {
+          relojYYYY--;
+          sprintf(buffer, "%d", relojYYYY);
+          tft.setCursor(28, 60);
+          tft.print(buffer);
+        }
+      } else if ((p.x > 114 && p.x < 158) && (p.y > 24 && p.y < 60)) {
+        if (relojMM < 12) {
+          relojMM++;
+          sprintf(buffer, "%02d", relojMM);
+          tft.setCursor(28 + 72 + 20, 60);
+          tft.print(buffer);
+        } else {
+          relojMM = 1;
+          sprintf(buffer, "%02d", relojMM);
+          tft.setCursor(28 + 72 + 20, 60);
+          tft.print(buffer);
+        }
+        switch (relojMM) {
+          case 4:
+          case 6:
+          case 9:
+          case 11:
+            if (relojDD > 30) {
+              relojDD = 30;
+              sprintf(buffer, "%02d", relojDD);
+              tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+              tft.print(buffer);
+            }
+            break;
+          case 2:
+            if ((relojYYYY % 4 == 0 && relojYYYY % 100 != 0) ||
+                relojYYYY % 400 == 0) {
+              if (relojDD > 29) {
+                relojDD = 29;
+                sprintf(buffer, "%02d", relojDD);
+                tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+                tft.print(buffer);
+              }
+            } else {
+              if (relojDD > 28) {
+                relojDD = 28;
+                sprintf(buffer, "%02d", relojDD);
+                tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+                tft.print(buffer);
+              }
+            }
+            break;
+        }
+      } else if ((p.x > 114 && p.x < 158) && (p.y > 81 && p.y < 114)) {
+        if (relojMM > 1) {
+          relojMM--;
+          sprintf(buffer, "%02d", relojMM);
+          tft.setCursor(28 + 72 + 20, 60);
+          tft.print(buffer);
+        } else {
+          relojMM = 12;
+          sprintf(buffer, "%02d", relojMM);
+          tft.setCursor(28 + 72 + 20, 60);
+          tft.print(buffer);
+        }
+        switch (relojMM) {
+          case 4:
+          case 6:
+          case 9:
+          case 11:
+            if (relojDD > 30) {
+              relojDD = 30;
+              sprintf(buffer, "%02d", relojDD);
+              tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+              tft.print(buffer);
+            }
+            break;
+          case 2:
+            if ((relojYYYY % 4 == 0 && relojYYYY % 100 != 0) ||
+                relojYYYY % 400 == 0) {
+              if (relojDD > 29) {
+                relojDD = 29;
+                sprintf(buffer, "%02d", relojDD);
+                tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+                tft.print(buffer);
+              }
+            } else {
+              if (relojDD > 28) {
+                relojDD = 28;
+                sprintf(buffer, "%02d", relojDD);
+                tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+                tft.print(buffer);
+              }
+            }
+            break;
+        }
+      } else if ((p.x > 170 && p.x < 214) && (p.y > 24 && p.y < 60)) {
+        switch (relojMM) {
+          case 1:
+          case 3:
+          case 5:
+          case 7:
+          case 8:
+          case 10:
+          case 12:
+            if (relojDD < 31) {
+              relojDD++;
+              sprintf(buffer, "%02d", relojDD);
+              tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+              tft.print(buffer);
+            } else {
+              relojDD = 1;
+              sprintf(buffer, "%02d", relojDD);
+              tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+              tft.print(buffer);
+            }
+            break;
+          case 4:
+          case 6:
+          case 9:
+          case 11:
+            if (relojDD < 30) {
+              relojDD++;
+              sprintf(buffer, "%02d", relojDD);
+              tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+              tft.print(buffer);
+            } else {
+              relojDD = 1;
+              sprintf(buffer, "%02d", relojDD);
+              tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+              tft.print(buffer);
+            }
+            break;
+          case 2:
+            if ((relojYYYY % 4 == 0 && relojYYYY % 100 != 0) ||
+                relojYYYY % 400 == 0) {
+              if (relojDD < 29) {
+                relojDD++;
+                sprintf(buffer, "%02d", relojDD);
+                tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+                tft.print(buffer);
+              } else {
+                relojDD = 1;
+                sprintf(buffer, "%02d", relojDD);
+                tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+                tft.print(buffer);
+              }
+            } else {
+              if (relojDD < 28) {
+                relojDD++;
+                sprintf(buffer, "%02d", relojDD);
+                tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+                tft.print(buffer);
+              } else {
+                relojDD = 1;
+                sprintf(buffer, "%02d", relojDD);
+                tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+                tft.print(buffer);
+              }
+            }
+            break;
+        }
+      } else if ((p.x > 170 && p.x < 214) && (p.y > 81 && p.y < 114)) {
+        switch (relojMM) {
+          case 1:
+          case 3:
+          case 5:
+          case 7:
+          case 8:
+          case 10:
+          case 12:
+            if (relojDD > 1) {
+              relojDD--;
+              sprintf(buffer, "%02d", relojDD);
+              tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+              tft.print(buffer);
+            } else {
+              relojDD = 31;
+              sprintf(buffer, "%02d", relojDD);
+              tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+              tft.print(buffer);
+            }
+            break;
+          case 4:
+          case 6:
+          case 9:
+          case 11:
+            if (relojDD > 1) {
+              relojDD--;
+              sprintf(buffer, "%02d", relojDD);
+              tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+              tft.print(buffer);
+            } else {
+              relojDD = 30;
+              sprintf(buffer, "%02d", relojDD);
+              tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+              tft.print(buffer);
+            }
+            break;
+          case 2:
+            if ((relojYYYY % 4 == 0 && relojYYYY % 100 != 0) ||
+                relojYYYY % 400 == 0) {
+              if (relojDD > 1) {
+                relojDD--;
+                sprintf(buffer, "%02d", relojDD);
+                tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+                tft.print(buffer);
+              } else {
+                relojDD = 29;
+                sprintf(buffer, "%02d", relojDD);
+                tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+                tft.print(buffer);
+              }
+            } else {
+              if (relojDD > 1) {
+                relojDD--;
+                sprintf(buffer, "%02d", relojDD);
+                tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+                tft.print(buffer);
+              } else {
+                relojDD = 28;
+                sprintf(buffer, "%02d", relojDD);
+                tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
+                tft.print(buffer);
+              }
+            }
+            break;
+        }
+      } else if ((p.x > 67 && p.x < 111) && (p.y > 116 && p.y < 150)) {
+        if (relojhh < 23) {
+          relojhh++;
+          sprintf(buffer, "%02d", relojhh);
+          tft.setCursor(74, 150);
+          tft.print(buffer);
+        } else {
+          relojhh = 0;
+          sprintf(buffer, "%02d", relojhh);
+          tft.setCursor(74, 150);
+          tft.print(buffer);
+        }
+      } else if ((p.x > 67 && p.x < 111) && (p.y > 171 && p.y < 207)) {
+        if (relojhh > 0) {
+          relojhh--;
+          sprintf(buffer, "%02d", relojhh);
+          tft.setCursor(74, 150);
+          tft.print(buffer);
+        } else {
+          relojhh = 23;
+          sprintf(buffer, "%02d", relojhh);
+          tft.setCursor(74, 150);
+          tft.print(buffer);
+        }
+      } else if ((p.x > 124 && p.x < 168) && (p.y > 116 && p.y < 150)) {
+        if (relojmm < 59) {
+          relojmm++;
+          sprintf(buffer, "%02d", relojmm);
+          tft.setCursor(74 + 36 + 20, 150);
+          tft.print(buffer);
+        } else {
+          relojmm = 0;
+          sprintf(buffer, "%02d", relojmm);
+          tft.setCursor(74 + 36 + 20, 150);
+          tft.print(buffer);
+        }
+      } else if ((p.x > 124 && p.x < 168) && (p.y > 171 && p.y < 207)) {
+        if (relojmm > 0) {
+          relojmm--;
+          sprintf(buffer, "%02d", relojmm);
+          tft.setCursor(74 + 36 + 20, 150);
+          tft.print(buffer);
+        } else {
+          relojmm = 59;
+          sprintf(buffer, "%02d", relojmm);
+          tft.setCursor(74 + 36 + 20, 150);
+          tft.print(buffer);
+        }
       }
+      delay(150);
     } else if (currentScreen == "programas") {
       if (programasButtons[0].contains(p.x, p.y)) {
         AjustesScreen();

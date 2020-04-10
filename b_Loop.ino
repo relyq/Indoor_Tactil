@@ -1,4 +1,5 @@
 void loop() {
+  now = rtc.now();
   // readTH();
   // hTierra = map(analogRead(A8), 0, 1023, 100, 0);
 
@@ -57,6 +58,8 @@ void loop() {
     z1fActivalast = z1fActiva;
   }
 
+  // PORTC = t >= temphSP ? PORTC || 0x10 : PORTC || 0x00; // puerto c 0x10 pin
+  // 33
   if (t >= temphSP) {  // t>=temphSP && t>=(temphSP-templSP)/2
     digitalWrite(FANPIN, 1);
   } else {
@@ -75,54 +78,86 @@ void loop() {
     digitalWrite(RIEGOPIN, 0);
   }
 
-  if (currentScreen == "home" && (lastT != t || lastH != h ||
-                                  lasthTierra != hTierra || lastdias != dias)) {
-    lastT = t;
-    lastH = h;
-    lasthTierra = hTierra;
-    lastdias = dias;
+  if (currentScreen == "home") {
+    if (now.unixtime() - prevTime >= 60) {
+      prevTime = now.unixtime();
+      Serial.print(now.year(), DEC);
+      Serial.print('/');
+      Serial.print(now.month(), DEC);
+      Serial.print('/');
+      Serial.print(now.day(), DEC);
+      Serial.print(" (");
+      Serial.print(daysOfTheWeek[now.dayOfTheWeek()]);
+      Serial.print(") ");
+      Serial.print(now.hour(), DEC);
+      Serial.print(':');
+      Serial.print(now.minute(), DEC);
+      Serial.print(':');
+      Serial.print(now.second(), DEC);
+      Serial.println();
 
-    sprintf(buffer, "%d", dias);
-    tft.setCursor(125 - (strlen(buffer) * 18), 230);
-    tft.setTextSize(3);
-    tft.setTextColor(WHITE, BLACK);
-    tft.print(buffer);
-
-    sprintf(buffer, "%d", hTierra);
-    strcat(buffer, "%");
-    tft.setCursor(230 - (strlen(buffer) * 18), 230);
-    tft.setTextSize(3);
-    tft.setTextColor(WHITE, BLACK);
-    tft.print(buffer);
-
-    dtostrf(t, 4, 1, buffer);
-    strcat(buffer, "C");
-    tft.setCursor(125 - (strlen(buffer) * 18), 285);
-    tft.setTextSize(3);
-    tft.setTextColor(WHITE, BLACK);
-    tft.print(buffer);  // temperatura leida por el DHT
-
-    sprintf(buffer, "%d", (uint8_t)h);
-    strcat(buffer, "%");
-    tft.setCursor(230 - (strlen(buffer) * 18), 285);
-    tft.setTextSize(3);
-    tft.setTextColor(WHITE, BLACK);
-    tft.print(buffer);  // humedad leida por el DHT
-
-    if (digitalRead(FANPIN)) {
-      tft.fillCircle(180, 94, 10, GREEN);
-    } else {
-      tft.fillCircle(180, 94, 10, RED);
+      strcpy(buffer, "MM/DD/YY hh:mm");
+      now.toString(buffer);
+      tft.setTextSize(2);
+      tft.setTextColor(WHITE, BLACK);
+      tft.setCursor(10, 181);
+      tft.print(buffer);
     }
-    if (digitalRead(VAPPIN)) {
-      tft.fillCircle(180, 119, 10, GREEN);
-    } else {
-      tft.fillCircle(180, 119, 10, RED);
+
+    if (lastdias != dias) {
+      lastdias = dias;
+      sprintf(buffer, "%d", dias);
+      tft.setCursor(125 - (strlen(buffer) * 18), 230);
+      tft.setTextSize(3);
+      tft.setTextColor(WHITE, BLACK);
+      tft.print(buffer);
     }
-    if (digitalRead(RIEGOPIN)) {
-      tft.fillCircle(180, 144, 10, GREEN);
-    } else {
-      tft.fillCircle(180, 144, 10, RED);
+
+    if (lasthTierra != hTierra) {
+      lasthTierra = hTierra;
+      sprintf(buffer, "%d", hTierra);
+      strcat(buffer, "%");
+      tft.setCursor(230 - (strlen(buffer) * 18), 230);
+      tft.setTextSize(3);
+      tft.setTextColor(WHITE, BLACK);
+      tft.print(buffer);
+
+      if (digitalRead(RIEGOPIN)) {
+        tft.fillCircle(180, 144, 10, GREEN);
+      } else {
+        tft.fillCircle(180, 144, 10, RED);
+      }
+    }
+
+    if (lastT != t) {
+      lastT = t;
+      dtostrf(t, 4, 1, buffer);
+      strcat(buffer, "C");
+      tft.setCursor(125 - (strlen(buffer) * 18), 285);
+      tft.setTextSize(3);
+      tft.setTextColor(WHITE, BLACK);
+      tft.print(buffer);  // temperatura leida por el DHT
+
+      if (digitalRead(FANPIN)) {
+        tft.fillCircle(180, 94, 10, GREEN);
+      } else {
+        tft.fillCircle(180, 94, 10, RED);
+      }
+    }
+
+    if (lastH != h) {
+      lastH = h;
+      sprintf(buffer, "%d", (uint8_t)h);
+      strcat(buffer, "%");
+      tft.setCursor(230 - (strlen(buffer) * 18), 285);
+      tft.setTextSize(3);
+      tft.setTextColor(WHITE, BLACK);
+      tft.print(buffer);  // humedad leida por el DHT
+      if (digitalRead(VAPPIN)) {
+        tft.fillCircle(180, 119, 10, GREEN);
+      } else {
+        tft.fillCircle(180, 119, 10, RED);
+      }
     }
   }
 }
