@@ -5,7 +5,9 @@ las librerias actualizadas no funcionaban por pin_magic.h
 
 todo:
 
-eliminar botones y variables que no necesite para ahorrar memoria
+usar operador ternario para if/else simples
+
+eliminar botones (los que no tienen texto o no lo tienen centrado) y variables que no necesite para ahorrar memoria
 
 temp maxima 80 (dht22 max)
 
