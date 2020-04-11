@@ -177,6 +177,8 @@ uint8_t humhSP;    // humedad aire limite h
 uint8_t riegolSP;  // riego limite l
 uint8_t riegohSP;  // riego limite h
 uint16_t diasSP;   // dias de la fase
+uint32_t diaFindefase; // dia en unixtime del fin de la fase activa
+uint32_t diaIniciodefase; // dia en unixtime del inicio de la fase activa
 
 uint16_t dias;
 uint16_t lastdias = 0xffff;

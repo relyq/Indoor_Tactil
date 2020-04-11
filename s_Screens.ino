@@ -435,7 +435,10 @@ void drawZ1F1Screen() {
   tft.print(buffer);
 
   //// temp
-  if (strtol(z1f1templSPstr, 0, 10) == 0) strcpy(z1f1templSPstr, "0");
+  if (strtol(z1f1templSPstr, 0, 10) == 0)
+    strcpy(z1f1templSPstr, "0");
+  else if (strtol(z1f1templSPstr, 0, 10) > 80)
+    strcpy(z1f1templSPstr, "80");
   strcpy(buffer, z1f1templSPstr);
   tft.setCursor(192 - (strlen(buffer) * 18) - (strlen(z1f1temphSPstr) * 18),
                 135);
@@ -445,6 +448,8 @@ void drawZ1F1Screen() {
   tft.print("-");
 
   if (strtol(z1f1temphSPstr, 0, 10) == 0) strcpy(z1f1temphSPstr, "0");
+  else if (strtol(z1f1temphSPstr, 0, 10) > 80)
+    strcpy(z1f1temphSPstr, "80");
   strcpy(buffer, z1f1temphSPstr);
   strcat(buffer, "C");
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
@@ -548,7 +553,7 @@ void drawZ1F2Screen() {
 
   strcpy(buffer, z1f2diasSPstr);
 
-  tft.setCursor(175, 45);
+  tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
   if (strtol(z1f2hluzSPstr, 0, 10) > 24)
@@ -558,11 +563,13 @@ void drawZ1F2Screen() {
 
   strcpy(buffer, z1f2hluzSPstr);
   strcat(buffer, "H");
-  tft.setCursor(175, 90);
+  tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
   if (strtol(z1f2templSPstr, 0, 10) == 0) strcpy(z1f2templSPstr, "0");
+  else if (strtol(z1f2templSPstr, 0, 10) > 80)
+    strcpy(z1f2templSPstr, "80");
   strcpy(buffer, z1f2templSPstr);
   tft.setCursor(192 - (strlen(buffer) * 18) - (strlen(z1f2temphSPstr) * 18),
                 135);
@@ -572,6 +579,8 @@ void drawZ1F2Screen() {
   tft.print("-");
 
   if (strtol(z1f2temphSPstr, 0, 10) == 0) strcpy(z1f2temphSPstr, "0");
+  else if (strtol(z1f2temphSPstr, 0, 10) > 80)
+    strcpy(z1f2temphSPstr, "80");
   strcpy(buffer, z1f2temphSPstr);
   strcat(buffer, "C");
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
@@ -675,7 +684,7 @@ void drawZ1F3Screen() {
 
   strcpy(buffer, z1f3diasSPstr);
 
-  tft.setCursor(175, 45);
+  tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
   if (strtol(z1f3hluzSPstr, 0, 10) > 24)
@@ -685,11 +694,13 @@ void drawZ1F3Screen() {
 
   strcpy(buffer, z1f3hluzSPstr);
   strcat(buffer, "H");
-  tft.setCursor(175, 90);
+  tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
   if (strtol(z1f3templSPstr, 0, 10) == 0) strcpy(z1f3templSPstr, "0");
+  else if (strtol(z1f3templSPstr, 0, 10) > 80)
+    strcpy(z1f3templSPstr, "80");
   strcpy(buffer, z1f3templSPstr);
   tft.setCursor(192 - (strlen(buffer) * 18) - (strlen(z1f3temphSPstr) * 18),
                 135);
@@ -699,6 +710,8 @@ void drawZ1F3Screen() {
   tft.print("-");
 
   if (strtol(z1f3temphSPstr, 0, 10) == 0) strcpy(z1f3temphSPstr, "0");
+  else if (strtol(z1f3temphSPstr, 0, 10) > 80)
+    strcpy(z1f3temphSPstr, "80");
   strcpy(buffer, z1f3temphSPstr);
   strcat(buffer, "C");
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
@@ -802,7 +815,7 @@ void drawZ1F4Screen() {
 
   strcpy(buffer, z1f4diasSPstr);
 
-  tft.setCursor(175, 45);
+  tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
   if (strtol(z1f4hluzSPstr, 0, 10) > 24)
@@ -812,11 +825,13 @@ void drawZ1F4Screen() {
 
   strcpy(buffer, z1f4hluzSPstr);
   strcat(buffer, "H");
-  tft.setCursor(175, 90);
+  tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
   if (strtol(z1f4templSPstr, 0, 10) == 0) strcpy(z1f4templSPstr, "0");
+  else if (strtol(z1f4templSPstr, 0, 10) > 80)
+    strcpy(z1f4templSPstr, "80");
   strcpy(buffer, z1f4templSPstr);
   tft.setCursor(192 - (strlen(buffer) * 18) - (strlen(z1f4temphSPstr) * 18),
                 135);
@@ -826,6 +841,8 @@ void drawZ1F4Screen() {
   tft.print("-");
 
   if (strtol(z1f4temphSPstr, 0, 10) == 0) strcpy(z1f4temphSPstr, "0");
+  else if (strtol(z1f4temphSPstr, 0, 10) > 80)
+    strcpy(z1f4temphSPstr, "80");
   strcpy(buffer, z1f4temphSPstr);
   strcat(buffer, "C");
   tft.setCursor(228 - (strlen(buffer) * 18), 135);

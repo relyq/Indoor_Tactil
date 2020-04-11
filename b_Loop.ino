@@ -9,6 +9,16 @@ void loop() {
   if (z1fActivalast != z1fActiva) {
     Serial.println("fase activa cambiada");
     switch (z1fActiva) {
+      case 0:
+        strcpy(templSPstr, "0");
+        strcpy(temphSPstr, "0");
+        strcpy(humlSPstr, "0");
+        strcpy(humhSPstr, "0");
+        strcpy(diasSPstr, "0");
+        strcpy(riegolSPstr, "0");
+        strcpy(riegohSPstr, "0");
+        dias = 0;
+        break;
       case 1:
         strcpy(templSPstr, z1f1templSPstr);
         strcpy(temphSPstr, z1f1temphSPstr);
@@ -55,28 +65,45 @@ void loop() {
     riegolSP = strtol(riegolSPstr, 0, 10);
     riegohSP = strtol(riegohSPstr, 0, 10);
 
+    diaIniciodefase = now.unixtime();
+    diaFindefase = now.unixtime() + diasSP * 86400;
+
+    Serial.print("diaFindefase: "); Serial.println(diaFindefase);
+    Serial.print("unixtime: "); Serial.println(now.unixtime());
+
     z1fActivalast = z1fActiva;
   }
 
+  if (z1fActiva != 0) {
+    if (t >= temphSP) {  // t>=temphSP && t>=(temphSP-templSP)/2
+      PORTC |= FANPIN;
+    } else {
+      PORTC &= ~FANPIN;
+    }
 
-  if (t >= temphSP) {  // t>=temphSP && t>=(temphSP-templSP)/2
-    PORTC |= FANPIN;
-  } else {
-    PORTC &= ~FANPIN;
+    if (h >= humhSP) {
+      PORTC |= VAPPIN;
+    } else {
+      PORTC &= ~VAPPIN;
+    }
+
+    if (hTierra <= riegolSP) {
+      PORTC |= RIEGOPIN;
+    } else if (hTierra >= riegohSP) {
+      PORTC &= ~RIEGOPIN;
+    }
+
+    if(now.unixtime() >= diaFindefase){
+      if(z1fActiva == 4){
+        z1fActiva = 0;
+      } else {
+        z1fActiva++;
+      }
+    }
+
+    dias = (now.unixtime() - diaIniciodefase)/86400;
+
   }
-
-  if (h >= humhSP) {
-    PORTC |= VAPPIN;
-  } else {
-    PORTC &= ~VAPPIN;
-  }
-
-  if (hTierra <= riegolSP) {
-    PORTC |= RIEGOPIN;
-  } else if (hTierra >= riegohSP) {
-    PORTC &= ~RIEGOPIN;
-  }
-
 
   if (currentScreen == "home") {
     if (now.second() == 0 && now.unixtime() - prevTime >= 2) {

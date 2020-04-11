@@ -31,6 +31,15 @@ void setup() {
   }
 
   switch (z1fActiva) {
+    case 0:
+      strcpy(templSPstr, "0");
+      strcpy(temphSPstr, "0");
+      strcpy(humlSPstr, "0");
+      strcpy(humhSPstr, "0");
+      strcpy(diasSPstr, "0");
+      strcpy(riegolSPstr, "0");
+      strcpy(riegohSPstr, "0");
+      break;
     case 1:
       strcpy(templSPstr, z1f1templSPstr);
       strcpy(temphSPstr, z1f1temphSPstr);

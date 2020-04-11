@@ -1,49 +1,39 @@
 # Indoor_Tactil
-cuando se inicia por primera vez, deberia empezar con el dispositivo parado?
-
-cuando no hay fase activa, deberian vaciarse los setpoints? parar el sistema hasta que se active una fase?
-
-cuando termine no puedo olvidarme de eliminar todos los set de texto etc que no necesito volver a repetir
+por que decidi elegir strings para guardar las cosas ugh algun dia lo voy a tener que cambiar
 
 podria usar objetos para las fases
+
+desde que agregue el rtc cada tanto se congela todo y se necesita reiniciar (quiza un delay al final del loop lo arregla)
 
 las librerias actualizadas no funcionaban por pin_magic.h
 
 todo:
 
-agregar ciclos de fases
+agregar cantidad de ciclos
 
-deberia cambiar el sistema de cambio de fases para que cuando se inicia una fase nueva instantaneamente se vaya a una funcion que efectivamente cambie la fase y no solo la variable que dice que fase esta activa
+//deberia cambiar el sistema de cambio de fases para que cuando se inicia una fase nueva instantaneamente se vaya a una funcion que efectivamente cambie la fase y no solo la variable que dice que fase esta activa
 
-deberia cambiar todas las strings que guardan setpoints por ints de forma que al teclado le entren y salgan numeros y cuando necesito imprimirlos los cargo al buffer como al resto de numeros
+//deberia cambiar todas las strings que guardan setpoints por ints de forma que al teclado le entren y salgan numeros y cuando necesito imprimirlos los cargo al buffer como al resto de numeros
 
-agregar puntos medios de los setpoints
-
-usar operador ternario para if/else simples
-
-eliminar botones (los que no tienen texto o no lo tienen centrado) y variables que no necesite para ahorrar memoria
-
-temp maxima 80 (dht22 max)
+agregar puntos medios de los setpoints para que el sistema se intente mantener en el punto medio siempre
 
 prender el ventilador por x tiempo por la noche para refrigerar y cambiar el aire
 
-si no hay fase activa, forzar todas las salidas a estar apagadas
-
 agregar pantalla de startup
 
-fin de fase y comienzo de la siguiente (cuando los dias llegan a 0)
-
-boton que lleve de vuelta al dashboard
-
-status bar
-
-guardar setpoints en eeprom
-
-podria (TENGO QUE) cambiar todos los digitalWrite() y digitalRead() por manipulacion manual de puertos
+hard reset
 
 sistema de alarmas para detectar si no esta funcionando un i/o
 
-hard reset
+status bar
+
+boton que lleve de vuelta al dashboard
+
+guardar setpoints en eeprom
+
+eliminar botones (los que no tienen texto o no lo tienen centrado) y variables que no necesite para ahorrar memoria
+
+cuando termine no puedo olvidarme de eliminar todos los set de texto etc que no necesito volver a repetir
 
 funciones opcionales:
 
