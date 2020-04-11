@@ -1,9 +1,19 @@
 # Indoor_Tactil
+cuando se inicia por primera vez, deberia empezar con el dispositivo parado?
+
+cuando no hay fase activa, deberian vaciarse los setpoints? parar el sistema hasta que se active una fase?
+
 cuando termine no puedo olvidarme de eliminar todos los set de texto etc que no necesito volver a repetir
+
+podria usar objetos para las fases
 
 las librerias actualizadas no funcionaban por pin_magic.h
 
 todo:
+
+agregar ciclos de fases
+
+deberia cambiar el sistema de cambio de fases para que cuando se inicia una fase nueva instantaneamente se vaya a una funcion que efectivamente cambie la fase y no solo la variable que dice que fase esta activa
 
 deberia cambiar todas las strings que guardan setpoints por ints de forma que al teclado le entren y salgan numeros y cuando necesito imprimirlos los cargo al buffer como al resto de numeros
 

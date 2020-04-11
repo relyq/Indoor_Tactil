@@ -7,11 +7,14 @@ void setup() {
   Serial.println(tft.height());
 
   pinMode(13, OUTPUT);
-  pinMode(DHTPIN, INPUT_PULLUP);
-  pinMode(FANPIN, OUTPUT);
-  pinMode(VAPPIN, OUTPUT);
-  pinMode(RIEGOPIN, OUTPUT);
-  pinMode(SENSORTIERRAPIN, INPUT_PULLUP);
+
+  DDRC |= (FANPIN | VAPPIN | RIEGOPIN) & ~(DHTPIN);
+  PORTC |= DHTPIN;
+
+  pinMode(SENSORTIERRAPIN, INPUT);
+
+  Serial.print("DDRC: "); Serial.println(DDRC, BIN);
+  Serial.print("PORTC: "); Serial.println(PORTC, BIN);
 
   if (!rtc.begin()) {
     Serial.println("Couldn't find RTC");

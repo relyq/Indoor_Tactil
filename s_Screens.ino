@@ -18,7 +18,7 @@ void drawHomeScreen() {
   tft.setTextColor(WHITE, BLACK);
   tft.print("Ventilacion");
 
-  if (digitalRead(FANPIN)) {
+  if (PINC & FANPIN) {
     tft.fillCircle(180, 94, 10, GREEN);
   } else {
     tft.fillCircle(180, 94, 10, RED);
@@ -29,7 +29,7 @@ void drawHomeScreen() {
   tft.setTextColor(WHITE, BLACK);
   tft.print("Vaporizacion");
 
-  if (digitalRead(VAPPIN)) {
+  if (PINC & VAPPIN) {
     tft.fillCircle(180, 119, 10, GREEN);
   } else {
     tft.fillCircle(180, 119, 10, RED);
@@ -40,7 +40,7 @@ void drawHomeScreen() {
   tft.setTextColor(WHITE, BLACK);
   tft.print("Riego");
 
-  if (digitalRead(RIEGOPIN)) {
+  if (PINC & RIEGOPIN) {
     tft.fillCircle(180, 144, 10, GREEN);
   } else {
     tft.fillCircle(180, 144, 10, RED);
@@ -56,11 +56,16 @@ void drawHomeScreen() {
     tft.print("-");
   }
 
-  strcpy(buffer, "MM/DD/YY hh:mm");
+  strcpy(buffer, "hh:mm");
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(10, 181);
+  tft.setCursor(170, 165);
+  tft.print(buffer);
+
+  strcpy(buffer, "DD/MM");
+  now.toString(buffer);
+  tft.setCursor(170, 183);
   tft.print(buffer);
 
   tft.setCursor(10, 200);
@@ -156,8 +161,8 @@ void drawMenuScreen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
-  tft.setCursor(120 - (((6 * 2 * 14) - 3) / 2), 10);
-  tft.print("Menu Principal");
+  tft.setCursor(120 - (((6 * 2 * 4) - 3) / 2), 10);
+  tft.print("Menu");
 
   // boton 1 - zona 1
   menuButtons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
@@ -169,7 +174,7 @@ void drawMenuScreen() {
                               "Ajustes", BUTTON_TEXTSIZE);
   menuButtons[1].drawButton();
 
-  menuButtons[2].initButtonUL(&tft, 5, 260, 230, 40, WHITE, LIGHTGREY, WHITE,
+  menuButtons[2].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                               "Volver", BUTTON_TEXTSIZE);
   menuButtons[2].drawButton();
 
@@ -204,7 +209,7 @@ void drawAjustesScreen() {
   ajustesButtons[3].drawButton();
 
   // boton 5 - Volver
-  ajustesButtons[4].initButtonUL(&tft, 5, 260, 230, 40, WHITE, LIGHTGREY, WHITE,
+  ajustesButtons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                                  "Volver", BUTTON_TEXTSIZE);
   ajustesButtons[4].drawButton();
 
@@ -218,7 +223,7 @@ void drawAlarmasScreen() {
   tft.setCursor(120 - (((6 * 2 * 7) - 3) / 2), 10);
   tft.print("Alarmas");
 
-  alarmasButtons[0].initButtonUL(&tft, 5, 260, 230, 40, WHITE, LIGHTGREY, WHITE,
+  alarmasButtons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                                  "Volver", BUTTON_TEXTSIZE);
   alarmasButtons[0].drawButton();
 
@@ -280,7 +285,7 @@ void drawRelojScreen() {
                                "Aceptar", BUTTON_TEXTSIZE);
   relojButtons[1].drawButton();
 
-  relojButtons[0].initButtonUL(&tft, 5, 260, 230, 40, WHITE, LIGHTGREY, WHITE,
+  relojButtons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                                "Volver", BUTTON_TEXTSIZE);
   relojButtons[0].drawButton();
 
@@ -291,10 +296,10 @@ void drawProgramasScreen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
-  tft.setCursor(120 - (((6 * 2 * 9) - 3) / 2), 10);
+  tft.setCursor(110 - (((6 * 2 * 9) - 3) / 2), 10);
   tft.print("Programas");
 
-  programasButtons[0].initButtonUL(&tft, 5, 260, 230, 40, WHITE, LIGHTGREY,
+  programasButtons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
                                    WHITE, "Volver", BUTTON_TEXTSIZE);
   programasButtons[0].drawButton();
 
@@ -308,7 +313,7 @@ void drawResetScreen() {
   tft.setCursor(120 - (((6 * 2 * 5) - 3) / 2), 10);
   tft.print("Reset");
 
-  resetButtons[0].initButtonUL(&tft, 5, 260, 230, 40, WHITE, LIGHTGREY, WHITE,
+  resetButtons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                                "Volver", BUTTON_TEXTSIZE);
   resetButtons[0].drawButton();
 
@@ -348,7 +353,7 @@ void drawZ1Screen() {
   z1Buttons[4].drawButton();
 
   // boton 6 - volver
-  z1Buttons[5].initButtonUL(&tft, 5, 260, 230, 40, WHITE, LIGHTGREY, WHITE,
+  z1Buttons[5].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                             "Volver", BUTTON_TEXTSIZE);
   z1Buttons[5].drawButton();
 
@@ -359,8 +364,8 @@ void drawZ1F1Screen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
-  tft.setCursor(120 - (((6 * 2 * 15) - 3) / 2), 10);
-  tft.print("Zona 1 - Fase 1");
+  tft.setCursor(120 - (((6 * 2 * 6) - 3) / 2), 10);
+  tft.print("Fase 1");
 
   z1f1Buttons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, BLACK, WHITE, "", 2);
   z1f1Buttons[0].drawRectButton();
@@ -477,8 +482,8 @@ void drawZ1F1Screen() {
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
 
-  z1f1Buttons[4].initButton(&tft, 120, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                            "Volver", BUTTON_TEXTSIZE);
+  z1f1Buttons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
+                              "Volver", BUTTON_TEXTSIZE);
   z1f1Buttons[4].drawButton();
 
   Serial.println("z1f1 dibujado");
@@ -488,8 +493,8 @@ void drawZ1F2Screen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
-  tft.setCursor(120 - (((6 * 2 * 15) - 3) / 2), 10);
-  tft.print("Zona 1 - Fase 2");
+  tft.setCursor(120 - (((6 * 2 * 6) - 3) / 2), 10);
+  tft.print("Fase 2");
 
   z1f2Buttons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, BLACK, WHITE, "", 2);
   z1f2Buttons[0].drawRectButton();
@@ -604,8 +609,8 @@ void drawZ1F2Screen() {
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
 
-  z1f2Buttons[4].initButton(&tft, 120, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                            "Volver", BUTTON_TEXTSIZE);
+  z1f2Buttons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
+                              "Volver", BUTTON_TEXTSIZE);
   z1f2Buttons[4].drawButton();
 
   Serial.println("z1f2 dibujado");
@@ -615,8 +620,8 @@ void drawZ1F3Screen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
-  tft.setCursor(120 - (((6 * 2 * 15) - 3) / 2), 10);
-  tft.print("Zona 1 - Fase 3");
+  tft.setCursor(120 - (((6 * 2 * 6) - 3) / 2), 10);
+  tft.print("Fase 3");
 
   z1f3Buttons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, BLACK, WHITE, "", 2);
   z1f3Buttons[0].drawRectButton();
@@ -731,8 +736,8 @@ void drawZ1F3Screen() {
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
 
-  z1f3Buttons[4].initButton(&tft, 120, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                            "Volver", BUTTON_TEXTSIZE);
+  z1f3Buttons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
+                              "Volver", BUTTON_TEXTSIZE);
   z1f3Buttons[4].drawButton();
 
   Serial.println("z1f3 dibujado");
@@ -742,8 +747,8 @@ void drawZ1F4Screen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
-  tft.setCursor(120 - (((6 * 2 * 15) - 3) / 2), 10);
-  tft.print("Zona 1 - Fase 4");
+  tft.setCursor(120 - (((6 * 2 * 6) - 3) / 2), 10);
+  tft.print("Fase 4");
 
   z1f4Buttons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, BLACK, WHITE, "", 2);
   z1f4Buttons[0].drawRectButton();
@@ -858,8 +863,8 @@ void drawZ1F4Screen() {
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
 
-  z1f4Buttons[4].initButton(&tft, 120, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                            "Volver", BUTTON_TEXTSIZE);
+  z1f4Buttons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
+                              "Volver", BUTTON_TEXTSIZE);
   z1f4Buttons[4].drawButton();
 
   Serial.println("z1f4 dibujado");
@@ -869,8 +874,8 @@ void drawZ1ControlScreen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
-  tft.setCursor(120 - (((6 * 2 * 16) - 3) / 2), 10);
-  tft.print("Zona 1 - Control");
+  tft.setCursor(120 - (((6 * 2 * 7) - 3) / 2), 10);
+  tft.print("Control");
 
   z1ControlButtons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
                                    "Inicio", BUTTON_TEXTSIZE);
@@ -880,7 +885,7 @@ void drawZ1ControlScreen() {
                                    "Terminar", BUTTON_TEXTSIZE);
   z1ControlButtons[1].drawButton();
 
-  z1ControlButtons[2].initButtonUL(&tft, 5, 260, 230, 40, WHITE, LIGHTGREY,
+  z1ControlButtons[2].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
                                    WHITE, "Volver", BUTTON_TEXTSIZE);
   z1ControlButtons[2].drawButton();
 
@@ -891,8 +896,8 @@ void drawZ1InicioScreen() {
   tft.fillScreen(BLACK);
   tft.setTextSize(2);
   tft.setTextColor(WHITE);
-  tft.setCursor(120 - (((6 * 2 * 15) - 3) / 2), 10);
-  tft.print("Zona 1 - Inicio");
+  tft.setCursor(120 - (((6 * 2 * 6) - 3) / 2), 10);
+  tft.print("Inicio");
 
   tft.setTextSize(3);
   tft.setCursor(120 - (((6 * 3 * 5) - 3) / 2),
@@ -939,7 +944,7 @@ void drawZ1InicioScreen() {
                                   WHITE, "Confirmar", BUTTON_TEXTSIZE);
   z1InicioButtons[4].drawButton();
 
-  z1InicioButtons[5].initButtonUL(&tft, 5, 260, 230, 40, WHITE, LIGHTGREY,
+  z1InicioButtons[5].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
                                   WHITE, "Volver", BUTTON_TEXTSIZE);
   z1InicioButtons[5].drawButton();
 

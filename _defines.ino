@@ -8,9 +8,6 @@
 #include "src/Adafruit_TFTLCD.h"  // Hardware-specific library
 #include "src/TouchScreen.h"
 
-#define DHTPIN 31
-#define DHTTYPE DHT11
-
 // The control pins for the LCD can be assigned to any digital or
 // analog pins...but we'll use the analog pins as this allows us to
 // double up the pins with the touch screen (see the TFT paint example).
@@ -92,9 +89,6 @@ Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);
 // ???????????????
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 10);
 
-DHT dht(DHTPIN, DHTTYPE);
-
-RTC_DS3231 rtc;
 
 Adafruit_GFX_Button homeButtons[1];
 Adafruit_GFX_Button menuButtons[3];
@@ -195,11 +189,14 @@ float lastH = 255;
 uint8_t hTierra;  // humedad tierra
 uint8_t lasthTierra = 255;
 
+// ins
 const uint8_t SENSORTIERRAPIN = A8;
+const uint8_t DHTPIN = 0x40;    // pin 31 en el port c
 
-const uint8_t FANPIN = 33;
-const uint8_t VAPPIN = 35;
-const uint8_t RIEGOPIN = 37;
+// outs
+const uint8_t FANPIN = 0x10;    // pin 33 en el port c
+const uint8_t VAPPIN = 0x04;    // pin 35 en el port c
+const uint8_t RIEGOPIN = 0x01;  // pin 37 en el port c
 
 char numKBstr[10];
 char* numKBPrevScreen;
@@ -224,6 +221,11 @@ uint8_t relojhh;
 uint8_t relojmm;
 
 char buffer[50];
+
+
+DHT dht(DHTPIN, DHT22);
+
+RTC_DS3231 rtc;
 
 /*
 

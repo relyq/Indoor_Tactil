@@ -58,28 +58,28 @@ void loop() {
     z1fActivalast = z1fActiva;
   }
 
-  // PORTC = t >= temphSP ? PORTC || 0x10 : PORTC || 0x00; // puerto c 0x10 pin
-  // 33
+
   if (t >= temphSP) {  // t>=temphSP && t>=(temphSP-templSP)/2
-    digitalWrite(FANPIN, 1);
+    PORTC |= FANPIN;
   } else {
-    digitalWrite(FANPIN, 0);
+    PORTC &= ~FANPIN;
   }
 
   if (h >= humhSP) {
-    digitalWrite(VAPPIN, 1);
+    PORTC |= VAPPIN;
   } else {
-    digitalWrite(VAPPIN, 0);
+    PORTC &= ~VAPPIN;
   }
 
   if (hTierra <= riegolSP) {
-    digitalWrite(RIEGOPIN, 1);
+    PORTC |= RIEGOPIN;
   } else if (hTierra >= riegohSP) {
-    digitalWrite(RIEGOPIN, 0);
+    PORTC &= ~RIEGOPIN;
   }
 
+
   if (currentScreen == "home") {
-    if (now.second() == 0 && now.unixtime() - prevTime >=2) {
+    if (now.second() == 0 && now.unixtime() - prevTime >= 2) {
       prevTime = now.unixtime();
       Serial.print(now.year(), DEC);
       Serial.print('/');
@@ -96,11 +96,16 @@ void loop() {
       Serial.print(now.second(), DEC);
       Serial.println();
 
-      strcpy(buffer, "MM/DD/YY hh:mm");
+      strcpy(buffer, "hh:mm");
       now.toString(buffer);
       tft.setTextSize(2);
       tft.setTextColor(WHITE, BLACK);
-      tft.setCursor(10, 181);
+      tft.setCursor(170, 165);
+      tft.print(buffer);
+
+      strcpy(buffer, "DD/MM");
+      now.toString(buffer);
+      tft.setCursor(170, 183);
       tft.print(buffer);
     }
 
@@ -122,7 +127,7 @@ void loop() {
       tft.setTextColor(WHITE, BLACK);
       tft.print(buffer);
 
-      if (digitalRead(RIEGOPIN)) {
+      if (PINC & RIEGOPIN) {
         tft.fillCircle(180, 144, 10, GREEN);
       } else {
         tft.fillCircle(180, 144, 10, RED);
@@ -138,7 +143,7 @@ void loop() {
       tft.setTextColor(WHITE, BLACK);
       tft.print(buffer);  // temperatura leida por el DHT
 
-      if (digitalRead(FANPIN)) {
+      if (PINC & FANPIN) {
         tft.fillCircle(180, 94, 10, GREEN);
       } else {
         tft.fillCircle(180, 94, 10, RED);
@@ -153,12 +158,21 @@ void loop() {
       tft.setTextSize(3);
       tft.setTextColor(WHITE, BLACK);
       tft.print(buffer);  // humedad leida por el DHT
-      if (digitalRead(VAPPIN)) {
+      if (PINC & VAPPIN) {
         tft.fillCircle(180, 119, 10, GREEN);
       } else {
         tft.fillCircle(180, 119, 10, RED);
       }
     }
+  }
+  if ((currentScreen != "home" && currentScreen != "numKB") &&
+      (now.second() == 0 && now.unixtime() - prevTime >= 2)) {
+    strcpy(buffer, "hh:mm");
+    now.toString(buffer);
+    tft.setTextSize(2);
+    tft.setTextColor(WHITE, BLACK);
+    tft.setCursor(170, 10);
+    tft.print(buffer);
   }
 }
 
@@ -169,9 +183,6 @@ void readTH() {
     lastH = h;
     t = dht.readTemperature();
     h = dht.readHumidity();
-
-    // sensación térmica en C
-    // hi = dht.computeHeatIndex(t, h, false);
 
     Serial.print(F("Humidity: "));
     Serial.print(h);

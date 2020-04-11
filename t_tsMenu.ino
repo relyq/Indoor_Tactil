@@ -35,6 +35,10 @@ void tsMenu() {
     Serial.print(p.z);
     Serial.println(") ");
 
+    if (currentScreen != "home" && (p.y < -1)) {
+      HomeScreen();
+    }
+
     if (currentScreen == "home") {  // deberia usar un switch
       if (homeButtons[0].contains(p.x, p.y)) {
         MenuScreen();
@@ -64,12 +68,13 @@ void tsMenu() {
         AjustesScreen();
       }
     } else if (currentScreen == "reloj") {
+      tft.setTextSize(3);
       tft.setTextColor(WHITE, BLACK);
       if (relojButtons[0].contains(p.x, p.y)) {
         AjustesScreen();
       } else if (relojButtons[1].contains(p.x, p.y)) {
-          rtc.adjust(DateTime(relojYYYY, relojMM, relojDD, relojhh, relojmm, 0));
-          AjustesScreen();
+        rtc.adjust(DateTime(relojYYYY, relojMM, relojDD, relojhh, relojmm, 0));
+        AjustesScreen();
       } else if ((p.x > 39 && p.x < 83) && (p.y > 24 && p.y < 60)) {
         relojYYYY++;
         sprintf(buffer, "%d", relojYYYY);
@@ -771,7 +776,6 @@ void tsMenu() {
         }
       }
     }
-
     //
   }
 }
