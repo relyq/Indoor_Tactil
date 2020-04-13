@@ -3,7 +3,7 @@ por que decidi elegir strings para guardar las cosas ugh algun dia lo voy a tene
 
 podria usar objetos para las fases
 
-desde que agregue el rtc cada tanto se congela todo y se necesita reiniciar (quiza un delay al final del loop lo arregla)
+desde que agregue el rtc cada tanto se congela todo y se necesita reiniciar (quiza un delay al final del loop lo arregla) // si alguno de los cables del rtc se mueve y se desconecta por un momento se freezea todo el sistema
 
 las librerias actualizadas no funcionaban por pin_magic.h
 
