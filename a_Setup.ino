@@ -13,11 +13,6 @@ void setup() {
 
   pinMode(SENSORTIERRAPIN, INPUT);
 
-  Serial.print("DDRC: ");
-  Serial.println(DDRC, BIN);
-  Serial.print("PORTC: ");
-  Serial.println(PORTC, BIN);
-
   if (!rtc.begin()) {
     Serial.println("Couldn't find RTC");
     while (1)

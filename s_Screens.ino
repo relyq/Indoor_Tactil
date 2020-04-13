@@ -852,6 +852,19 @@ void drawZ1ControlScreen() {
                                    "Terminar", BUTTON_TEXTSIZE);
   z1ControlButtons[1].drawButton();
 
+  z1ControlButtons[3].initButtonUL(&tft, 20, 170, 200, 40, WHITE, RED, WHITE,
+                                   "Confirmar", BUTTON_TEXTSIZE);
+
+  tft.drawRect(5, 125, 230, 40, WHITE);
+  tft.setTextSize(3);
+  tft.setTextColor(WHITE);
+  tft.setCursor(15, 135);
+  tft.print("Ciclos");
+
+  sprintf(buffer, "%d", ciclos);
+  tft.setCursor(228 - (strlen(buffer)*18), 135);
+  tft.print(buffer);
+
   z1ControlButtons[2].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
                                    WHITE, "Volver", BUTTON_TEXTSIZE);
   z1ControlButtons[2].drawButton();

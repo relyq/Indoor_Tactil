@@ -88,7 +88,14 @@ void loop() {
 
     if (now.unixtime() >= diaFindefase) {
       if (z1fActiva == 4) {
-        z1fActiva = 0;
+        if (ciclos == 0) {
+          z1fActiva = 1;
+        } else if (ciclos == 1) {
+          z1fActiva = 0;
+        } else {
+          ciclos--;
+          z1fActiva = 1;
+        }
       } else {
         z1fActiva++;
       }
@@ -98,6 +105,10 @@ void loop() {
   }
 
   if (currentScreen == 0) {
+    if(z1fActivalast != z1fActiva){
+      HomeScreen();
+    }
+
     if (now.second() == 0 && now.unixtime() - prevTime >= 2) {
       prevTime = now.unixtime();
       Serial.print(now.year(), DEC);

@@ -1,5 +1,4 @@
 # Indoor_Tactil
-deberia cambiar currentScreen y prevScreen por arrays de bytes
 
 podria usar objetos para las fases - lo voy a hacer para una version futura
 
@@ -8,8 +7,6 @@ desde que agregue el rtc cada tanto se congela todo y se necesita reiniciar (qui
 las librerias actualizadas no funcionaban por pin_magic.h
 
 todo:
-
-agregar cantidad de ciclos
 
 //deberia cambiar el sistema de cambio de fases para que cuando se inicia una fase nueva instantaneamente se vaya a una funcion que efectivamente cambie la fase y no solo la variable que dice que fase esta activa
 

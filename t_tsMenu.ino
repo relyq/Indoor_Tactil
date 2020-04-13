@@ -74,6 +74,7 @@ void tsMenu() {
         AjustesScreen();
       } else if (relojButtons[1].contains(p.x, p.y)) {
         rtc.adjust(DateTime(relojYYYY, relojMM, relojDD, relojhh, relojmm, 0));
+        now = rtc.now();
         AjustesScreen();
       } else if ((p.x > 39 && p.x < 83) && (p.y > 24 && p.y < 60)) {
         relojYYYY++;
@@ -486,10 +487,10 @@ void tsMenu() {
         Z1InicioScreen();
       } else if (z1ControlButtons[1].contains(p.x, p.y) &&
                  z1TerminarConfirmar == 0) {
-        z1ControlButtons[3].initButtonUL(&tft, 20, 170, 200, 40, WHITE, RED,
-                                         WHITE, "Confirmar", BUTTON_TEXTSIZE);
         z1ControlButtons[3].drawButton();
         z1TerminarConfirmar = 1;
+      } else if ((p.x > 170 && p.x < 235) && (p.y > 125 && p.y < 165)) {
+        NumericKeyboardScreen(&ciclos, 3, "Ciclos");
       } else if (z1TerminarConfirmar == 1 &&
                  z1ControlButtons[3].contains(p.x, p.y)) {
         z1fActiva = 0;
@@ -763,6 +764,8 @@ void tsMenu() {
             Z1F3Screen();
           } else if (numKBPrevScreen == 36) {
             Z1F4Screen();
+          } else if (numKBPrevScreen == 31) {
+            Z1ControlScreen();
           }
         } else if (numericKeyboardButtons[13].contains(p.x, p.y)) {
           if (numKBvarptr8b != NULL)
@@ -777,6 +780,8 @@ void tsMenu() {
             Z1F3Screen();
           } else if (numKBPrevScreen == 36) {
             Z1F4Screen();
+          } else if (numKBPrevScreen == 31) {
+            Z1ControlScreen();
           }
         }
       }

@@ -182,6 +182,7 @@ uint8_t riegohSP;          // riego limite h
 uint16_t diasSP;           // dias de la fase
 uint32_t diaFindefase;     // dia en unixtime del fin de la fase activa
 uint32_t diaIniciodefase;  // dia en unixtime del inicio de la fase activa
+uint16_t ciclos = 1;       // cantidad de ciclos - 0 = ciclo continuo
 
 uint16_t dias;
 uint16_t lastdias = 0xffff;
