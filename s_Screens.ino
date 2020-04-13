@@ -918,7 +918,7 @@ void drawZ1InicioScreen() {
   Serial.println("z1inicio dibujado");
 }
 
-void drawNumericKeyboardScreen(char* title) {
+void drawNumericKeyboardScreen(const char* title) {
   numKBPrevScreen = prevScreen;
   Serial.println(numKBPrevScreen);
 

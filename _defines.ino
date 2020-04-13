@@ -106,8 +106,27 @@ Adafruit_GFX_Button resetButtons[1];
 Adafruit_GFX_Button numericKeyboardButtons[16];
 
 // estos dos deberian ser char[]
-char* currentScreen;  // acá guardo la pantalla activa
-char* prevScreen;     // acá guardo la pantalla anterior
+uint8_t currentScreen;  // acá guardo la pantalla activa
+/*
+  0 - dashboard/home screen
+  1 - menu
+  2 - ajustes
+  3 - alarmas
+  4 - reloj
+  5 - programas
+  6 - reset
+
+  30 - zona 1 menu
+  31 - zona 1 control
+  32 - zona 1 inicio
+  33 - zona 1 fase 1
+  34 - zona 1 fase 2
+  35 - zona 1 fase 3
+  36 - zona 1 fase 4
+
+  255 - numKB
+*/
+uint8_t prevScreen;     // acá guardo la pantalla anterior
 
 uint8_t z1fActiva = 0;
 uint8_t z1fActivalast = z1fActiva;
@@ -185,7 +204,7 @@ const uint8_t VAPPIN = 0x04;    // pin 35 en el port c
 const uint8_t RIEGOPIN = 0x01;  // pin 37 en el port c
 
 char numKBstr[10];
-char* numKBPrevScreen;
+uint8_t numKBPrevScreen;
 uint8_t* numKBvarptr8b;
 uint16_t* numKBvarptr16b;
 uint8_t numKBstrLength;
@@ -214,5 +233,5 @@ DHT dht(DHTPIN, DHT22);
 RTC_DS3231 rtc;
 
 /*
-  deberia cambiar currentScreen y prevScreen por arrays de bytes
+
 */

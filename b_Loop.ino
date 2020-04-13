@@ -97,7 +97,7 @@ void loop() {
     dias = (now.unixtime() - diaIniciodefase) / 86400;
   }
 
-  if (currentScreen == "home") {
+  if (currentScreen == 0) {
     if (now.second() == 0 && now.unixtime() - prevTime >= 2) {
       prevTime = now.unixtime();
       Serial.print(now.year(), DEC);
@@ -184,7 +184,7 @@ void loop() {
       }
     }
   }
-  if ((currentScreen != "home" && currentScreen != "numKB") &&
+  if ((currentScreen != 0 && currentScreen != 255) &&
       (now.second() == 0 && now.unixtime() - prevTime >= 2)) {
     strcpy(buffer, "hh:mm");
     now.toString(buffer);
@@ -225,7 +225,6 @@ void DEBUG() {
 
   if (!(strcmp(msg, lastmsg) == 0)) {
     char msgval[4];
-    uint8_t i = 0;
     uint8_t val;
 
     strcpy(msgval, msg + 1);

@@ -1612,7 +1612,7 @@ void Adafruit_GFX_Button::initButton(Adafruit_GFX *gfx, int16_t x, int16_t y,
 void Adafruit_GFX_Button::initButtonUL(Adafruit_GFX *gfx, int16_t x1,
                                        int16_t y1, uint16_t w, uint16_t h,
                                        uint16_t outline, uint16_t fill,
-                                       uint16_t textcolor, char *label,
+                                       uint16_t textcolor, const char *label,
                                        uint8_t textsize) {
   initButtonUL(gfx, x1, y1, w, h, outline, fill, textcolor, label, textsize,
                textsize);
@@ -1638,7 +1638,7 @@ void Adafruit_GFX_Button::initButtonUL(Adafruit_GFX *gfx, int16_t x1,
 void Adafruit_GFX_Button::initButtonUL(Adafruit_GFX *gfx, int16_t x1,
                                        int16_t y1, uint16_t w, uint16_t h,
                                        uint16_t outline, uint16_t fill,
-                                       uint16_t textcolor, char *label,
+                                       uint16_t textcolor, const char *label,
                                        uint8_t textsize_x, uint8_t textsize_y) {
   _x1 = x1;
   _y1 = y1;

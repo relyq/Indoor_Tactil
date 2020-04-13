@@ -35,15 +35,15 @@ void tsMenu() {
     Serial.print(p.z);
     Serial.println(") ");
 
-    if (currentScreen != "home" && (p.y < -1)) {
+    if (currentScreen != 0 && (p.y < -1)) {
       HomeScreen();
     }
 
-    if (currentScreen == "home") {  // deberia usar un switch
+    if (currentScreen == 0) {  // deberia usar un switch
       if (homeButtons[0].contains(p.x, p.y)) {
         MenuScreen();
       }
-    } else if (currentScreen == "menu") {
+    } else if (currentScreen == 1) {
       if (menuButtons[0].contains(p.x, p.y)) {
         Z1Screen();
       } else if (menuButtons[1].contains(p.x, p.y)) {
@@ -51,7 +51,7 @@ void tsMenu() {
       } else if (menuButtons[2].contains(p.x, p.y)) {
         HomeScreen();
       }
-    } else if (currentScreen == "ajustes") {
+    } else if (currentScreen == 2) {
       if (ajustesButtons[4].contains(p.x, p.y)) {
         MenuScreen();
       } else if (ajustesButtons[0].contains(p.x, p.y)) {
@@ -63,11 +63,11 @@ void tsMenu() {
       } else if (ajustesButtons[3].contains(p.x, p.y)) {
         ResetScreen();
       }
-    } else if (currentScreen == "alarmas") {
+    } else if (currentScreen == 3) {
       if (alarmasButtons[0].contains(p.x, p.y)) {
         AjustesScreen();
       }
-    } else if (currentScreen == "reloj") {
+    } else if (currentScreen == 4) {
       tft.setTextSize(3);
       tft.setTextColor(WHITE, BLACK);
       if (relojButtons[0].contains(p.x, p.y)) {
@@ -373,15 +373,15 @@ void tsMenu() {
         }
       }
       delay(150);
-    } else if (currentScreen == "programas") {
+    } else if (currentScreen == 5) {
       if (programasButtons[0].contains(p.x, p.y)) {
         AjustesScreen();
       }
-    } else if (currentScreen == "reset") {
+    } else if (currentScreen == 6) {
       if (resetButtons[0].contains(p.x, p.y)) {
         AjustesScreen();
       }
-    } else if (currentScreen == "z1") {
+    } else if (currentScreen == 30) {
       if (z1Buttons[5].contains(p.x, p.y)) {
         MenuScreen();
       } else if (z1Buttons[0].contains(p.x, p.y)) {
@@ -395,7 +395,7 @@ void tsMenu() {
       } else if (z1Buttons[4].contains(p.x, p.y)) {
         Z1ControlScreen();
       }
-    } else if (currentScreen == "z1f1") {
+    } else if (currentScreen == 33) {
       if (z1f1Buttons[4].contains(p.x, p.y)) {
         Z1Screen();
       } else if (z1f1Buttons[0].contains(p.x, p.y)) {
@@ -416,7 +416,7 @@ void tsMenu() {
         NumericKeyboardScreen(&z1f1humh, 2, "Hum alta");
       }
 
-    } else if (currentScreen == "z1f2") {
+    } else if (currentScreen == 34) {
       if (z1f2Buttons[4].contains(p.x, p.y)) {
         Z1Screen();
       } else if (z1f2Buttons[0].contains(p.x, p.y)) {
@@ -436,7 +436,7 @@ void tsMenu() {
       } else if (z1f2Buttons[10].contains(p.x, p.y)) {
         NumericKeyboardScreen(&z1f2humh, 2, "Hum alta");
       }
-    } else if (currentScreen == "z1f3") {
+    } else if (currentScreen == 35) {
       if (z1f3Buttons[4].contains(p.x, p.y)) {
         Z1Screen();
       } else if (z1f3Buttons[0].contains(p.x, p.y)) {
@@ -456,7 +456,7 @@ void tsMenu() {
       } else if (z1f3Buttons[10].contains(p.x, p.y)) {
         NumericKeyboardScreen(&z1f3humh, 2, "Hum alta");
       }
-    } else if (currentScreen == "z1f4") {
+    } else if (currentScreen == 36) {
       if (z1f4Buttons[4].contains(p.x, p.y)) {
         Z1Screen();
       } else if (z1f4Buttons[0].contains(p.x, p.y)) {
@@ -477,7 +477,7 @@ void tsMenu() {
         NumericKeyboardScreen(&z1f4humh, 2, "Hum alta");
       }
 
-    } else if (currentScreen == "z1control") {
+    } else if (currentScreen == 31) {
       if (z1ControlButtons[2].contains(p.x, p.y)) {
         z1TerminarConfirmar = 0;
         Z1Screen();
@@ -496,7 +496,7 @@ void tsMenu() {
         z1TerminarConfirmar = 0;
         tft.fillRect(5, 170, 230, 40, BLACK);
       }
-    } else if (currentScreen == "z1inicio") {
+    } else if (currentScreen == 32) {
       if (z1InicioButtons[5].contains(p.x, p.y)) {
         Z1ControlScreen();
       } else if (z1InicioButtons[0].contains(p.x, p.y) &&
@@ -672,7 +672,7 @@ void tsMenu() {
         z1InicioButtons[2].drawRectButton();
         z1InicioButtons[3].drawRectButton();
       }
-    } else if (currentScreen == "numKB") {
+    } else if (currentScreen == 255) {
       numKBstrLength = strlen(numKBstr);
 
       tft.setTextSize(BUTTON_TEXTSIZE);
@@ -755,30 +755,27 @@ void tsMenu() {
       // aca van cada una de las pantallas en las que hay un teclado
       {
         if (numericKeyboardButtons[0].contains(p.x, p.y)) {
-          if (numKBPrevScreen == "z1f1") {
+          if (numKBPrevScreen == 33) {
             Z1F1Screen();
-          }
-          /*
-           else if (numKBPrevScreen == "z1f2") {
+          } else if (numKBPrevScreen == 34) {
             Z1F2Screen();
-          } else if (numKBPrevScreen == "z1f3") {
+          } else if (numKBPrevScreen == 35) {
             Z1F3Screen();
-          } else if (numKBPrevScreen == "z1f4") {
+          } else if (numKBPrevScreen == 36) {
             Z1F4Screen();
           }
-          */
         } else if (numericKeyboardButtons[13].contains(p.x, p.y)) {
           if (numKBvarptr8b != NULL)
             *numKBvarptr8b = atoi(numKBstr);
           else if (numKBvarptr16b != NULL)
             *numKBvarptr16b = atoi(numKBstr);
-          if (numKBPrevScreen == "z1f1") {
+          if (numKBPrevScreen == 33) {
             Z1F1Screen();
-          } else if (numKBPrevScreen == "z1f2") {
+          } else if (numKBPrevScreen == 34) {
             Z1F2Screen();
-          } else if (numKBPrevScreen == "z1f3") {
+          } else if (numKBPrevScreen == 35) {
             Z1F3Screen();
-          } else if (numKBPrevScreen == "z1f4") {
+          } else if (numKBPrevScreen == 36) {
             Z1F4Screen();
           }
         }

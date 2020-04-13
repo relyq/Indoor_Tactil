@@ -254,10 +254,10 @@ public:
   // New/alt initButton() uses upper-left corner & size
   void initButtonUL(Adafruit_GFX *gfx, int16_t x1, int16_t y1, uint16_t w,
                     uint16_t h, uint16_t outline, uint16_t fill,
-                    uint16_t textcolor, char *label, uint8_t textsize);
+                    uint16_t textcolor, const char *label, uint8_t textsize);
   void initButtonUL(Adafruit_GFX *gfx, int16_t x1, int16_t y1, uint16_t w,
                     uint16_t h, uint16_t outline, uint16_t fill,
-                    uint16_t textcolor, char *label, uint8_t textsize_x,
+                    uint16_t textcolor, const char *label, uint8_t textsize_x,
                     uint8_t textsize_y);
   void drawButton(boolean inverted = false);
   void drawRectButton(boolean inverted = false); // modified
