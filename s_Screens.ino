@@ -68,24 +68,25 @@ void drawHomeScreen() {
   tft.setCursor(170, 183);
   tft.print(buffer);
 
+  sprintf(buffer, "%d", diasSP);
   tft.setCursor(10, 200);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
   tft.print("Dias   ");
-  tft.setCursor(125 - (strlen(diasSPstr) * 12), 200);
+  tft.setCursor(125 - (strlen(buffer) * 12), 200);
   tft.setTextColor(ORANGE);
-  tft.print(diasSPstr);
+  tft.print(buffer);
 
   tft.setCursor(130, 200);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
   tft.print("Riego ");
-  strcpy(buffer, riegohSPstr);
+  sprintf(buffer, "%d", riegohSP);
   strcat(buffer, "%");
   tft.setCursor(130, 220);
   tft.setTextColor(ORANGE);
   tft.print(buffer);  // riego sp h
-  strcpy(buffer, riegolSPstr);
+  sprintf(buffer, "%d", riegolSP);
   strcat(buffer, "%");
   tft.setCursor(130, 240);
   tft.setTextColor(BLUE);
@@ -95,12 +96,12 @@ void drawHomeScreen() {
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
   tft.print("T.");
-  strcpy(buffer, templSPstr);
+  sprintf(buffer, "%d", templSP);
   strcat(buffer, "C");
   tft.setCursor(77 - (strlen(buffer) * 12), 260);
   tft.setTextColor(BLUE);
   tft.print(buffer);  // temp sp l
-  strcpy(buffer, temphSPstr);
+  sprintf(buffer, "%d", temphSP);
   strcat(buffer, "C");
   tft.setCursor(125 - (strlen(buffer) * 12), 260);
   tft.setTextColor(ORANGE);
@@ -110,12 +111,12 @@ void drawHomeScreen() {
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
   tft.print("Humedad ");
-  strcpy(buffer, humhSPstr);
+  sprintf(buffer, "%d", humhSP);
   strcat(buffer, "%");
   tft.setCursor(130, 280);
   tft.setTextColor(ORANGE);
   tft.print(buffer);  // humedad sp h
-  strcpy(buffer, humlSPstr);
+  sprintf(buffer, "%d", humlSP);
   strcat(buffer, "%");
   tft.setCursor(130, 300);
   tft.setTextColor(BLUE);
@@ -416,76 +417,61 @@ void drawZ1F1Screen() {
   tft.setTextSize(3);
 
   //// dias
-  if (strtol(z1f1diasSPstr, 0, 10) == 0) strcpy(z1f1diasSPstr, "0");
-
-  strcpy(buffer, z1f1diasSPstr);
+  sprintf(buffer, "%d", z1f1dias);
 
   tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
   //// hluz
-  if (strtol(z1f1hluzSPstr, 0, 10) > 24)
-    strcpy(z1f1hluzSPstr, "24");
-  else if (strtol(z1f1hluzSPstr, 0, 10) == 0)
-    strcpy(z1f1hluzSPstr, "0");
-
-  strcpy(buffer, z1f1hluzSPstr);
+  if (z1f1hLuz > 24) z1f1hLuz = 24;
+  sprintf(buffer, "%d", z1f1hLuz);
   strcat(buffer, "H");
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
-  if (strtol(z1f1templSPstr, 0, 10) == 0)
-    strcpy(z1f1templSPstr, "0");
-  else if (strtol(z1f1templSPstr, 0, 10) > 80)
-    strcpy(z1f1templSPstr, "80");
-  strcpy(buffer, z1f1templSPstr);
-  tft.setCursor(192 - (strlen(buffer) * 18) - (strlen(z1f1temphSPstr) * 18),
-                135);
-  tft.print(buffer);
-
-  tft.setCursor(192 - (strlen(z1f1temphSPstr) * 18), 135);
-  tft.print("-");
-
-  if (strtol(z1f1temphSPstr, 0, 10) == 0) strcpy(z1f1temphSPstr, "0");
-  else if (strtol(z1f1temphSPstr, 0, 10) > 80)
-    strcpy(z1f1temphSPstr, "80");
-  strcpy(buffer, z1f1temphSPstr);
+  if (z1f1temph > 80) z1f1temph = 80;
+  sprintf(buffer, "%d", z1f1temph);
+  uint8_t z1f1temphSTRlen = strlen(buffer);
   strcat(buffer, "C");
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
-  //// riego
-  if (strtol(z1f1riegolSPstr, 0, 10) == 0) strcpy(z1f1riegolSPstr, "0");
-  strcpy(buffer, z1f1riegolSPstr);
-  tft.setCursor(192 - (strlen(buffer) * 18) - (strlen(z1f1riegohSPstr) * 18),
-                180);
+  if (z1f1templ > 80) z1f1templ = 80;
+  sprintf(buffer, "%d", z1f1templ);
+  tft.setCursor(192 - (strlen(buffer) * 18) - (z1f1temphSTRlen * 18), 135);
   tft.print(buffer);
 
-  tft.setCursor(192 - (strlen(z1f1riegohSPstr) * 18), 180);
+  tft.setCursor(192 - (z1f1temphSTRlen * 18), 135);
   tft.print("-");
 
-  if (strtol(z1f1riegohSPstr, 0, 10) == 0) strcpy(z1f1riegohSPstr, "0");
-  strcpy(buffer, z1f1riegohSPstr);
+  //// riego
+  sprintf(buffer, "%d", z1f1riegoh);
+  uint8_t z1f1riegohSTRlen = strlen(buffer);
   strcat(buffer, "%");
   tft.setCursor(228 - (strlen(buffer) * 18), 180);
   tft.print(buffer);
 
-  //// humedad
-  if (strtol(z1f1humlSPstr, 0, 10) == 0) strcpy(z1f1humlSPstr, "0");
-  strcpy(buffer, z1f1humlSPstr);
-  tft.setCursor(192 - (strlen(buffer) * 18) - (strlen(z1f1humhSPstr) * 18),
-                225);
+  sprintf(buffer, "%d", z1f1riegol);
+  tft.setCursor(192 - (strlen(buffer) * 18) - (z1f1riegohSTRlen * 18), 180);
   tft.print(buffer);
 
-  tft.setCursor(192 - (strlen(z1f1humhSPstr) * 18), 225);
+  tft.setCursor(192 - (z1f1riegohSTRlen * 18), 180);
   tft.print("-");
 
-  if (strtol(z1f1humhSPstr, 0, 10) == 0) strcpy(z1f1humhSPstr, "0");
-  strcpy(buffer, z1f1humhSPstr);
+  //// humedad
+  sprintf(buffer, "%d", z1f1humh);
+  uint8_t z1f1humhSTRlen = strlen(buffer);
   strcat(buffer, "%");
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
+
+  sprintf(buffer, "%d", z1f1huml);
+  tft.setCursor(192 - (strlen(buffer) * 18) - (z1f1humhSTRlen * 18), 225);
+  tft.print(buffer);
+
+  tft.setCursor(192 - (z1f1humhSTRlen * 18), 225);
+  tft.print("-");
 
   z1f1Buttons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                               "Volver", BUTTON_TEXTSIZE);
@@ -549,74 +535,62 @@ void drawZ1F2Screen() {
 
   tft.setTextSize(3);
 
-  if (strtol(z1f2diasSPstr, 0, 10) == 0) strcpy(z1f2diasSPstr, "0");
-
-  strcpy(buffer, z1f2diasSPstr);
+  //// dias
+  sprintf(buffer, "%d", z1f2dias);
 
   tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
-  if (strtol(z1f2hluzSPstr, 0, 10) > 24)
-    strcpy(z1f2hluzSPstr, "24");
-  else if (strtol(z1f2hluzSPstr, 0, 10) == 0)
-    strcpy(z1f2hluzSPstr, "0");
-
-  strcpy(buffer, z1f2hluzSPstr);
+  //// hluz
+  if (z1f2hLuz > 24) z1f2hLuz = 24;
+  sprintf(buffer, "%d", z1f2hLuz);
   strcat(buffer, "H");
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
-  if (strtol(z1f2templSPstr, 0, 10) == 0) strcpy(z1f2templSPstr, "0");
-  else if (strtol(z1f2templSPstr, 0, 10) > 80)
-    strcpy(z1f2templSPstr, "80");
-  strcpy(buffer, z1f2templSPstr);
-  tft.setCursor(192 - (strlen(buffer) * 18) - (strlen(z1f2temphSPstr) * 18),
-                135);
-  tft.print(buffer);
-
-  tft.setCursor(192 - (strlen(z1f2temphSPstr) * 18), 135);
-  tft.print("-");
-
-  if (strtol(z1f2temphSPstr, 0, 10) == 0) strcpy(z1f2temphSPstr, "0");
-  else if (strtol(z1f2temphSPstr, 0, 10) > 80)
-    strcpy(z1f2temphSPstr, "80");
-  strcpy(buffer, z1f2temphSPstr);
+  if (z1f2temph > 80) z1f2temph = 80;
+  sprintf(buffer, "%d", z1f2temph);
+  uint8_t z1f2temphSTRlen = strlen(buffer);
   strcat(buffer, "C");
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
-  //// riego
-  if (strtol(z1f2riegolSPstr, 0, 10) == 0) strcpy(z1f2riegolSPstr, "0");
-  strcpy(buffer, z1f2riegolSPstr);
-  tft.setCursor(192 - (strlen(buffer) * 18) - (strlen(z1f2riegohSPstr) * 18),
-                180);
+  if (z1f2templ > 80) z1f2templ = 80;
+  sprintf(buffer, "%d", z1f2templ);
+  tft.setCursor(192 - (strlen(buffer) * 18) - (z1f2temphSTRlen * 18), 135);
   tft.print(buffer);
 
-  tft.setCursor(192 - (strlen(z1f2riegohSPstr) * 18), 180);
+  tft.setCursor(192 - (z1f2temphSTRlen * 18), 135);
   tft.print("-");
 
-  if (strtol(z1f2riegohSPstr, 0, 10) == 0) strcpy(z1f2riegohSPstr, "0");
-  strcpy(buffer, z1f2riegohSPstr);
+  //// riego
+  sprintf(buffer, "%d", z1f2riegoh);
+  uint8_t z1f2riegohSTRlen = strlen(buffer);
   strcat(buffer, "%");
   tft.setCursor(228 - (strlen(buffer) * 18), 180);
   tft.print(buffer);
 
-  //// humedad
-  if (strtol(z1f2humlSPstr, 0, 10) == 0) strcpy(z1f2humlSPstr, "0");
-  strcpy(buffer, z1f2humlSPstr);
-  tft.setCursor(192 - (strlen(buffer) * 18) - (strlen(z1f2humhSPstr) * 18),
-                225);
+  sprintf(buffer, "%d", z1f2riegol);
+  tft.setCursor(192 - (strlen(buffer) * 18) - (z1f2riegohSTRlen * 18), 180);
   tft.print(buffer);
 
-  tft.setCursor(192 - (strlen(z1f2humhSPstr) * 18), 225);
+  tft.setCursor(192 - (z1f2riegohSTRlen * 18), 180);
   tft.print("-");
 
-  if (strtol(z1f2humhSPstr, 0, 10) == 0) strcpy(z1f2humhSPstr, "0");
-  strcpy(buffer, z1f2humhSPstr);
+  //// humedad
+  sprintf(buffer, "%d", z1f2humh);
+  uint8_t z1f2humhSTRlen = strlen(buffer);
   strcat(buffer, "%");
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
+
+  sprintf(buffer, "%d", z1f2huml);
+  tft.setCursor(192 - (strlen(buffer) * 18) - (z1f2humhSTRlen * 18), 225);
+  tft.print(buffer);
+
+  tft.setCursor(192 - (z1f2humhSTRlen * 18), 225);
+  tft.print("-");
 
   z1f2Buttons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                               "Volver", BUTTON_TEXTSIZE);
@@ -680,74 +654,62 @@ void drawZ1F3Screen() {
 
   tft.setTextSize(3);
 
-  if (strtol(z1f3diasSPstr, 0, 10) == 0) strcpy(z1f3diasSPstr, "0");
-
-  strcpy(buffer, z1f3diasSPstr);
+  //// dias
+  sprintf(buffer, "%d", z1f3dias);
 
   tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
-  if (strtol(z1f3hluzSPstr, 0, 10) > 24)
-    strcpy(z1f3hluzSPstr, "24");
-  else if (strtol(z1f3hluzSPstr, 0, 10) == 0)
-    strcpy(z1f3hluzSPstr, "0");
-
-  strcpy(buffer, z1f3hluzSPstr);
+  //// hluz
+  if (z1f3hLuz > 24) z1f3hLuz = 24;
+  sprintf(buffer, "%d", z1f3hLuz);
   strcat(buffer, "H");
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
-  if (strtol(z1f3templSPstr, 0, 10) == 0) strcpy(z1f3templSPstr, "0");
-  else if (strtol(z1f3templSPstr, 0, 10) > 80)
-    strcpy(z1f3templSPstr, "80");
-  strcpy(buffer, z1f3templSPstr);
-  tft.setCursor(192 - (strlen(buffer) * 18) - (strlen(z1f3temphSPstr) * 18),
-                135);
-  tft.print(buffer);
-
-  tft.setCursor(192 - (strlen(z1f3temphSPstr) * 18), 135);
-  tft.print("-");
-
-  if (strtol(z1f3temphSPstr, 0, 10) == 0) strcpy(z1f3temphSPstr, "0");
-  else if (strtol(z1f3temphSPstr, 0, 10) > 80)
-    strcpy(z1f3temphSPstr, "80");
-  strcpy(buffer, z1f3temphSPstr);
+  if (z1f3temph > 80) z1f3temph = 80;
+  sprintf(buffer, "%d", z1f3temph);
+  uint8_t z1f3temphSTRlen = strlen(buffer);
   strcat(buffer, "C");
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
-  //// riego
-  if (strtol(z1f3riegolSPstr, 0, 10) == 0) strcpy(z1f3riegolSPstr, "0");
-  strcpy(buffer, z1f3riegolSPstr);
-  tft.setCursor(192 - (strlen(buffer) * 18) - (strlen(z1f3riegohSPstr) * 18),
-                180);
+  if (z1f3templ > 80) z1f3templ = 80;
+  sprintf(buffer, "%d", z1f3templ);
+  tft.setCursor(192 - (strlen(buffer) * 18) - (z1f3temphSTRlen * 18), 135);
   tft.print(buffer);
 
-  tft.setCursor(192 - (strlen(z1f3riegohSPstr) * 18), 180);
+  tft.setCursor(192 - (z1f3temphSTRlen * 18), 135);
   tft.print("-");
 
-  if (strtol(z1f3riegohSPstr, 0, 10) == 0) strcpy(z1f3riegohSPstr, "0");
-  strcpy(buffer, z1f3riegohSPstr);
+  //// riego
+  sprintf(buffer, "%d", z1f3riegoh);
+  uint8_t z1f3riegohSTRlen = strlen(buffer);
   strcat(buffer, "%");
   tft.setCursor(228 - (strlen(buffer) * 18), 180);
   tft.print(buffer);
 
-  //// humedad
-  if (strtol(z1f3humlSPstr, 0, 10) == 0) strcpy(z1f3humlSPstr, "0");
-  strcpy(buffer, z1f3humlSPstr);
-  tft.setCursor(192 - (strlen(buffer) * 18) - (strlen(z1f3humhSPstr) * 18),
-                225);
+  sprintf(buffer, "%d", z1f3riegol);
+  tft.setCursor(192 - (strlen(buffer) * 18) - (z1f3riegohSTRlen * 18), 180);
   tft.print(buffer);
 
-  tft.setCursor(192 - (strlen(z1f3humhSPstr) * 18), 225);
+  tft.setCursor(192 - (z1f3riegohSTRlen * 18), 180);
   tft.print("-");
 
-  if (strtol(z1f3humhSPstr, 0, 10) == 0) strcpy(z1f3humhSPstr, "0");
-  strcpy(buffer, z1f3humhSPstr);
+  //// humedad
+  sprintf(buffer, "%d", z1f3humh);
+  uint8_t z1f3humhSTRlen = strlen(buffer);
   strcat(buffer, "%");
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
+
+  sprintf(buffer, "%d", z1f3huml);
+  tft.setCursor(192 - (strlen(buffer) * 18) - (z1f3humhSTRlen * 18), 225);
+  tft.print(buffer);
+
+  tft.setCursor(192 - (z1f3humhSTRlen * 18), 225);
+  tft.print("-");
 
   z1f3Buttons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                               "Volver", BUTTON_TEXTSIZE);
@@ -811,74 +773,62 @@ void drawZ1F4Screen() {
 
   tft.setTextSize(3);
 
-  if (strtol(z1f4diasSPstr, 0, 10) == 0) strcpy(z1f4diasSPstr, "0");
-
-  strcpy(buffer, z1f4diasSPstr);
+  //// dias
+  sprintf(buffer, "%d", z1f4dias);
 
   tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
-  if (strtol(z1f4hluzSPstr, 0, 10) > 24)
-    strcpy(z1f4hluzSPstr, "24");
-  else if (strtol(z1f4hluzSPstr, 0, 10) == 0)
-    strcpy(z1f4hluzSPstr, "0");
-
-  strcpy(buffer, z1f4hluzSPstr);
+  //// hluz
+  if (z1f4hLuz > 24) z1f4hLuz = 24;
+  sprintf(buffer, "%d", z1f4hLuz);
   strcat(buffer, "H");
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
-  if (strtol(z1f4templSPstr, 0, 10) == 0) strcpy(z1f4templSPstr, "0");
-  else if (strtol(z1f4templSPstr, 0, 10) > 80)
-    strcpy(z1f4templSPstr, "80");
-  strcpy(buffer, z1f4templSPstr);
-  tft.setCursor(192 - (strlen(buffer) * 18) - (strlen(z1f4temphSPstr) * 18),
-                135);
-  tft.print(buffer);
-
-  tft.setCursor(192 - (strlen(z1f4temphSPstr) * 18), 135);
-  tft.print("-");
-
-  if (strtol(z1f4temphSPstr, 0, 10) == 0) strcpy(z1f4temphSPstr, "0");
-  else if (strtol(z1f4temphSPstr, 0, 10) > 80)
-    strcpy(z1f4temphSPstr, "80");
-  strcpy(buffer, z1f4temphSPstr);
+  if (z1f4temph > 80) z1f4temph = 80;
+  sprintf(buffer, "%d", z1f4temph);
+  uint8_t z1f4temphSTRlen = strlen(buffer);
   strcat(buffer, "C");
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
-  //// riego
-  if (strtol(z1f4riegolSPstr, 0, 10) == 0) strcpy(z1f4riegolSPstr, "0");
-  strcpy(buffer, z1f4riegolSPstr);
-  tft.setCursor(192 - (strlen(buffer) * 18) - (strlen(z1f4riegohSPstr) * 18),
-                180);
+  if (z1f4templ > 80) z1f4templ = 80;
+  sprintf(buffer, "%d", z1f4templ);
+  tft.setCursor(192 - (strlen(buffer) * 18) - (z1f4temphSTRlen * 18), 135);
   tft.print(buffer);
 
-  tft.setCursor(192 - (strlen(z1f4riegohSPstr) * 18), 180);
+  tft.setCursor(192 - (z1f4temphSTRlen * 18), 135);
   tft.print("-");
 
-  if (strtol(z1f4riegohSPstr, 0, 10) == 0) strcpy(z1f4riegohSPstr, "0");
-  strcpy(buffer, z1f4riegohSPstr);
+  //// riego
+  sprintf(buffer, "%d", z1f4riegoh);
+  uint8_t z1f4riegohSTRlen = strlen(buffer);
   strcat(buffer, "%");
   tft.setCursor(228 - (strlen(buffer) * 18), 180);
   tft.print(buffer);
 
-  //// humedad
-  if (strtol(z1f4humlSPstr, 0, 10) == 0) strcpy(z1f4humlSPstr, "0");
-  strcpy(buffer, z1f4humlSPstr);
-  tft.setCursor(192 - (strlen(buffer) * 18) - (strlen(z1f4humhSPstr) * 18),
-                225);
+  sprintf(buffer, "%d", z1f4riegol);
+  tft.setCursor(192 - (strlen(buffer) * 18) - (z1f4riegohSTRlen * 18), 180);
   tft.print(buffer);
 
-  tft.setCursor(192 - (strlen(z1f4humhSPstr) * 18), 225);
+  tft.setCursor(192 - (z1f4riegohSTRlen * 18), 180);
   tft.print("-");
 
-  if (strtol(z1f4humhSPstr, 0, 10) == 0) strcpy(z1f4humhSPstr, "0");
-  strcpy(buffer, z1f4humhSPstr);
+  //// humedad
+  sprintf(buffer, "%d", z1f4humh);
+  uint8_t z1f4humhSTRlen = strlen(buffer);
   strcat(buffer, "%");
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
+
+  sprintf(buffer, "%d", z1f4huml);
+  tft.setCursor(192 - (strlen(buffer) * 18) - (z1f4humhSTRlen * 18), 225);
+  tft.print(buffer);
+
+  tft.setCursor(192 - (z1f4humhSTRlen * 18), 225);
+  tft.print("-");
 
   z1f4Buttons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                               "Volver", BUTTON_TEXTSIZE);

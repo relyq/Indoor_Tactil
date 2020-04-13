@@ -89,7 +89,6 @@ Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);
 // ???????????????
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 10);
 
-
 Adafruit_GFX_Button homeButtons[1];
 Adafruit_GFX_Button menuButtons[3];
 Adafruit_GFX_Button z1Buttons[6];
@@ -118,67 +117,52 @@ uint8_t z1fSeleccionada =
 bool z1TerminarConfirmar = 0;
 
 //// valores default
-char z1f1diasSPstr[4] = "90";
-char z1f1hluzSPstr[3] = "16";
-char z1f1templSPstr[3] = "20";
-char z1f1temphSPstr[3] = "25";
-char z1f1riegolSPstr[3] = "20";
-char z1f1riegohSPstr[3] = "60";
-char z1f1humlSPstr[3] = "60";
-char z1f1humhSPstr[3] = "80";
 
-char z1f2diasSPstr[4] = "90";
-char z1f2hluzSPstr[3] = "16";
-char z1f2templSPstr[3] = "20";
-char z1f2temphSPstr[3] = "25";
-char z1f2riegolSPstr[3] = "20";
-char z1f2riegohSPstr[3] = "60";
-char z1f2humlSPstr[3] = "60";
-char z1f2humhSPstr[3] = "80";
+uint16_t z1f1dias = 1;
+uint8_t z1f1hLuz = 1;
+uint8_t z1f1templ = 1;
+uint8_t z1f1temph = 1;
+uint8_t z1f1riegol = 1;
+uint8_t z1f1riegoh = 1;
+uint8_t z1f1huml = 1;
+uint8_t z1f1humh = 1;
 
-char z1f3diasSPstr[4] = "90";
-char z1f3hluzSPstr[3] = "16";
-char z1f3templSPstr[3] = "20";
-char z1f3temphSPstr[3] = "25";
-char z1f3riegolSPstr[3] = "20";
-char z1f3riegohSPstr[3] = "60";
-char z1f3humlSPstr[3] = "60";
-char z1f3humhSPstr[3] = "80";
+uint16_t z1f2dias = 2;
+uint8_t z1f2hLuz = 2;
+uint8_t z1f2templ = 2;
+uint8_t z1f2temph = 2;
+uint8_t z1f2riegol = 2;
+uint8_t z1f2riegoh = 2;
+uint8_t z1f2huml = 2;
+uint8_t z1f2humh = 2;
 
-char z1f4diasSPstr[4] = "90";
-char z1f4hluzSPstr[3] = "16";
-char z1f4templSPstr[3] = "20";
-char z1f4temphSPstr[3] = "25";
-char z1f4riegolSPstr[3] = "20";
-char z1f4riegohSPstr[3] = "60";
-char z1f4humlSPstr[3] = "60";
-char z1f4humhSPstr[3] = "80";
+uint16_t z1f3dias = 3;
+uint8_t z1f3hLuz = 3;
+uint8_t z1f3templ = 3;
+uint8_t z1f3temph = 3;
+uint8_t z1f3riegol = 3;
+uint8_t z1f3riegoh = 3;
+uint8_t z1f3huml = 3;
+uint8_t z1f3humh = 3;
 
-#define templSPdef "20"
-#define temphSPdef "30"
-#define humlSPdef "60"
-#define humhSPdef "80"
-#define diasSPdef "90"
-#define riegolSPdef "20"
-#define riegohSPdef "60"
+uint16_t z1f4dias = 4;
+uint8_t z1f4hLuz = 4;
+uint8_t z1f4templ = 4;
+uint8_t z1f4temph = 4;
+uint8_t z1f4riegol = 4;
+uint8_t z1f4riegoh = 4;
+uint8_t z1f4huml = 4;
+uint8_t z1f4humh = 4;
 
-char templSPstr[3] = templSPdef;
-char temphSPstr[3] = temphSPdef;
-char humlSPstr[3] = humlSPdef;
-char humhSPstr[3] = humhSPdef;
-char diasSPstr[4] = diasSPdef;
-char riegolSPstr[3] = riegolSPdef;
-char riegohSPstr[3] = riegohSPdef;
-
-uint8_t templSP;   // temperatura limite l
-uint8_t temphSP;   // temperatura limite h
-uint8_t humlSP;    // humedad aire limite l
-uint8_t humhSP;    // humedad aire limite h
-uint8_t riegolSP;  // riego limite l
-uint8_t riegohSP;  // riego limite h
-uint16_t diasSP;   // dias de la fase
-uint32_t diaFindefase; // dia en unixtime del fin de la fase activa
-uint32_t diaIniciodefase; // dia en unixtime del inicio de la fase activa
+uint8_t templSP;           // temperatura limite l
+uint8_t temphSP;           // temperatura limite h
+uint8_t humlSP;            // humedad aire limite l
+uint8_t humhSP;            // humedad aire limite h
+uint8_t riegolSP;          // riego limite l
+uint8_t riegohSP;          // riego limite h
+uint16_t diasSP;           // dias de la fase
+uint32_t diaFindefase;     // dia en unixtime del fin de la fase activa
+uint32_t diaIniciodefase;  // dia en unixtime del inicio de la fase activa
 
 uint16_t dias;
 uint16_t lastdias = 0xffff;
@@ -193,7 +177,7 @@ uint8_t lasthTierra = 255;
 
 // ins
 const uint8_t SENSORTIERRAPIN = A8;
-const uint8_t DHTPIN = 0x40;    // pin 31 en el port c
+const uint8_t DHTPIN = 0x40;  // pin 31 en el port c
 
 // outs
 const uint8_t FANPIN = 0x10;    // pin 33 en el port c
@@ -202,7 +186,8 @@ const uint8_t RIEGOPIN = 0x01;  // pin 37 en el port c
 
 char numKBstr[10];
 char* numKBPrevScreen;
-char* numKBvarptr;
+uint8_t* numKBvarptr8b;
+uint16_t* numKBvarptr16b;
 uint8_t numKBstrLength;
 uint8_t numKBbufferSize;
 
@@ -224,11 +209,10 @@ uint8_t relojmm;
 
 char buffer[50];
 
-
 DHT dht(DHTPIN, DHT22);
 
 RTC_DS3231 rtc;
 
 /*
-
+  deberia cambiar currentScreen y prevScreen por arrays de bytes
 */

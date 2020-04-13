@@ -10,66 +10,59 @@ void loop() {
     Serial.println("fase activa cambiada");
     switch (z1fActiva) {
       case 0:
-        strcpy(templSPstr, "0");
-        strcpy(temphSPstr, "0");
-        strcpy(humlSPstr, "0");
-        strcpy(humhSPstr, "0");
-        strcpy(diasSPstr, "0");
-        strcpy(riegolSPstr, "0");
-        strcpy(riegohSPstr, "0");
-        dias = 0;
+        diasSP = 0;
+        templSP = 0;
+        temphSP = 0;
+        humlSP = 0;
+        humhSP = 0;
+        riegolSP = 0;
+        riegohSP = 0;
         break;
       case 1:
-        strcpy(templSPstr, z1f1templSPstr);
-        strcpy(temphSPstr, z1f1temphSPstr);
-        strcpy(humlSPstr, z1f1humlSPstr);
-        strcpy(humhSPstr, z1f1humhSPstr);
-        strcpy(diasSPstr, z1f1diasSPstr);
-        strcpy(riegolSPstr, z1f1riegolSPstr);
-        strcpy(riegohSPstr, z1f1riegohSPstr);
+        diasSP = z1f1dias;
+        templSP = z1f1templ;
+        temphSP = z1f1temph;
+        humlSP = z1f1huml;
+        humhSP = z1f1humh;
+        riegolSP = z1f1riegol;
+        riegohSP = z1f1riegoh;
         break;
       case 2:
-        strcpy(templSPstr, z1f2templSPstr);
-        strcpy(temphSPstr, z1f2temphSPstr);
-        strcpy(humlSPstr, z1f2humlSPstr);
-        strcpy(humhSPstr, z1f2humhSPstr);
-        strcpy(diasSPstr, z1f2diasSPstr);
-        strcpy(riegolSPstr, z1f2riegolSPstr);
-        strcpy(riegohSPstr, z1f2riegohSPstr);
+        diasSP = z1f2dias;
+        templSP = z1f2templ;
+        temphSP = z1f2temph;
+        humlSP = z1f2huml;
+        humhSP = z1f2humh;
+        riegolSP = z1f2riegol;
+        riegohSP = z1f2riegoh;
         break;
       case 3:
-        strcpy(templSPstr, z1f3templSPstr);
-        strcpy(temphSPstr, z1f3temphSPstr);
-        strcpy(humlSPstr, z1f3humlSPstr);
-        strcpy(humhSPstr, z1f3humhSPstr);
-        strcpy(diasSPstr, z1f3diasSPstr);
-        strcpy(riegolSPstr, z1f3riegolSPstr);
-        strcpy(riegohSPstr, z1f3riegohSPstr);
+        diasSP = z1f3dias;
+        templSP = z1f3templ;
+        temphSP = z1f3temph;
+        humlSP = z1f3huml;
+        humhSP = z1f3humh;
+        riegolSP = z1f3riegol;
+        riegohSP = z1f3riegoh;
         break;
       case 4:
-        strcpy(templSPstr, z1f4templSPstr);
-        strcpy(temphSPstr, z1f4temphSPstr);
-        strcpy(humlSPstr, z1f4humlSPstr);
-        strcpy(humhSPstr, z1f4humhSPstr);
-        strcpy(diasSPstr, z1f4diasSPstr);
-        strcpy(riegolSPstr, z1f4riegolSPstr);
-        strcpy(riegohSPstr, z1f4riegohSPstr);
+        diasSP = z1f4dias;
+        templSP = z1f4templ;
+        temphSP = z1f4temph;
+        humlSP = z1f4huml;
+        humhSP = z1f4humh;
+        riegolSP = z1f4riegol;
+        riegohSP = z1f4riegoh;
         break;
     }
-
-    templSP = strtol(templSPstr, 0, 10);
-    temphSP = strtol(temphSPstr, 0, 10);
-    humlSP = strtol(humlSPstr, 0, 10);
-    humhSP = strtol(humhSPstr, 0, 10);
-    diasSP = strtol(diasSPstr, 0, 10);
-    riegolSP = strtol(riegolSPstr, 0, 10);
-    riegohSP = strtol(riegohSPstr, 0, 10);
 
     diaIniciodefase = now.unixtime();
     diaFindefase = now.unixtime() + diasSP * 86400;
 
-    Serial.print("diaFindefase: "); Serial.println(diaFindefase);
-    Serial.print("unixtime: "); Serial.println(now.unixtime());
+    Serial.print("diaFindefase: ");
+    Serial.println(diaFindefase);
+    Serial.print("unixtime: ");
+    Serial.println(now.unixtime());
 
     z1fActivalast = z1fActiva;
   }
@@ -93,16 +86,15 @@ void loop() {
       PORTC &= ~RIEGOPIN;
     }
 
-    if(now.unixtime() >= diaFindefase){
-      if(z1fActiva == 4){
+    if (now.unixtime() >= diaFindefase) {
+      if (z1fActiva == 4) {
         z1fActiva = 0;
       } else {
         z1fActiva++;
       }
     }
 
-    dias = (now.unixtime() - diaIniciodefase)/86400;
-
+    dias = (now.unixtime() - diaIniciodefase) / 86400;
   }
 
   if (currentScreen == "home") {
