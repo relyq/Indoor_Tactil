@@ -65,6 +65,10 @@ void loop() {
     Serial.println(now.unixtime());
 
     z1fActivalast = z1fActiva;
+
+    if(currentScreen == 0){
+      HomeScreen();
+    }
   }
 
   if (z1fActiva != 0) {
@@ -105,10 +109,6 @@ void loop() {
   }
 
   if (currentScreen == 0) {
-    if(z1fActivalast != z1fActiva){
-      HomeScreen();
-    }
-
     if (now.second() == 0 && now.unixtime() - prevTime >= 2) {
       prevTime = now.unixtime();
       Serial.print(now.year(), DEC);

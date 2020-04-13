@@ -1,4 +1,5 @@
 # Indoor_Tactil
+el dia de fin de fase solo se calcula al cambiar de fase, por lo tanto si pasa el tiempo mas alla del dia de fin de fase, no continua a la fase que deberia, solo comienza la fase que continuaba a la que termino
 
 podria usar objetos para las fases - lo voy a hacer para una version futura
 
@@ -7,8 +8,6 @@ desde que agregue el rtc cada tanto se congela todo y se necesita reiniciar (qui
 las librerias actualizadas no funcionaban por pin_magic.h
 
 todo:
-
-//deberia cambiar el sistema de cambio de fases para que cuando se inicia una fase nueva instantaneamente se vaya a una funcion que efectivamente cambie la fase y no solo la variable que dice que fase esta activa
 
 agregar puntos medios de los setpoints para que el sistema se intente mantener en el punto medio siempre
 
