@@ -102,7 +102,7 @@ void loop() {
 
     if (h >= humhSP) {
       PORTC |= VAPPIN;
-    } else {
+    } else if (h <= ((float)humhSP + (float)humlSP) / 2) {
       PORTC &= ~VAPPIN;
     }
 

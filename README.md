@@ -9,25 +9,23 @@ las librerias actualizadas no funcionaban por pin_magic.h
 
 no se que tan bien funciona el sistema de iluminacion aunque parece estar funcionando bien
 
-todo:
+deberia haber algo que suba la humedad?
 
-agregar humedad punto medio?
+todo:
 
 sistema de fertilizante
 
 prender el ventilador por x tiempo por la noche para refrigerar y cambiar el aire
 
-agregar pantalla de startup
-
-hard reset
-
 sistema de alarmas para detectar si no esta funcionando un i/o
 
 guardar setpoints en eeprom
 
+hard reset
+
 eliminar botones (los que no tienen texto o no lo tienen centrado) y variables que no necesite para ahorrar memoria
 
-cuando termine no puedo olvidarme de eliminar todos los set de texto etc que no necesito volver a repetir
+cuando termine no puedo olvidarme de eliminar todos los settext etc que no necesito volver a repetir
 
 funciones opcionales:
 

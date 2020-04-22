@@ -1005,3 +1005,11 @@ void drawNumericKeyboardScreen(const char* title) {
                                           BUTTON_TEXTSIZE);
   numericKeyboardButtons[13].drawButton();
 }
+
+void drawStartupScreen() {
+  tft.fillScreen(BLACK);
+  tft.setTextColor(WHITE);
+  tft.setTextSize(3);
+  tft.setCursor(120 - (6 * 3 * 6) / 2, 160 - (7 * 3));
+  tft.print("Silics");
+}

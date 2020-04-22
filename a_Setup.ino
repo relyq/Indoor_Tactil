@@ -88,5 +88,7 @@ void setup() {
 
   now = rtc.now();
   prevTime = now.unixtime() + 61;
+  drawStartupScreen();
+  delay(1500);
   HomeScreen();
 }
