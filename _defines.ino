@@ -126,7 +126,7 @@ uint8_t currentScreen;  // acá guardo la pantalla activa
 
   255 - numKB
 */
-uint8_t prevScreen;     // acá guardo la pantalla anterior
+uint8_t prevScreen;  // acá guardo la pantalla anterior
 
 uint8_t z1fActiva = 0;
 uint8_t z1fActivalast = z1fActiva;
@@ -139,12 +139,12 @@ bool z1TerminarConfirmar = 0;
 
 uint16_t z1f1dias = 1;
 uint8_t z1f1hLuz = 1;
-uint8_t z1f1templ = 1;
-uint8_t z1f1temph = 1;
-uint8_t z1f1riegol = 1;
-uint8_t z1f1riegoh = 1;
-uint8_t z1f1huml = 1;
-uint8_t z1f1humh = 1;
+uint8_t z1f1templ = 20;
+uint8_t z1f1temph = 30;
+uint8_t z1f1riegol = 20;
+uint8_t z1f1riegoh = 60;
+uint8_t z1f1huml = 60;
+uint8_t z1f1humh = 80;
 
 uint16_t z1f2dias = 2;
 uint8_t z1f2hLuz = 2;
@@ -173,19 +173,25 @@ uint8_t z1f4riegoh = 4;
 uint8_t z1f4huml = 4;
 uint8_t z1f4humh = 4;
 
+uint16_t diasSP;           // dias de la fase
+uint32_t diaIniciodefase;  // dia en unixtime del inicio de la fase activa
+uint32_t diaFindefase;     // dia en unixtime del fin de la fase activa
+uint8_t hLuz;              // horas luz de la fase
+uint8_t hInicioLuz;        // hora de inicio de iluminacion
+uint8_t hFinLuz;           // hora de fin de iluminacion
+uint8_t mInicioFinLuz;     // minuto de inicio/fin de iluminacion
 uint8_t templSP;           // temperatura limite l
 uint8_t temphSP;           // temperatura limite h
 uint8_t humlSP;            // humedad aire limite l
 uint8_t humhSP;            // humedad aire limite h
 uint8_t riegolSP;          // riego limite l
 uint8_t riegohSP;          // riego limite h
-uint16_t diasSP;           // dias de la fase
-uint32_t diaFindefase;     // dia en unixtime del fin de la fase activa
-uint32_t diaIniciodefase;  // dia en unixtime del inicio de la fase activa
 uint16_t ciclos = 1;       // cantidad de ciclos - 0 = ciclo continuo
 
 uint16_t dias;
 uint16_t lastdias = 0xffff;
+
+uint8_t lastLuz = 0;
 
 float t;  // temperatura
 float h;  // humedad
@@ -200,7 +206,9 @@ const uint8_t SENSORTIERRAPIN = A8;
 const uint8_t DHTPIN = 0x40;  // pin 31 en el port c
 
 // outs
+const uint8_t HEATPIN = 0x20;   // pin 32 en el port c
 const uint8_t FANPIN = 0x10;    // pin 33 en el port c
+const uint8_t LUZPIN = 0x08;    // pin 34 en el port c
 const uint8_t VAPPIN = 0x04;    // pin 35 en el port c
 const uint8_t RIEGOPIN = 0x01;  // pin 37 en el port c
 

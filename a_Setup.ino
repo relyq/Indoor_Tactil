@@ -8,7 +8,7 @@ void setup() {
 
   pinMode(13, OUTPUT);
 
-  DDRC |= (FANPIN | VAPPIN | RIEGOPIN) & ~(DHTPIN);
+  DDRC |= (HEATPIN | FANPIN | LUZPIN | VAPPIN | RIEGOPIN) & ~(DHTPIN);
   PORTC |= DHTPIN;
 
   pinMode(SENSORTIERRAPIN, INPUT);

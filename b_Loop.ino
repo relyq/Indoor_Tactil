@@ -11,6 +11,7 @@ void loop() {
     switch (z1fActiva) {
       case 0:
         diasSP = 0;
+        hLuz = 0;
         templSP = 0;
         temphSP = 0;
         humlSP = 0;
@@ -20,6 +21,7 @@ void loop() {
         break;
       case 1:
         diasSP = z1f1dias;
+        hLuz = z1f1hLuz;
         templSP = z1f1templ;
         temphSP = z1f1temph;
         humlSP = z1f1huml;
@@ -29,6 +31,7 @@ void loop() {
         break;
       case 2:
         diasSP = z1f2dias;
+        hLuz = z1f2hLuz;
         templSP = z1f2templ;
         temphSP = z1f2temph;
         humlSP = z1f2huml;
@@ -38,6 +41,7 @@ void loop() {
         break;
       case 3:
         diasSP = z1f3dias;
+        hLuz = z1f3hLuz;
         templSP = z1f3templ;
         temphSP = z1f3temph;
         humlSP = z1f3huml;
@@ -47,6 +51,7 @@ void loop() {
         break;
       case 4:
         diasSP = z1f4dias;
+        hLuz = z1f4hLuz;
         templSP = z1f4templ;
         temphSP = z1f4temph;
         humlSP = z1f4huml;
@@ -59,23 +64,40 @@ void loop() {
     diaIniciodefase = now.unixtime();
     diaFindefase = now.unixtime() + diasSP * 86400;
 
+    hInicioLuz = now.hour();
+    mInicioFinLuz = now.minute();
+    hFinLuz = (now.unixtime() + (hLuz * 60 * 60)) / 3600 % 24;
+
     Serial.print("diaFindefase: ");
     Serial.println(diaFindefase);
     Serial.print("unixtime: ");
     Serial.println(now.unixtime());
 
+    Serial.print("horas luz: ");
+    Serial.println(hLuz);
+    Serial.print("hora fin de luz: ");
+    Serial.print(hFinLuz);
+    Serial.print(":");
+    Serial.println(mInicioFinLuz);
+
     z1fActivalast = z1fActiva;
 
-    if(currentScreen == 0){
+    if (currentScreen == 0) {
       HomeScreen();
     }
   }
 
   if (z1fActiva != 0) {
-    if (t >= temphSP) {  // t>=temphSP && t>=(temphSP-templSP)/2
+    if (t >= temphSP) {
+      PORTC &= ~HEATPIN;
       PORTC |= FANPIN;
-    } else {
+    } else if (t <= templSP) {
       PORTC &= ~FANPIN;
+      PORTC |= HEATPIN;
+    } else if (t <= ((float)temphSP + (float)templSP) / 2) {
+      PORTC &= ~FANPIN;
+    } else if (t >= ((float)temphSP + (float)templSP) / 2) {
+      PORTC &= ~HEATPIN;
     }
 
     if (h >= humhSP) {
@@ -88,6 +110,27 @@ void loop() {
       PORTC |= RIEGOPIN;
     } else if (hTierra >= riegohSP) {
       PORTC &= ~RIEGOPIN;
+    }
+
+    // si la hora esta entre la hora de inicio de luz y la hora de fin de luz, y
+    // la luz no esta prendida
+    if (now.hour() > hInicioLuz ||
+        (now.hour() == hInicioLuz && now.minute() >= mInicioFinLuz)) {
+      if (!(PINC & LUZPIN)) {
+        Serial.println("luz encendida");
+        PORTC |= LUZPIN;
+      }
+    } else if (now.hour() < hFinLuz ||
+               (now.hour() == hFinLuz && now.minute() < mInicioFinLuz)) {
+      if (!(PINC & LUZPIN)) {
+        Serial.println("luz encendida");
+        PORTC |= LUZPIN;
+      }
+    } else {
+      if (PINC & LUZPIN) {
+        Serial.println("luz apagada");
+        PORTC &= ~LUZPIN;
+      }
     }
 
     if (now.unixtime() >= diaFindefase) {
@@ -106,6 +149,8 @@ void loop() {
     }
 
     dias = (now.unixtime() - diaIniciodefase) / 86400;
+  } else if (z1fActiva == 0) {
+    PORTC &= ~(FANPIN | HEATPIN | VAPPIN | RIEGOPIN);
   }
 
   if (currentScreen == 0) {
@@ -133,10 +178,21 @@ void loop() {
       tft.setCursor(170, 165);
       tft.print(buffer);
 
-      strcpy(buffer, "DD/MM");
+      strcpy(buffer, "DD/MM/YY");
       now.toString(buffer);
-      tft.setCursor(170, 183);
+      tft.setCursor(134, 183);
       tft.print(buffer);
+    }
+
+    if (lastLuz != (PINC & LUZPIN)) {
+      lastLuz = (PINC & LUZPIN);
+      Serial.print("lastLuz: ");
+      Serial.println(lastLuz);
+      if (PINC & LUZPIN) {
+        tft.fillCircle(180, 69, 10, GREEN);
+      } else {
+        tft.fillCircle(180, 69, 10, LIGHTGREY);
+      }
     }
 
     if (lastdias != dias) {
@@ -160,7 +216,7 @@ void loop() {
       if (PINC & RIEGOPIN) {
         tft.fillCircle(180, 144, 10, GREEN);
       } else {
-        tft.fillCircle(180, 144, 10, RED);
+        tft.fillCircle(180, 144, 10, LIGHTGREY);
       }
     }
 
@@ -173,10 +229,12 @@ void loop() {
       tft.setTextColor(WHITE, BLACK);
       tft.print(buffer);  // temperatura leida por el DHT
 
-      if (PINC & FANPIN) {
-        tft.fillCircle(180, 94, 10, GREEN);
-      } else {
-        tft.fillCircle(180, 94, 10, RED);
+      if (PINC & FANPIN && !(PINC & HEATPIN)) {
+        tft.fillCircle(180, 94, 10, BLUE);
+      } else if (PINC & HEATPIN && !(PINC & FANPIN)) {
+        tft.fillCircle(180, 94, 10, YELLOW);
+      } else if (!(PINC & HEATPIN) && !(PINC & FANPIN)) {
+        tft.fillCircle(180, 94, 10, LIGHTGREY);
       }
     }
 
@@ -191,7 +249,7 @@ void loop() {
       if (PINC & VAPPIN) {
         tft.fillCircle(180, 119, 10, GREEN);
       } else {
-        tft.fillCircle(180, 119, 10, RED);
+        tft.fillCircle(180, 119, 10, LIGHTGREY);
       }
     }
   }

@@ -7,9 +7,13 @@ desde que agregue el rtc cada tanto se congela todo y se necesita reiniciar (qui
 
 las librerias actualizadas no funcionaban por pin_magic.h
 
+no se que tan bien funciona el sistema de iluminacion aunque parece estar funcionando bien
+
 todo:
 
-agregar puntos medios de los setpoints para que el sistema se intente mantener en el punto medio siempre
+agregar humedad punto medio?
+
+sistema de fertilizante
 
 prender el ventilador por x tiempo por la noche para refrigerar y cambiar el aire
 
@@ -18,8 +22,6 @@ agregar pantalla de startup
 hard reset
 
 sistema de alarmas para detectar si no esta funcionando un i/o
-
-status bar
 
 guardar setpoints en eeprom
 

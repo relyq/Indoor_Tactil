@@ -11,17 +11,23 @@ void drawHomeScreen() {
   tft.setTextColor(WHITE, BLACK);
   tft.print("Iluminacion");
 
-  tft.fillCircle(180, 69, 10, RED);
+  if (PINC & LUZPIN) {
+    tft.fillCircle(180, 69, 10, GREEN);
+  } else {
+    tft.fillCircle(180, 69, 10, LIGHTGREY);
+  }
 
   tft.setCursor(10, 90);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
   tft.print("Ventilacion");
 
-  if (PINC & FANPIN) {
-    tft.fillCircle(180, 94, 10, GREEN);
-  } else {
-    tft.fillCircle(180, 94, 10, RED);
+  if (PINC & FANPIN && !(PINC & HEATPIN)) {
+    tft.fillCircle(180, 94, 10, BLUE);
+  } else if (PINC & HEATPIN && !(PINC & FANPIN)) {
+    tft.fillCircle(180, 94, 10, YELLOW);
+  } else if (!(PINC & HEATPIN) && !(PINC & FANPIN)) {
+    tft.fillCircle(180, 94, 10, LIGHTGREY);
   }
 
   tft.setCursor(10, 115);
@@ -32,7 +38,7 @@ void drawHomeScreen() {
   if (PINC & VAPPIN) {
     tft.fillCircle(180, 119, 10, GREEN);
   } else {
-    tft.fillCircle(180, 119, 10, RED);
+    tft.fillCircle(180, 119, 10, LIGHTGREY);
   }
 
   tft.setCursor(10, 140);
@@ -43,7 +49,7 @@ void drawHomeScreen() {
   if (PINC & RIEGOPIN) {
     tft.fillCircle(180, 144, 10, GREEN);
   } else {
-    tft.fillCircle(180, 144, 10, RED);
+    tft.fillCircle(180, 144, 10, LIGHTGREY);
   }
 
   tft.setCursor(10, 165);
@@ -63,9 +69,9 @@ void drawHomeScreen() {
   tft.setCursor(170, 165);
   tft.print(buffer);
 
-  strcpy(buffer, "DD/MM");
+  strcpy(buffer, "DD/MM/YY");
   now.toString(buffer);
-  tft.setCursor(170, 183);
+  tft.setCursor(134, 183);
   tft.print(buffer);
 
   sprintf(buffer, "%d", diasSP);
@@ -862,7 +868,7 @@ void drawZ1ControlScreen() {
   tft.print("Ciclos");
 
   sprintf(buffer, "%d", ciclos);
-  tft.setCursor(228 - (strlen(buffer)*18), 135);
+  tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
   z1ControlButtons[2].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
