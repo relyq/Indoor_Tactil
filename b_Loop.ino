@@ -6,6 +6,7 @@ void loop() {
   DEBUG();
   tsMenu();
 
+  // aca manejo el cambio de fases
   if (z1fActivalast != z1fActiva) {
     Serial.println("fase activa cambiada");
     switch (z1fActiva) {
@@ -87,29 +88,36 @@ void loop() {
     }
   }
 
+  // funcionalidad
   if (z1fActiva != 0) {
+    PORTCSTATE = PINC;
+
     if (t >= temphSP) {
-      PORTC &= ~HEATPIN;
-      PORTC |= FANPIN;
+      PORTCSTATE &= ~HEATPIN;
+      PORTCSTATE |= FANPIN;
     } else if (t <= templSP) {
-      PORTC &= ~FANPIN;
-      PORTC |= HEATPIN;
+      PORTCSTATE &= ~FANPIN;
+      PORTCSTATE |= HEATPIN;
     } else if (t <= ((float)temphSP + (float)templSP) / 2) {
-      PORTC &= ~FANPIN;
+      PORTCSTATE &= ~FANPIN;
     } else if (t >= ((float)temphSP + (float)templSP) / 2) {
-      PORTC &= ~HEATPIN;
+      PORTCSTATE &= ~HEATPIN;
     }
 
     if (h >= humhSP) {
-      PORTC |= VAPPIN;
+      PORTCSTATE |= VAPPIN;
     } else if (h <= ((float)humhSP + (float)humlSP) / 2) {
-      PORTC &= ~VAPPIN;
+      PORTCSTATE &= ~VAPPIN;
     }
 
     if (hTierra <= riegolSP) {
-      PORTC |= RIEGOPIN;
+      PORTCSTATE |= RIEGOPIN;
     } else if (hTierra >= riegohSP) {
-      PORTC &= ~RIEGOPIN;
+      PORTCSTATE &= ~RIEGOPIN;
+    }
+
+    if(PINC != PORTCSTATE){
+      PORTC = PORTCSTATE;
     }
 
     // si la hora esta entre la hora de inicio de luz y la hora de fin de luz, y
@@ -153,6 +161,7 @@ void loop() {
     PORTC &= ~(FANPIN | HEATPIN | VAPPIN | RIEGOPIN);
   }
 
+  // aca actualizo el dashboard
   if (currentScreen == 0) {
     if (now.second() == 0 && now.unixtime() - prevTime >= 2) {
       prevTime = now.unixtime();
@@ -253,6 +262,7 @@ void loop() {
       }
     }
   }
+  // aca actualizo la hora en todas las pantallas excepto dashboard y numpad
   if ((currentScreen != 0 && currentScreen != 255) &&
       (now.second() == 0 && now.unixtime() - prevTime >= 2)) {
     strcpy(buffer, "hh:mm");

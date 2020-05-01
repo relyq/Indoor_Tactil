@@ -212,6 +212,8 @@ const uint8_t LUZPIN = 0x08;    // pin 34 en el port c
 const uint8_t VAPPIN = 0x04;    // pin 35 en el port c
 const uint8_t RIEGOPIN = 0x01;  // pin 37 en el port c
 
+uint8_t PORTCSTATE;
+
 char numKBstr[10];
 uint8_t numKBPrevScreen;
 uint8_t* numKBvarptr8b;
