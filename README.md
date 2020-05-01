@@ -15,7 +15,7 @@ todo:
 
 solo deberia cambiar el estado de un pin si ese pin no esta en ese estado
 
-sistema de fertilizante
+riego por rafagas
 
 prender el ventilador por x tiempo por la noche para refrigerar y cambiar el aire
 
@@ -30,6 +30,8 @@ eliminar botones (los que no tienen texto o no lo tienen centrado) y variables q
 cuando termine no puedo olvidarme de eliminar todos los settext etc que no necesito volver a repetir
 
 pantallas de errores (rtc/dht/etc desconectado, rtc perdio el tiempo)
+
+sistema de fertilizante
 
 funciones opcionales:
 
