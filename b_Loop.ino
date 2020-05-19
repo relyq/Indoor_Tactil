@@ -104,19 +104,43 @@ void loop() {
       PORTCSTATE &= ~HEATPIN;
     }
 
-    if (h >= humhSP) {
+    if (h <= humhSP) {
       PORTCSTATE |= VAPPIN;
-    } else if (h <= ((float)humhSP + (float)humlSP) / 2) {
+    } else if (h >= ((float)humhSP + (float)humlSP) / 2) {
       PORTCSTATE &= ~VAPPIN;
     }
 
+    uint8_t riegoEspera;
+    uint8_t eRiego;
     if (hTierra <= riegolSP) {
-      PORTCSTATE |= RIEGOPIN;
+      eRiego = 1;
+      riegoEspera = 0;
     } else if (hTierra >= riegohSP) {
+      eRiego = 0;
+    }
+
+    uint8_t riegoFin;
+    const uint8_t riegoTiempo = 5;
+    if (eRiego) {
+      if (!riegoEspera) {
+        riegoFin = now.unixtime() + riegoTiempo; // solo tengo que cambiar el tiempo de fin la primera vez que entro aca
+        PORTCSTATE |= RIEGOPIN;
+        if (now.unixtime >= riegoFin) {
+          riegoEspera = 1;
+        }
+      }
+      if (riegoEspera) {
+        riegoFin = now.unixtime() + riegoTiempo * 2;
+        PORTCSTATE &= ~RIEGOPIN;
+        if (now.unixtime >= riegoFin) {
+          riegoEspera = 0;
+        }
+      }
+    } else if (!eRiego) {
       PORTCSTATE &= ~RIEGOPIN;
     }
 
-    if(PINC != PORTCSTATE){
+    if (PINC != PORTCSTATE) {
       PORTC = PORTCSTATE;
     }
 

@@ -9,11 +9,11 @@ las librerias actualizadas no funcionaban por pin_magic.h
 
 no se que tan bien funciona el sistema de iluminacion aunque parece estar funcionando bien
 
-deberia haber algo que suba la humedad?
+deberia haber algo que baje la humedad? // la ventilación baja la humedad
+
+podria usar memoria dinamica para guardar informacion que solo se necesita por momentos
 
 todo:
-
-solo deberia cambiar el estado de un pin si ese pin no esta en ese estado
 
 riego por rafagas
 
