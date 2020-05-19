@@ -110,35 +110,79 @@ void loop() {
       PORTCSTATE &= ~VAPPIN;
     }
 
-    uint8_t riegoEspera;
-    uint8_t eRiego;
+
+                      // 0 - riego activo
+                      // 1 - riego espera
+                      // 2 - riego activo primera vez
+                      // 3 - riego espera primera vez
+    /*
+    
     if (hTierra <= riegolSP) {
       eRiego = 1;
-      riegoEspera = 0;
+      riegoEspera = 2;
     } else if (hTierra >= riegohSP) {
       eRiego = 0;
     }
 
-    uint8_t riegoFin;
-    const uint8_t riegoTiempo = 5;
+    
     if (eRiego) {
-      if (!riegoEspera) {
-        riegoFin = now.unixtime() + riegoTiempo; // solo tengo que cambiar el tiempo de fin la primera vez que entro aca
+      if (riegoEspera == 0 || riegoEspera == 2) {
+        if (riegoEspera == 2) {
+          riegoFin = now.unixtime() + riegoTiempo; // solo tengo que cambiar el tiempo de fin la primera vez que entro aca
+        }
         PORTCSTATE |= RIEGOPIN;
-        if (now.unixtime >= riegoFin) {
-          riegoEspera = 1;
+        riegoEspera = 0;
+        if (now.unixtime() >= riegoFin) {
+          riegoEspera = 3;
         }
       }
-      if (riegoEspera) {
-        riegoFin = now.unixtime() + riegoTiempo * 2;
+      if (riegoEspera == 1 || riegoEspera == 3) {
+        if (riegoEspera == 3) {
+          riegoFin = now.unixtime() + riegoTiempo * 2;
+        }
         PORTCSTATE &= ~RIEGOPIN;
-        if (now.unixtime >= riegoFin) {
-          riegoEspera = 0;
+        riegoEspera = 1;
+        if (now.unixtime() >= riegoFin) {
+          riegoEspera = 2;
         }
       }
     } else if (!eRiego) {
       PORTCSTATE &= ~RIEGOPIN;
     }
+    */
+
+   if (hTierra <= riegolSP) {
+      tRiegoBomba = now.unixtime() + riegoTiempo;
+      PORTCSTATE |= RIEGOPIN;
+      Serial.println("tRiegoBomba sobreescrito");
+    } else if (hTierra >= riegohSP) {
+      tRiegoEspera = 0;
+      tRiegoBomba = 0;
+      PORTCSTATE &= ~RIEGOPIN;
+    }
+
+    Serial.print("tRiegoEspera = "); Serial.println(tRiegoEspera);
+    Serial.print("tRiegoBomba = "); Serial.println(tRiegoBomba);
+
+    if (tRiegoBomba && !tRiegoEspera) {
+      
+      if(now.unixtime() >= tRiegoBomba){
+        tRiegoBomba = 0;
+        tRiegoEspera = now.unixtime() + riegoTiempo * 2;
+        PORTC &= ~RIEGOPIN;
+      }
+    }
+    
+    if (tRiegoEspera && !tRiegoBomba) {
+      
+      if(now.unixtime() >= tRiegoEspera){
+        tRiegoEspera = 0;
+        tRiegoBomba = now.unixtime() + riegoTiempo;
+        PORTC |= RIEGOPIN;
+      }
+    }
+    
+
 
     if (PINC != PORTCSTATE) {
       PORTC = PORTCSTATE;

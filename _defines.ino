@@ -243,6 +243,17 @@ DHT dht(DHTPIN, DHT22);
 
 RTC_DS3231 rtc;
 
+//uint8_t riegoEspera;  // 0 - riego activo
+                      // 1 - riego espera
+                      // 2 - riego activo primera vez
+                      // 3 - riego espera primera vez
+//uint8_t eRiego;
+//uint8_t riegoFin;
+const uint8_t riegoTiempo = 5;
+uint32_t tRiegoBomba;
+uint32_t tRiegoEspera;
+
+
 /*
 
 */
