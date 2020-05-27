@@ -110,13 +110,12 @@ void loop() {
       PORTCSTATE &= ~VAPPIN;
     }
 
-
-                      // 0 - riego activo
-                      // 1 - riego espera
-                      // 2 - riego activo primera vez
-                      // 3 - riego espera primera vez
+    // 0 - riego activo
+    // 1 - riego espera
+    // 2 - riego activo primera vez
+    // 3 - riego espera primera vez
     /*
-    
+
     if (hTierra <= riegolSP) {
       eRiego = 1;
       riegoEspera = 2;
@@ -124,11 +123,12 @@ void loop() {
       eRiego = 0;
     }
 
-    
+
     if (eRiego) {
       if (riegoEspera == 0 || riegoEspera == 2) {
         if (riegoEspera == 2) {
-          riegoFin = now.unixtime() + riegoTiempo; // solo tengo que cambiar el tiempo de fin la primera vez que entro aca
+          riegoFin = now.unixtime() + riegoTiempo; // solo tengo que cambiar el
+    tiempo de fin la primera vez que entro aca
         }
         PORTCSTATE |= RIEGOPIN;
         riegoEspera = 0;
@@ -151,7 +151,7 @@ void loop() {
     }
     */
 
-   if (hTierra <= riegolSP) {
+    if (hTierra <= riegolSP && (tRiegoEspera + tRiegoBomba) == 0) {
       tRiegoBomba = now.unixtime() + riegoTiempo;
       PORTCSTATE |= RIEGOPIN;
       Serial.println("tRiegoBomba sobreescrito");
@@ -161,31 +161,36 @@ void loop() {
       PORTCSTATE &= ~RIEGOPIN;
     }
 
-    Serial.print("tRiegoEspera = "); Serial.println(tRiegoEspera);
-    Serial.print("tRiegoBomba = "); Serial.println(tRiegoBomba);
-
     if (tRiegoBomba && !tRiegoEspera) {
-      
-      if(now.unixtime() >= tRiegoBomba){
+      if (now.unixtime() >= tRiegoBomba) {
         tRiegoBomba = 0;
-        tRiegoEspera = now.unixtime() + riegoTiempo * 2;
-        PORTC &= ~RIEGOPIN;
+        tRiegoEspera = now.unixtime() + riegoTiempo * 2; // tiempo apagado
+        PORTCSTATE &= ~RIEGOPIN;
       }
     }
-    
-    if (tRiegoEspera && !tRiegoBomba) {
-      
-      if(now.unixtime() >= tRiegoEspera){
-        tRiegoEspera = 0;
-        tRiegoBomba = now.unixtime() + riegoTiempo;
-        PORTC |= RIEGOPIN;
-      }
-    }
-    
 
+    if (tRiegoEspera && !tRiegoBomba) {
+      if (now.unixtime() >= tRiegoEspera) {
+        tRiegoEspera = 0;
+        tRiegoBomba = now.unixtime() + riegoTiempo; // tiempo encendido
+        PORTCSTATE |= RIEGOPIN;
+      }
+    }
+
+    // Serial.print("PINC = 0x");
+    // Serial.println(PINC, HEX);
+    // Serial.print("PORTCSTATE = 0x");
+    // Serial.println(PORTCSTATE, HEX);
 
     if (PINC != PORTCSTATE) {
       PORTC = PORTCSTATE;
+      Serial.println("portc actualizado");
+      Serial.print("tRiegoEspera = ");
+      Serial.println(tRiegoEspera);
+      Serial.print("tRiegoBomba = ");
+      Serial.println(tRiegoBomba);
+      Serial.print("PIN37 = ");
+      Serial.println(PINC & RIEGOPIN);
     }
 
     // si la hora esta entre la hora de inicio de luz y la hora de fin de luz, y
@@ -281,7 +286,7 @@ void loop() {
       tft.print(buffer);
     }
 
-    if (lasthTierra != hTierra) {
+    if (lasthTierra != hTierra || LASTRIEGOSTATE != (PINC & RIEGOPIN)) {
       lasthTierra = hTierra;
       sprintf(buffer, "%d", hTierra);
       strcat(buffer, "%");
@@ -289,6 +294,10 @@ void loop() {
       tft.setTextSize(3);
       tft.setTextColor(WHITE, BLACK);
       tft.print(buffer);
+      LASTRIEGOSTATE = (PINC & RIEGOPIN);
+
+      Serial.print("PIN37 = ");
+      Serial.println(PINC & RIEGOPIN);
 
       if (PINC & RIEGOPIN) {
         tft.fillCircle(180, 144, 10, GREEN);

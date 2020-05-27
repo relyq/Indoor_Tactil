@@ -252,6 +252,7 @@ RTC_DS3231 rtc;
 const uint8_t riegoTiempo = 5;
 uint32_t tRiegoBomba;
 uint32_t tRiegoEspera;
+uint8_t LASTRIEGOSTATE;
 
 
 /*

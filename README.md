@@ -14,9 +14,6 @@ deberia haber algo que baje la humedad? // la ventilación baja la humedad
 podria usar memoria dinamica para guardar informacion que solo se necesita por momentos
 
 todo:
-
-riego por rafagas
-
 prender el ventilador por x tiempo por la noche para refrigerar y cambiar el aire
 
 sistema de alarmas para detectar si no esta funcionando un i/o
