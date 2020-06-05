@@ -1,5 +1,5 @@
 /*
-  INDOOR TACTIL v0.7
+  INDOOR TACTIL v0.75
 
   sistema de pantallas completamente actualizado
   la funcion tsMenu() se encarga del manejo del sistema de pantallas
