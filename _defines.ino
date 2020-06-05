@@ -188,8 +188,8 @@ uint8_t riegolSP;          // riego limite l
 uint8_t riegohSP;          // riego limite h
 uint16_t ciclos = 1;       // cantidad de ciclos - 0 = ciclo continuo
 
-uint16_t dias;
-uint16_t lastdias = 0xffff;
+uint16_t dias;              // dias que lleva la fase activa
+uint16_t lastdias = 0xffff; // esto lo uso para mostrar en la pantalla cuando cambia el dia que lleva la fase
 
 uint8_t lastLuz = 0;
 
@@ -214,12 +214,12 @@ const uint8_t RIEGOPIN = 0x01;  // pin 37 en el port c
 
 uint8_t PORTCSTATE;
 
-char numKBstr[10];
-uint8_t numKBPrevScreen;
-uint8_t* numKBvarptr8b;
-uint16_t* numKBvarptr16b;
-uint8_t numKBstrLength;
-uint8_t numKBbufferSize;
+char numKBstr[10];        // aca guardo la str que estoy modificando en el teclado numerico
+uint8_t numKBPrevScreen;  // la pantalla a la que tengo que volver
+uint8_t* numKBvarptr8b;   // puntero a la variable que quiero modificar si es un byte
+uint16_t* numKBvarptr16b; // si es de 2 byte. probablemente hay una mejor forma de hacerlo.
+uint8_t numKBstrLength;   // el largo que puede tener la variable - para evitar overflow
+uint8_t numKBbufferSize;  // no estoy seguro para que sirve esto pero es necesario
 
 unsigned long time;      // acá guardo el tiempo que lleva el programa
                          // MILLIS() LLEGA A SU OVERFLOW A LOS 50 DIAS
@@ -237,7 +237,7 @@ uint8_t relojDD;
 uint8_t relojhh;
 uint8_t relojmm;
 
-char buffer[50];
+char buffer[50];  // buffer para mostrar cosas en pantalla
 
 DHT dht(DHTPIN, DHT22);
 
@@ -249,10 +249,10 @@ RTC_DS3231 rtc;
                       // 3 - riego espera primera vez
 //uint8_t eRiego;
 //uint8_t riegoFin;
-const uint8_t riegoTiempo = 5;
-uint32_t tRiegoBomba;
-uint32_t tRiegoEspera;
-uint8_t LASTRIEGOSTATE;
+const uint8_t riegoTiempo = 5;  // tiempo que dura la rafaga de riego
+uint32_t tRiegoBomba;           // cuando deberia terminar la rafaga - unix timestamp
+uint32_t tRiegoEspera;          // cuando deberia terminar la espera - unix timestamp
+uint8_t LASTRIEGOSTATE;         // ultimo estado de riego - esto es para actualizar la luz del dashboard
 
 
 /*

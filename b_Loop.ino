@@ -110,6 +110,9 @@ void loop() {
       PORTCSTATE &= ~VAPPIN;
     }
 
+
+    // el sistema de riego que pensaba usar originalmente
+    // no funciono y uso el que diseño mi viejo más abajo
     // 0 - riego activo
     // 1 - riego espera
     // 2 - riego activo primera vez
@@ -150,6 +153,8 @@ void loop() {
       PORTCSTATE &= ~RIEGOPIN;
     }
     */
+
+   // sistema de riego de mi viejo
 
     if (hTierra <= riegolSP && (tRiegoEspera + tRiegoBomba) == 0) {
       tRiegoBomba = now.unixtime() + riegoTiempo;
