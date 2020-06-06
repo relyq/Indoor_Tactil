@@ -320,9 +320,16 @@ void drawResetScreen() {
   tft.setCursor(120 - (((6 * 2 * 5) - 3) / 2), 10);
   tft.print("Reset");
 
+  tft.setCursor(5, 35);
+  tft.print("Esta seguro que desea reiniciar el dispositivo de fabrica?");
+
   resetButtons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                                "Volver", BUTTON_TEXTSIZE);
   resetButtons[0].drawButton();
+
+  resetButtons[1].initButtonUL(&tft, 20, 170, 200, 40, WHITE, RED, WHITE,
+                               "Confirmar", BUTTON_TEXTSIZE);
+  resetButtons[1].drawButton();
 
   Serial.println("reset dibujado");
 }
@@ -1012,4 +1019,6 @@ void drawStartupScreen() {
   tft.setTextSize(3);
   tft.setCursor(120 - (6 * 3 * 6) / 2, 160 - (7 * 3));
   tft.print("Silics");
+  tft.setCursor(120 - (6 * 3 * 6) / 2, 170);
+  tft.print("GrowOS");
 }

@@ -13,7 +13,11 @@ deberia haber algo que baje la humedad? // la ventilación baja la humedad
 
 podria usar memoria dinamica para guardar informacion que solo se necesita por momentos
 
+hay algunas cosas en español y algunas en ingles deberia arreglarlo lmao
+
 todo:
+
+la hora de fin de luz parece estar bugeada; se configura como la misma hora que la hora de inicio de luz, al menos cuando la hora luz es 1
 
 al terminar o cambiar de fase deberia llevar al dashboard
 
@@ -24,6 +28,10 @@ sistema de alarmas para detectar si no esta funcionando un i/o
 guardar setpoints en eeprom
 
 hard reset
+
+arreglar texto de hard reset
+
+una prueba de rutina para asegurar que la eeprom sigue funcionando (crc?)
 
 eliminar botones (los que no tienen texto o no lo tienen centrado) y variables que no necesite para ahorrar memoria
 

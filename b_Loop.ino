@@ -69,6 +69,14 @@ void loop() {
     mInicioFinLuz = now.minute();
     hFinLuz = (now.unixtime() + (hLuz * 60 * 60)) / 3600 % 24;
 
+    EEPROM.update(10, z1fActiva);
+    EEPROM.put(11, diaIniciodefase);
+    EEPROM.put(15, diaFindefase);
+    EEPROM.update(19, hInicioLuz);
+    EEPROM.update(20, hFinLuz);
+    EEPROM.update(21, mInicioFinLuz);
+    EEPROM.update(22, ciclos);
+
     Serial.print("diaFindefase: ");
     Serial.println(diaFindefase);
     Serial.print("unixtime: ");
@@ -109,7 +117,6 @@ void loop() {
     } else if (h >= ((float)humhSP + (float)humlSP) / 2) {
       PORTCSTATE &= ~VAPPIN;
     }
-
 
     // el sistema de riego que pensaba usar originalmente
     // no funciono y uso el que diseño mi viejo más abajo
@@ -154,7 +161,7 @@ void loop() {
     }
     */
 
-   // sistema de riego de mi viejo
+    // sistema de riego de mi viejo
 
     if (hTierra <= riegolSP && (tRiegoEspera + tRiegoBomba) == 0) {
       tRiegoBomba = now.unixtime() + riegoTiempo;
@@ -169,7 +176,7 @@ void loop() {
     if (tRiegoBomba && !tRiegoEspera) {
       if (now.unixtime() >= tRiegoBomba) {
         tRiegoBomba = 0;
-        tRiegoEspera = now.unixtime() + riegoTiempo * 2; // tiempo apagado
+        tRiegoEspera = now.unixtime() + riegoTiempo * 2;  // tiempo apagado
         PORTCSTATE &= ~RIEGOPIN;
       }
     }
@@ -177,7 +184,7 @@ void loop() {
     if (tRiegoEspera && !tRiegoBomba) {
       if (now.unixtime() >= tRiegoEspera) {
         tRiegoEspera = 0;
-        tRiegoBomba = now.unixtime() + riegoTiempo; // tiempo encendido
+        tRiegoBomba = now.unixtime() + riegoTiempo;  // tiempo encendido
         PORTCSTATE |= RIEGOPIN;
       }
     }
@@ -410,6 +417,16 @@ void DEBUG() {
         val = (msgval[0] - '0') * 10;
         val += msgval[1] - '0';
         dias = val;
+        break;
+      case 'E':  // eeprom
+        if (!strcmp(msg, "ERDD")) {
+          eeprom_read();
+        } else if (!strcmp(msg, "ECLR")) {
+          eeprom_clear();
+        } else if(!strcmp(msg, "ERST")){
+          eeprom_hardReset();
+        }
+        break;
     }
 
     Serial.print(msg[0]);

@@ -1,7 +1,8 @@
-
 #include <DHT.h>
+#include <EEPROM.h>
 #include <RTClib.h>
 #include <SPI.h>
+#include <avr/wdt.h>
 #include <string.h>
 
 #include "src/Adafruit_GFX.h"     // Core graphics library
@@ -102,10 +103,9 @@ Adafruit_GFX_Button ajustesButtons[5];
 Adafruit_GFX_Button alarmasButtons[1];
 Adafruit_GFX_Button relojButtons[2];
 Adafruit_GFX_Button programasButtons[1];
-Adafruit_GFX_Button resetButtons[1];
+Adafruit_GFX_Button resetButtons[2];
 Adafruit_GFX_Button numericKeyboardButtons[16];
 
-// estos dos deberian ser char[]
 uint8_t currentScreen;  // acá guardo la pantalla activa
 /*
   0 - dashboard/home screen
@@ -128,50 +128,49 @@ uint8_t currentScreen;  // acá guardo la pantalla activa
 */
 uint8_t prevScreen;  // acá guardo la pantalla anterior
 
-uint8_t z1fActiva = 0;
-uint8_t z1fActivalast = z1fActiva;
-uint8_t z1fSeleccionada =
-    z1fActiva;  // fase seleccionada en la pantalla de inicio de fases
+uint8_t z1fActiva;
+uint8_t z1fActivalast;
+uint8_t z1fSeleccionada;  // fase seleccionada en la pantalla de inicio de fases
 
 bool z1TerminarConfirmar = 0;
 
 //// valores default
 
-uint16_t z1f1dias = 1;
-uint8_t z1f1hLuz = 1;
-uint8_t z1f1templ = 20;
-uint8_t z1f1temph = 30;
-uint8_t z1f1riegol = 20;
-uint8_t z1f1riegoh = 60;
-uint8_t z1f1huml = 60;
-uint8_t z1f1humh = 80;
+uint16_t z1f1dias;
+uint8_t z1f1hLuz;
+uint8_t z1f1templ;
+uint8_t z1f1temph;
+uint8_t z1f1riegol;
+uint8_t z1f1riegoh;
+uint8_t z1f1huml;
+uint8_t z1f1humh;
 
-uint16_t z1f2dias = 2;
-uint8_t z1f2hLuz = 2;
-uint8_t z1f2templ = 2;
-uint8_t z1f2temph = 2;
-uint8_t z1f2riegol = 2;
-uint8_t z1f2riegoh = 2;
-uint8_t z1f2huml = 2;
-uint8_t z1f2humh = 2;
+uint16_t z1f2dias;
+uint8_t z1f2hLuz;
+uint8_t z1f2templ;
+uint8_t z1f2temph;
+uint8_t z1f2riegol;
+uint8_t z1f2riegoh;
+uint8_t z1f2huml;
+uint8_t z1f2humh;
 
-uint16_t z1f3dias = 3;
-uint8_t z1f3hLuz = 3;
-uint8_t z1f3templ = 3;
-uint8_t z1f3temph = 3;
-uint8_t z1f3riegol = 3;
-uint8_t z1f3riegoh = 3;
-uint8_t z1f3huml = 3;
-uint8_t z1f3humh = 3;
+uint16_t z1f3dias;
+uint8_t z1f3hLuz;
+uint8_t z1f3templ;
+uint8_t z1f3temph;
+uint8_t z1f3riegol;
+uint8_t z1f3riegoh;
+uint8_t z1f3huml;
+uint8_t z1f3humh;
 
-uint16_t z1f4dias = 4;
-uint8_t z1f4hLuz = 4;
-uint8_t z1f4templ = 4;
-uint8_t z1f4temph = 4;
-uint8_t z1f4riegol = 4;
-uint8_t z1f4riegoh = 4;
-uint8_t z1f4huml = 4;
-uint8_t z1f4humh = 4;
+uint16_t z1f4dias;
+uint8_t z1f4hLuz;
+uint8_t z1f4templ;
+uint8_t z1f4temph;
+uint8_t z1f4riegol;
+uint8_t z1f4riegoh;
+uint8_t z1f4huml;
+uint8_t z1f4humh;
 
 uint16_t diasSP;           // dias de la fase
 uint32_t diaIniciodefase;  // dia en unixtime del inicio de la fase activa
@@ -186,10 +185,11 @@ uint8_t humlSP;            // humedad aire limite l
 uint8_t humhSP;            // humedad aire limite h
 uint8_t riegolSP;          // riego limite l
 uint8_t riegohSP;          // riego limite h
-uint16_t ciclos = 1;       // cantidad de ciclos - 0 = ciclo continuo
+uint8_t ciclos;            // cantidad de ciclos - 0 = ciclo continuo
 
-uint16_t dias;              // dias que lleva la fase activa
-uint16_t lastdias = 0xffff; // esto lo uso para mostrar en la pantalla cuando cambia el dia que lleva la fase
+uint16_t dias;               // dias que lleva la fase activa
+uint16_t lastdias = 0xffff;  // esto lo uso para mostrar en la pantalla cuando
+                             // cambia el dia que lleva la fase
 
 uint8_t lastLuz = 0;
 
@@ -214,12 +214,17 @@ const uint8_t RIEGOPIN = 0x01;  // pin 37 en el port c
 
 uint8_t PORTCSTATE;
 
-char numKBstr[10];        // aca guardo la str que estoy modificando en el teclado numerico
+char numKBstr[10];  // aca guardo la str que estoy modificando en el teclado
+                    // numerico
 uint8_t numKBPrevScreen;  // la pantalla a la que tengo que volver
-uint8_t* numKBvarptr8b;   // puntero a la variable que quiero modificar si es un byte
-uint16_t* numKBvarptr16b; // si es de 2 byte. probablemente hay una mejor forma de hacerlo.
-uint8_t numKBstrLength;   // el largo que puede tener la variable - para evitar overflow
-uint8_t numKBbufferSize;  // no estoy seguro para que sirve esto pero es necesario
+uint8_t*
+    numKBvarptr8b;  // puntero a la variable que quiero modificar si es un byte
+uint16_t* numKBvarptr16b;  // si es de 2 byte. probablemente hay una mejor forma
+                           // de hacerlo.
+uint8_t numKBstrLength;    // el largo que puede tener la variable - para evitar
+                           // overflow
+uint8_t
+    numKBbufferSize;  // no estoy seguro para que sirve esto pero es necesario
 
 unsigned long time;      // acá guardo el tiempo que lleva el programa
                          // MILLIS() LLEGA A SU OVERFLOW A LOS 50 DIAS
@@ -243,18 +248,40 @@ DHT dht(DHTPIN, DHT22);
 
 RTC_DS3231 rtc;
 
-//uint8_t riegoEspera;  // 0 - riego activo
-                      // 1 - riego espera
-                      // 2 - riego activo primera vez
-                      // 3 - riego espera primera vez
-//uint8_t eRiego;
-//uint8_t riegoFin;
+// uint8_t riegoEspera;  // 0 - riego activo
+// 1 - riego espera
+// 2 - riego activo primera vez
+// 3 - riego espera primera vez
+// uint8_t eRiego;
+// uint8_t riegoFin;
 const uint8_t riegoTiempo = 5;  // tiempo que dura la rafaga de riego
-uint32_t tRiegoBomba;           // cuando deberia terminar la rafaga - unix timestamp
-uint32_t tRiegoEspera;          // cuando deberia terminar la espera - unix timestamp
-uint8_t LASTRIEGOSTATE;         // ultimo estado de riego - esto es para actualizar la luz del dashboard
-
+uint32_t tRiegoBomba;    // cuando deberia terminar la rafaga - unix timestamp
+uint32_t tRiegoEspera;   // cuando deberia terminar la espera - unix timestamp
+uint8_t LASTRIEGOSTATE;  // ultimo estado de riego - esto es para actualizar la
+                         // luz del dashboard
 
 /*
 
+  EEPROM:
+  [0-9] = id, device info, etc
+  [10-29] = fase activa, info fase activa, ciclos
+    10 = fase activa
+    11-14 = UNIX timestamp inicio de fase
+    15-18 = UNIX timestamp fin de fase
+    19 = hora de inicio de iluminacion
+    20 = hora de fin de iluminacion
+    21 = minuto de inicio/fin de iluminacion
+    22 = ciclo/s
+  [30-49] = configuracion fase 1
+    30-31 = dias
+    32 = horas luz
+    33 = temp low
+    34 = temp high
+    35 = riego low
+    36 = riego high
+    37 = hum low
+    38 = hum low
+  [50-69] = configuracion fase 2
+  [70-89] = configuracion fase 3
+  [90-109] = configuracion fase 4
 */
