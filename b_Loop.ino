@@ -176,7 +176,7 @@ void loop() {
     if (tRiegoBomba && !tRiegoEspera) {
       if (now.unixtime() >= tRiegoBomba) {
         tRiegoBomba = 0;
-        tRiegoEspera = now.unixtime() + riegoTiempo * 2;  // tiempo apagado
+        tRiegoEspera = now.unixtime() + riegoTiempo * 3;  // tiempo apagado
         PORTCSTATE &= ~RIEGOPIN;
       }
     }
