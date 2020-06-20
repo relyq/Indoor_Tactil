@@ -212,7 +212,7 @@ void drawAjustesScreen() {
 
   // boton 4 - hard reset
   ajustesButtons[3].initButtonUL(&tft, 5, 170, 230, 40, WHITE, ORANGE, YELLOW,
-                                 "Reset", BUTTON_TEXTSIZE);
+                                 "H. Reset", BUTTON_TEXTSIZE);
   ajustesButtons[3].drawButton();
 
   // boton 5 - Volver
@@ -321,7 +321,7 @@ void drawResetScreen() {
   tft.print("Reset");
 
   tft.setCursor(5, 35);
-  tft.print("Esta seguro que desea reiniciar el dispositivo de fabrica?");
+  tft.print("\tEsta seguro que\n desea reiniciar el\n dispositivo a la\n configuracion de\n fabrica?");
 
   resetButtons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                                "Volver", BUTTON_TEXTSIZE);

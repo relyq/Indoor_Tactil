@@ -381,6 +381,8 @@ void tsMenu() {
     } else if (currentScreen == 6) {
       if (resetButtons[0].contains(p.x, p.y)) {
         AjustesScreen();
+      } else if (resetButtons[1].contains(p.x, p.y)) {
+        eeprom_hardReset();
       }
     } else if (currentScreen == 30) {
       if (z1Buttons[5].contains(p.x, p.y)) {
@@ -490,9 +492,16 @@ void tsMenu() {
         z1ControlButtons[3].drawButton();
         z1TerminarConfirmar = 1;
       } else if ((p.x > 170 && p.x < 235) && (p.y > 125 && p.y < 165)) {
+        z1TerminarConfirmar = 0;
         NumericKeyboardScreen(&ciclos, 2, "Ciclos");
       } else if (z1TerminarConfirmar == 1 &&
                  z1ControlButtons[3].contains(p.x, p.y)) {
+        for (uint8_t i = 10; i < 29; i++) {
+          EEPROM.update(i, 0x00);
+        }
+        EEPROM.update(22, 0x01);
+        Serial.println("eeprom 10 to 29 cleared to 0x00\n");
+        eeprom_read();
         z1fActiva = 0;
         z1TerminarConfirmar = 0;
         tft.fillRect(5, 170, 230, 40, BLACK);

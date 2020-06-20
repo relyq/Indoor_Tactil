@@ -3,7 +3,7 @@
 #include <RTClib.h>
 #include <SPI.h>
 #include <avr/wdt.h>
-#include <string.h>
+//#include <string.h>
 
 #include "src/Adafruit_GFX.h"     // Core graphics library
 #include "src/Adafruit_TFTLCD.h"  // Hardware-specific library
