@@ -13,27 +13,27 @@ void tsMenu() {
   // presionada
   if (p.z > MINPRESSURE) {
     // scale from 0->1023 to tft.width
-    Serial.print("Unmapped p: ");
-    Serial.print("(");
+    Serial.print(F("Unmapped p: "));
+    Serial.print(F("("));
     Serial.print(p.x);
-    Serial.print(", ");
+    Serial.print(F(", "));
     Serial.print(p.y);
-    Serial.print(", ");
+    Serial.print(F(", "));
     Serial.print(p.z);
-    Serial.print(") ");
+    Serial.print(F(") "));
 
     p.x = map(p.x, TS_MINX, TS_MAXX, tft.width(), 0);
     p.y = map(p.y, TS_MINY, TS_MAXY - 60, tft.height(), 0);
     // if the screen is being touched show cursor position
 
-    Serial.print("Mapped p: ");
-    Serial.print("(");
+    Serial.print(F("Mapped p: "));
+    Serial.print(F("("));
     Serial.print(p.x);
-    Serial.print(", ");
+    Serial.print(F(", "));
     Serial.print(p.y);
-    Serial.print(", ");
+    Serial.print(F(", "));
     Serial.print(p.z);
-    Serial.println(") ");
+    Serial.println(F(") "));
 
     if (currentScreen != 0 && (p.y < -1)) {
       HomeScreen();
@@ -84,7 +84,7 @@ void tsMenu() {
           AjustesScreen();
         } else if ((p.x > 39 && p.x < 83) && (p.y > 24 && p.y < 60)) {
           relojYYYY++;
-          sprintf(buffer, "%d", relojYYYY);
+          sprintf_P(buffer, STR_fdecimal, relojYYYY);
           tft.setCursor(28, 60);
           tft.print(buffer);
           if (relojMM == 2) {
@@ -92,14 +92,14 @@ void tsMenu() {
                 relojYYYY % 400 == 0) {
               if (relojDD > 29) {
                 relojDD = 29;
-                sprintf(buffer, "%02d", relojDD);
+                sprintf_P(buffer, STR_f02decimal, relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               }
             } else {
               if (relojDD > 28) {
                 relojDD = 28;
-                sprintf(buffer, "%02d", relojDD);
+                sprintf_P(buffer, STR_f02decimal, relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               }
@@ -108,19 +108,19 @@ void tsMenu() {
         } else if ((p.x > 39 && p.x < 83) && (p.y > 81 && p.y < 114)) {
           if (relojYYYY > 1970) {
             relojYYYY--;
-            sprintf(buffer, "%d", relojYYYY);
+            sprintf_P(buffer, STR_fdecimal, relojYYYY);
             tft.setCursor(28, 60);
             tft.print(buffer);
           }
         } else if ((p.x > 114 && p.x < 158) && (p.y > 24 && p.y < 60)) {
           if (relojMM < 12) {
             relojMM++;
-            sprintf(buffer, "%02d", relojMM);
+            sprintf_P(buffer, STR_f02decimal, relojMM);
             tft.setCursor(28 + 72 + 20, 60);
             tft.print(buffer);
           } else {
             relojMM = 1;
-            sprintf(buffer, "%02d", relojMM);
+            sprintf_P(buffer, STR_f02decimal, relojMM);
             tft.setCursor(28 + 72 + 20, 60);
             tft.print(buffer);
           }
@@ -131,7 +131,7 @@ void tsMenu() {
             case 11:
               if (relojDD > 30) {
                 relojDD = 30;
-                sprintf(buffer, "%02d", relojDD);
+                sprintf_P(buffer, STR_f02decimal, relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               }
@@ -141,14 +141,14 @@ void tsMenu() {
                   relojYYYY % 400 == 0) {
                 if (relojDD > 29) {
                   relojDD = 29;
-                  sprintf(buffer, "%02d", relojDD);
+                  sprintf_P(buffer, STR_f02decimal, relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 }
               } else {
                 if (relojDD > 28) {
                   relojDD = 28;
-                  sprintf(buffer, "%02d", relojDD);
+                  sprintf_P(buffer, STR_f02decimal, relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 }
@@ -158,12 +158,12 @@ void tsMenu() {
         } else if ((p.x > 114 && p.x < 158) && (p.y > 81 && p.y < 114)) {
           if (relojMM > 1) {
             relojMM--;
-            sprintf(buffer, "%02d", relojMM);
+            sprintf_P(buffer, STR_f02decimal, relojMM);
             tft.setCursor(28 + 72 + 20, 60);
             tft.print(buffer);
           } else {
             relojMM = 12;
-            sprintf(buffer, "%02d", relojMM);
+            sprintf_P(buffer, STR_f02decimal, relojMM);
             tft.setCursor(28 + 72 + 20, 60);
             tft.print(buffer);
           }
@@ -174,7 +174,7 @@ void tsMenu() {
             case 11:
               if (relojDD > 30) {
                 relojDD = 30;
-                sprintf(buffer, "%02d", relojDD);
+                sprintf_P(buffer, STR_f02decimal, relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               }
@@ -184,14 +184,14 @@ void tsMenu() {
                   relojYYYY % 400 == 0) {
                 if (relojDD > 29) {
                   relojDD = 29;
-                  sprintf(buffer, "%02d", relojDD);
+                  sprintf_P(buffer, STR_f02decimal, relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 }
               } else {
                 if (relojDD > 28) {
                   relojDD = 28;
-                  sprintf(buffer, "%02d", relojDD);
+                  sprintf_P(buffer, STR_f02decimal, relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 }
@@ -209,12 +209,12 @@ void tsMenu() {
             case 12:
               if (relojDD < 31) {
                 relojDD++;
-                sprintf(buffer, "%02d", relojDD);
+                sprintf_P(buffer, STR_f02decimal, relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               } else {
                 relojDD = 1;
-                sprintf(buffer, "%02d", relojDD);
+                sprintf_P(buffer, STR_f02decimal, relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               }
@@ -225,12 +225,12 @@ void tsMenu() {
             case 11:
               if (relojDD < 30) {
                 relojDD++;
-                sprintf(buffer, "%02d", relojDD);
+                sprintf_P(buffer, STR_f02decimal, relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               } else {
                 relojDD = 1;
-                sprintf(buffer, "%02d", relojDD);
+                sprintf_P(buffer, STR_f02decimal, relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               }
@@ -240,24 +240,24 @@ void tsMenu() {
                   relojYYYY % 400 == 0) {
                 if (relojDD < 29) {
                   relojDD++;
-                  sprintf(buffer, "%02d", relojDD);
+                  sprintf_P(buffer, STR_f02decimal, relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 } else {
                   relojDD = 1;
-                  sprintf(buffer, "%02d", relojDD);
+                  sprintf_P(buffer, STR_f02decimal, relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 }
               } else {
                 if (relojDD < 28) {
                   relojDD++;
-                  sprintf(buffer, "%02d", relojDD);
+                  sprintf_P(buffer, STR_f02decimal, relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 } else {
                   relojDD = 1;
-                  sprintf(buffer, "%02d", relojDD);
+                  sprintf_P(buffer, STR_f02decimal, relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 }
@@ -275,12 +275,12 @@ void tsMenu() {
             case 12:
               if (relojDD > 1) {
                 relojDD--;
-                sprintf(buffer, "%02d", relojDD);
+                sprintf_P(buffer, STR_f02decimal, relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               } else {
                 relojDD = 31;
-                sprintf(buffer, "%02d", relojDD);
+                sprintf_P(buffer, STR_f02decimal, relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               }
@@ -291,12 +291,12 @@ void tsMenu() {
             case 11:
               if (relojDD > 1) {
                 relojDD--;
-                sprintf(buffer, "%02d", relojDD);
+                sprintf_P(buffer, STR_f02decimal, relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               } else {
                 relojDD = 30;
-                sprintf(buffer, "%02d", relojDD);
+                sprintf_P(buffer, STR_f02decimal, relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               }
@@ -306,24 +306,24 @@ void tsMenu() {
                   relojYYYY % 400 == 0) {
                 if (relojDD > 1) {
                   relojDD--;
-                  sprintf(buffer, "%02d", relojDD);
+                  sprintf_P(buffer, STR_f02decimal, relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 } else {
                   relojDD = 29;
-                  sprintf(buffer, "%02d", relojDD);
+                  sprintf_P(buffer, STR_f02decimal, relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 }
               } else {
                 if (relojDD > 1) {
                   relojDD--;
-                  sprintf(buffer, "%02d", relojDD);
+                  sprintf_P(buffer, STR_f02decimal, relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 } else {
                   relojDD = 28;
-                  sprintf(buffer, "%02d", relojDD);
+                  sprintf_P(buffer, STR_f02decimal, relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 }
@@ -333,48 +333,48 @@ void tsMenu() {
         } else if ((p.x > 67 && p.x < 111) && (p.y > 116 && p.y < 150)) {
           if (relojhh < 23) {
             relojhh++;
-            sprintf(buffer, "%02d", relojhh);
+            sprintf_P(buffer, STR_f02decimal, relojhh);
             tft.setCursor(74, 150);
             tft.print(buffer);
           } else {
             relojhh = 0;
-            sprintf(buffer, "%02d", relojhh);
+            sprintf_P(buffer, STR_f02decimal, relojhh);
             tft.setCursor(74, 150);
             tft.print(buffer);
           }
         } else if ((p.x > 67 && p.x < 111) && (p.y > 171 && p.y < 207)) {
           if (relojhh > 0) {
             relojhh--;
-            sprintf(buffer, "%02d", relojhh);
+            sprintf_P(buffer, STR_f02decimal, relojhh);
             tft.setCursor(74, 150);
             tft.print(buffer);
           } else {
             relojhh = 23;
-            sprintf(buffer, "%02d", relojhh);
+            sprintf_P(buffer, STR_f02decimal, relojhh);
             tft.setCursor(74, 150);
             tft.print(buffer);
           }
         } else if ((p.x > 124 && p.x < 168) && (p.y > 116 && p.y < 150)) {
           if (relojmm < 59) {
             relojmm++;
-            sprintf(buffer, "%02d", relojmm);
+            sprintf_P(buffer, STR_f02decimal, relojmm);
             tft.setCursor(74 + 36 + 20, 150);
             tft.print(buffer);
           } else {
             relojmm = 0;
-            sprintf(buffer, "%02d", relojmm);
+            sprintf_P(buffer, STR_f02decimal, relojmm);
             tft.setCursor(74 + 36 + 20, 150);
             tft.print(buffer);
           }
         } else if ((p.x > 124 && p.x < 168) && (p.y > 171 && p.y < 207)) {
           if (relojmm > 0) {
             relojmm--;
-            sprintf(buffer, "%02d", relojmm);
+            sprintf_P(buffer, STR_f02decimal, relojmm);
             tft.setCursor(74 + 36 + 20, 150);
             tft.print(buffer);
           } else {
             relojmm = 59;
-            sprintf(buffer, "%02d", relojmm);
+            sprintf_P(buffer, STR_f02decimal, relojmm);
             tft.setCursor(74 + 36 + 20, 150);
             tft.print(buffer);
           }
@@ -430,7 +430,7 @@ void tsMenu() {
 
               cargarFases();
 
-              Serial.println("Programa 1 cargado");
+              Serial.println(F("Programa 1 cargado"));
               break;
             case 2:  // guardar
               EEPROM.put(110, f1);
@@ -438,7 +438,7 @@ void tsMenu() {
               EEPROM.put(150, f3);
               EEPROM.put(170, f4);
 
-              Serial.println("Programa 1 guardado");
+              Serial.println(F("Programa 1 guardado"));
               break;
           }
           programasConfirmar = 0;
@@ -474,7 +474,7 @@ void tsMenu() {
 
               cargarFases();
 
-              Serial.println("Programa 2 cargado");
+              Serial.println(F("Programa 2 cargado"));
               break;
             case 2:  // guardar
               EEPROM.put(210, f1);
@@ -482,7 +482,7 @@ void tsMenu() {
               EEPROM.put(250, f3);
               EEPROM.put(270, f4);
 
-              Serial.println("Programa 2 guardado");
+              Serial.println(F("Programa 2 guardado"));
               break;
           }
           programasConfirmar = 0;
@@ -518,7 +518,7 @@ void tsMenu() {
 
               cargarFases();
 
-              Serial.println("Programa 3 cargado");
+              Serial.println(F("Programa 3 cargado"));
               break;
             case 2:  // guardar
               EEPROM.put(310, f1);
@@ -526,7 +526,7 @@ void tsMenu() {
               EEPROM.put(350, f3);
               EEPROM.put(370, f4);
 
-              Serial.println("Programa 3 guardado");
+              Serial.println(F("Programa 3 guardado"));
               break;
           }
           programasConfirmar = 0;
@@ -562,7 +562,7 @@ void tsMenu() {
 
               cargarFases();
 
-              Serial.println("Programa 4 cargado");
+              Serial.println(F("Programa 4 cargado"));
               break;
             case 2:  // guardar
               EEPROM.put(410, f1);
@@ -570,7 +570,7 @@ void tsMenu() {
               EEPROM.put(450, f3);
               EEPROM.put(470, f4);
 
-              Serial.println("Programa 4 guardado");
+              Serial.println(F("Programa 4 guardado"));
               break;
           }
           programasConfirmar = 0;
@@ -612,7 +612,7 @@ void tsMenu() {
             EEPROM.update(i, 0x00);
           }
           EEPROM.update(22, 0x01);
-          Serial.println("eeprom 10 to 29 cleared to 0x00\n");
+          Serial.println(F("eeprom 10 to 29 cleared to 0x00\n"));
           eeprom_read();
           z1fActiva = 0;
 
@@ -627,34 +627,34 @@ void tsMenu() {
                    (z1fActiva != 1 && z1fSeleccionada != 1)) {
           z1fSeleccionada = 1;
           z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, YELLOW,
-                                          WHITE, "1", BUTTON_TEXTSIZE);
+                                          WHITE, PSTR("1"), BUTTON_TEXTSIZE);
 
           z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE,
-                                          DARKGREY, WHITE, "2",
+                                          DARKGREY, WHITE, PSTR("2"),
                                           BUTTON_TEXTSIZE);
 
           z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE,
-                                          DARKGREY, WHITE, "3",
+                                          DARKGREY, WHITE, PSTR("3"),
                                           BUTTON_TEXTSIZE);
 
           z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
-                                          DARKGREY, WHITE, "4",
+                                          DARKGREY, WHITE, PSTR("4"),
                                           BUTTON_TEXTSIZE);
           switch (z1fActiva) {
             break;
             case 2:
               z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE,
-                                              OLIVE, WHITE, "2",
+                                              OLIVE, WHITE, PSTR("2"),
                                               BUTTON_TEXTSIZE);
               break;
             case 3:
               z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE,
-                                              OLIVE, WHITE, "3",
+                                              OLIVE, WHITE, PSTR("3"),
                                               BUTTON_TEXTSIZE);
               break;
             case 4:
               z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
-                                              OLIVE, WHITE, "4",
+                                              OLIVE, WHITE, PSTR("4"),
                                               BUTTON_TEXTSIZE);
               break;
           }
@@ -667,33 +667,33 @@ void tsMenu() {
                    (z1fActiva != 2 && z1fSeleccionada != 2)) {
           z1fSeleccionada = 2;
           z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE, YELLOW,
-                                          WHITE, "2", BUTTON_TEXTSIZE);
+                                          WHITE, PSTR("2"), BUTTON_TEXTSIZE);
 
           z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, DARKGREY,
-                                          WHITE, "1", BUTTON_TEXTSIZE);
+                                          WHITE, PSTR("1"), BUTTON_TEXTSIZE);
 
           z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE,
-                                          DARKGREY, WHITE, "3",
+                                          DARKGREY, WHITE, PSTR("3"),
                                           BUTTON_TEXTSIZE);
 
           z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
-                                          DARKGREY, WHITE, "4",
+                                          DARKGREY, WHITE, PSTR("4"),
                                           BUTTON_TEXTSIZE);
 
           switch (z1fActiva) {
             case 1:
               z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE,
-                                              OLIVE, WHITE, "1",
+                                              OLIVE, WHITE, PSTR("1"),
                                               BUTTON_TEXTSIZE);
               break;
             case 3:
               z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE,
-                                              OLIVE, WHITE, "3",
+                                              OLIVE, WHITE, PSTR("3"),
                                               BUTTON_TEXTSIZE);
               break;
             case 4:
               z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
-                                              OLIVE, WHITE, "4",
+                                              OLIVE, WHITE, PSTR("4"),
                                               BUTTON_TEXTSIZE);
               break;
           }
@@ -706,33 +706,33 @@ void tsMenu() {
                    (z1fActiva != 3 && z1fSeleccionada != 3)) {
           z1fSeleccionada = 3;
           z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE, YELLOW,
-                                          WHITE, "3", BUTTON_TEXTSIZE);
+                                          WHITE, PSTR("3"), BUTTON_TEXTSIZE);
 
           z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, DARKGREY,
-                                          WHITE, "1", BUTTON_TEXTSIZE);
+                                          WHITE, PSTR("1"), BUTTON_TEXTSIZE);
 
           z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE,
-                                          DARKGREY, WHITE, "2",
+                                          DARKGREY, WHITE, PSTR("2"),
                                           BUTTON_TEXTSIZE);
 
           z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
-                                          DARKGREY, WHITE, "4",
+                                          DARKGREY, WHITE, PSTR("4"),
                                           BUTTON_TEXTSIZE);
 
           switch (z1fActiva) {
             case 1:
               z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE,
-                                              OLIVE, WHITE, "1",
+                                              OLIVE, WHITE, PSTR("1"),
                                               BUTTON_TEXTSIZE);
               break;
             case 2:
               z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE,
-                                              OLIVE, WHITE, "2",
+                                              OLIVE, WHITE, PSTR("2"),
                                               BUTTON_TEXTSIZE);
               break;
             case 4:
               z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
-                                              OLIVE, WHITE, "4",
+                                              OLIVE, WHITE, PSTR("4"),
                                               BUTTON_TEXTSIZE);
               break;
           }
@@ -745,33 +745,33 @@ void tsMenu() {
                    (z1fActiva != 4 && z1fSeleccionada != 4)) {
           z1fSeleccionada = 4;
           z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE, YELLOW,
-                                          WHITE, "4", BUTTON_TEXTSIZE);
+                                          WHITE, PSTR("4"), BUTTON_TEXTSIZE);
 
           z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, DARKGREY,
-                                          WHITE, "1", BUTTON_TEXTSIZE);
+                                          WHITE, PSTR("1"), BUTTON_TEXTSIZE);
 
           z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE,
-                                          DARKGREY, WHITE, "2",
+                                          DARKGREY, WHITE, PSTR("2"),
                                           BUTTON_TEXTSIZE);
 
           z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE,
-                                          DARKGREY, WHITE, "3",
+                                          DARKGREY, WHITE, PSTR("3"),
                                           BUTTON_TEXTSIZE);
 
           switch (z1fActiva) {
             case 1:
               z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE,
-                                              OLIVE, WHITE, "1",
+                                              OLIVE, WHITE, PSTR("1"),
                                               BUTTON_TEXTSIZE);
               break;
             case 2:
               z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE,
-                                              OLIVE, WHITE, "2",
+                                              OLIVE, WHITE, PSTR("2"),
                                               BUTTON_TEXTSIZE);
               break;
             case 3:
               z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE,
-                                              OLIVE, WHITE, "3",
+                                              OLIVE, WHITE, PSTR("3"),
                                               BUTTON_TEXTSIZE);
               break;
           }
@@ -784,38 +784,38 @@ void tsMenu() {
                    (z1fActiva != z1fSeleccionada)) {
           z1fActiva = z1fSeleccionada;
           z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, DARKGREY,
-                                          WHITE, "1", BUTTON_TEXTSIZE);
+                                          WHITE, PSTR("1"), BUTTON_TEXTSIZE);
 
           z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE,
-                                          DARKGREY, WHITE, "2",
+                                          DARKGREY, WHITE, PSTR("2"),
                                           BUTTON_TEXTSIZE);
 
           z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE,
-                                          DARKGREY, WHITE, "3",
+                                          DARKGREY, WHITE, PSTR("3"),
                                           BUTTON_TEXTSIZE);
 
           z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
-                                          DARKGREY, WHITE, "4",
+                                          DARKGREY, WHITE, PSTR("4"),
                                           BUTTON_TEXTSIZE);
           switch (z1fActiva) {
             case 1:
               z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE,
-                                              OLIVE, WHITE, "1",
+                                              OLIVE, WHITE, PSTR("1"),
                                               BUTTON_TEXTSIZE);
               break;
             case 2:
               z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE,
-                                              OLIVE, WHITE, "2",
+                                              OLIVE, WHITE, PSTR("2"),
                                               BUTTON_TEXTSIZE);
               break;
             case 3:
               z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE,
-                                              OLIVE, WHITE, "3",
+                                              OLIVE, WHITE, PSTR("3"),
                                               BUTTON_TEXTSIZE);
               break;
             case 4:
               z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
-                                              OLIVE, WHITE, "4",
+                                              OLIVE, WHITE, PSTR("4"),
                                               BUTTON_TEXTSIZE);
               break;
           }
@@ -933,61 +933,61 @@ void tsMenu() {
 
             tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                           60 - ((7 * BUTTON_TEXTSIZE) / 2));
-            tft.print('0');
+            tft.print(F("0"));
           } else if (numericKeyboardButtons[4].contains(p.x, p.y)) {
             numKBstr[numKBstrLength] = '1';
 
             tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                           60 - ((7 * BUTTON_TEXTSIZE) / 2));
-            tft.print('1');
+            tft.print(F("1"));
           } else if (numericKeyboardButtons[5].contains(p.x, p.y)) {
             numKBstr[numKBstrLength] = '2';
 
             tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                           60 - ((7 * BUTTON_TEXTSIZE) / 2));
-            tft.print('2');
+            tft.print(F("2"));
           } else if (numericKeyboardButtons[6].contains(p.x, p.y)) {
             numKBstr[numKBstrLength] = '3';
 
             tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                           60 - ((7 * BUTTON_TEXTSIZE) / 2));
-            tft.print('3');
+            tft.print(F("3"));
           } else if (numericKeyboardButtons[7].contains(p.x, p.y)) {
             numKBstr[numKBstrLength] = '4';
 
             tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                           60 - ((7 * BUTTON_TEXTSIZE) / 2));
-            tft.print('4');
+            tft.print(F("4"));
           } else if (numericKeyboardButtons[8].contains(p.x, p.y)) {
             numKBstr[numKBstrLength] = '5';
 
             tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                           60 - ((7 * BUTTON_TEXTSIZE) / 2));
-            tft.print('5');
+            tft.print(F("5"));
           } else if (numericKeyboardButtons[9].contains(p.x, p.y)) {
             numKBstr[numKBstrLength] = '6';
 
             tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                           60 - ((7 * BUTTON_TEXTSIZE) / 2));
-            tft.print('6');
+            tft.print(F("6"));
           } else if (numericKeyboardButtons[10].contains(p.x, p.y)) {
             numKBstr[numKBstrLength] = '7';
 
             tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                           60 - ((7 * BUTTON_TEXTSIZE) / 2));
-            tft.print('7');
+            tft.print(F("7"));
           } else if (numericKeyboardButtons[11].contains(p.x, p.y)) {
             numKBstr[numKBstrLength] = '8';
 
             tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                           60 - ((7 * BUTTON_TEXTSIZE) / 2));
-            tft.print('8');
+            tft.print(F("8"));
           } else if (numericKeyboardButtons[12].contains(p.x, p.y)) {
             numKBstr[numKBstrLength] = '9';
 
             tft.setCursor(15 + ((numKBstrLength)*6 * BUTTON_TEXTSIZE),
                           60 - ((7 * BUTTON_TEXTSIZE) / 2));
-            tft.print('9');
+            tft.print(F("9"));
           }
           delay(150);
         }

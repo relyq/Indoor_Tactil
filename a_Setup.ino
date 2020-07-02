@@ -1,9 +1,9 @@
 void setup() {
   Serial.begin(9600);
 
-  Serial.print("TFT size is ");
+  Serial.print(F("TFT size is "));
   Serial.print(tft.width());
-  Serial.print("x");
+  Serial.print(F("x"));
   Serial.println(tft.height());
 
   pinMode(13, OUTPUT);
@@ -16,13 +16,13 @@ void setup() {
   MCUSR = 0;  // clear out any flags of prior resets.
 
   if (!rtc.begin()) {
-    Serial.println("Couldn't find RTC");
+    Serial.println(F("Couldn't find RTC"));
     while (1)
       ;
   }
 
   if (rtc.lostPower()) {
-    Serial.println("RTC lost power, lets set the time!");
+    Serial.println(F("RTC lost power, lets set the time!"));
     rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
     // rtc.adjust(DateTime(1974, 1, 2, 0, 0, 0));
   }
@@ -61,7 +61,7 @@ void setup() {
   tft.setRotation(0);
   tft.fillScreen(BLACK);
 
-  Serial.println("Starting Loop");
+  Serial.println(F("Starting Loop"));
 
   now = rtc.now();
   prevTime = now.unixtime() + 61;

@@ -8,7 +8,7 @@ void loop() {
 
   // aca manejo el cambio de fases
   if (z1fActivalast != z1fActiva) {
-    Serial.println("fase activa cambiada");
+    Serial.println(F("fase activa cambiada"));
     switch (z1fActiva) {
       case 0:
         fActivaSP.dias = 0;
@@ -48,16 +48,16 @@ void loop() {
     EEPROM.update(21, mInicioFinLuz);
     EEPROM.update(22, ciclos);
 
-    Serial.print("diaFindefase: ");
+    Serial.print(F("diaFindefase: "));
     Serial.println(diaFindefase);
-    Serial.print("unixtime: ");
+    Serial.print(F("unixtime: "));
     Serial.println(now.unixtime());
 
-    Serial.print("horas luz: ");
+    Serial.print(F("horas luz: "));
     Serial.println(hLuz);
-    Serial.print("hora fin de luz: ");
+    Serial.print(F("hora fin de luz: "));
     Serial.print(hFinLuz);
-    Serial.print(":");
+    Serial.print(F(":"));
     Serial.println(mInicioFinLuz);
 
     z1fActivalast = z1fActiva;
@@ -94,7 +94,7 @@ void loop() {
     if (hTierra <= fActivaSP.riegol && (tRiegoEspera + tRiegoBomba) == 0) {
       tRiegoBomba = now.unixtime() + riegoTiempo;
       PORTCSTATE |= RIEGOPIN;
-      Serial.println("tRiegoBomba sobreescrito");
+      Serial.println(F("tRiegoBomba sobreescrito"));
     } else if (hTierra >= fActivaSP.riegoh) {
       tRiegoEspera = 0;
       tRiegoBomba = 0;
@@ -124,12 +124,12 @@ void loop() {
 
     if (PINC != PORTCSTATE) {
       PORTC = PORTCSTATE;
-      Serial.println("portc actualizado");
-      Serial.print("tRiegoEspera = ");
+      Serial.println(F("portc actualizado"));
+      Serial.print(F("tRiegoEspera = "));
       Serial.println(tRiegoEspera);
-      Serial.print("tRiegoBomba = ");
+      Serial.print(F("tRiegoBomba = "));
       Serial.println(tRiegoBomba);
-      Serial.print("PIN37 = ");
+      Serial.print(F("PIN37 = "));
       Serial.println(PINC & RIEGOPIN);
     }
 
@@ -138,18 +138,18 @@ void loop() {
     if (now.hour() > hInicioLuz ||
         (now.hour() == hInicioLuz && now.minute() >= mInicioFinLuz)) {
       if (!(PINC & LUZPIN)) {
-        Serial.println("luz encendida");
+        Serial.println(F("luz encendida"));
         PORTC |= LUZPIN;
       }
     } else if (now.hour() < hFinLuz ||
                (now.hour() == hFinLuz && now.minute() < mInicioFinLuz)) {
       if (!(PINC & LUZPIN)) {
-        Serial.println("luz encendida");
+        Serial.println(F("luz encendida"));
         PORTC |= LUZPIN;
       }
     } else {
       if (PINC & LUZPIN) {
-        Serial.println("luz apagada");
+        Serial.println(F("luz apagada"));
         PORTC &= ~LUZPIN;
       }
     }
@@ -179,28 +179,28 @@ void loop() {
     if (now.second() == 0 && now.unixtime() - prevTime >= 2) {
       prevTime = now.unixtime();
       Serial.print(now.year(), DEC);
-      Serial.print('/');
+      Serial.print(F("/"));
       Serial.print(now.month(), DEC);
-      Serial.print('/');
+      Serial.print(F("/"));
       Serial.print(now.day(), DEC);
-      Serial.print(" (");
+      Serial.print(F(" ("));
       Serial.print(daysOfTheWeek[now.dayOfTheWeek()]);
-      Serial.print(") ");
+      Serial.print(F(") "));
       Serial.print(now.hour(), DEC);
-      Serial.print(':');
+      Serial.print(F(":"));
       Serial.print(now.minute(), DEC);
-      Serial.print(':');
+      Serial.print(F(":"));
       Serial.print(now.second(), DEC);
       Serial.println();
 
-      strcpy(buffer, "hh:mm");
+      strcpy_P(buffer, STR_hhmm);
       now.toString(buffer);
       tft.setTextSize(2);
       tft.setTextColor(WHITE, BLACK);
       tft.setCursor(170, 165);
       tft.print(buffer);
 
-      strcpy(buffer, "DD/MM/YY");
+      strcpy_P(buffer, STR_DDMMYY);
       now.toString(buffer);
       tft.setCursor(134, 183);
       tft.print(buffer);
@@ -208,7 +208,7 @@ void loop() {
 
     if (lastLuz != (PINC & LUZPIN)) {
       lastLuz = (PINC & LUZPIN);
-      Serial.print("lastLuz: ");
+      Serial.print(F("lastLuz: "));
       Serial.println(lastLuz);
       if (PINC & LUZPIN) {
         tft.fillCircle(180, 69, 10, GREEN);
@@ -219,7 +219,7 @@ void loop() {
 
     if (lastdias != dias) {
       lastdias = dias;
-      sprintf(buffer, "%d", dias);
+      sprintf_P(buffer, STR_fdecimal, dias);
       tft.setCursor(125 - (strlen(buffer) * 18), 230);
       tft.setTextSize(3);
       tft.setTextColor(WHITE, BLACK);
@@ -228,15 +228,15 @@ void loop() {
 
     if (lasthTierra != hTierra || LASTRIEGOSTATE != (PINC & RIEGOPIN)) {
       lasthTierra = hTierra;
-      sprintf(buffer, "%d", hTierra);
-      strcat(buffer, "%");
+      sprintf_P(buffer, STR_fdecimal, hTierra);
+      strcat_P(buffer, STR_percent);
       tft.setCursor(230 - (strlen(buffer) * 18), 230);
       tft.setTextSize(3);
       tft.setTextColor(WHITE, BLACK);
       tft.print(buffer);
       LASTRIEGOSTATE = (PINC & RIEGOPIN);
 
-      Serial.print("PIN37 = ");
+      Serial.print(F("PIN37 = "));
       Serial.println(PINC & RIEGOPIN);
 
       if (PINC & RIEGOPIN) {
@@ -249,7 +249,7 @@ void loop() {
     if (lastT != t) {
       lastT = t;
       dtostrf(t, 4, 1, buffer);
-      strcat(buffer, "C");
+      strcat_P(buffer, STR_celsius);
       tft.setCursor(125 - (strlen(buffer) * 18), 285);
       tft.setTextSize(3);
       tft.setTextColor(WHITE, BLACK);
@@ -266,8 +266,8 @@ void loop() {
 
     if (lastH != h) {
       lastH = h;
-      sprintf(buffer, "%d", (uint8_t)h);
-      strcat(buffer, "%");
+      sprintf_P(buffer, STR_fdecimal, (uint8_t)h);
+      strcat_P(buffer, STR_percent);
       tft.setCursor(230 - (strlen(buffer) * 18), 285);
       tft.setTextSize(3);
       tft.setTextColor(WHITE, BLACK);
@@ -282,7 +282,7 @@ void loop() {
   // aca actualizo la hora en todas las pantallas excepto dashboard y numpad
   if ((currentScreen != 0 && currentScreen != 255) &&
       (now.second() == 0 && now.unixtime() - prevTime >= 2)) {
-    strcpy(buffer, "hh:mm");
+    strcpy_P(buffer, STR_hhmm);
     now.toString(buffer);
     tft.setTextSize(2);
     tft.setTextColor(WHITE, BLACK);
@@ -321,7 +321,7 @@ void DEBUG() {
 
   if (!(strcmp(msg, lastmsg) == 0)) {
     char msgval[4];
-    uint8_t val;
+    uint8_t val = 0;
 
     strcpy(msgval, msg + 1);
 
@@ -342,11 +342,11 @@ void DEBUG() {
         hTierra = val;
         break;
       case 'E':  // eeprom
-        if (!strcmp(msg, "ERDD")) {
+        if (!strcmp_P(msg, PSTR("ERDD"))) {
           eeprom_read();
-        } else if (!strcmp(msg, "ECLR")) {
+        } else if (!strcmp_P(msg, PSTR("ECLR"))) {
           eeprom_clear();
-        } else if (!strcmp(msg, "ERST")) {
+        } else if (!strcmp_P(msg, PSTR("ERST"))) {
           eeprom_hardReset();
         }
         break;

@@ -7,7 +7,7 @@ void HomeScreen() {
 void MenuScreen() {
   currentScreen = 1;
   drawMenuScreen();
-  strcpy(buffer, "hh:mm");
+  strcpy_P(buffer, STR_hhmm);
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -19,7 +19,7 @@ void MenuScreen() {
 void AjustesScreen() {
   currentScreen = 2;
   drawAjustesScreen();
-  strcpy(buffer, "hh:mm");
+  strcpy_P(buffer, STR_hhmm);
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -31,7 +31,7 @@ void AjustesScreen() {
 void AlarmasScreen() {
   currentScreen = 3;
   drawAlarmasScreen();
-  strcpy(buffer, "hh:mm");
+  strcpy_P(buffer, STR_hhmm);
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -43,7 +43,7 @@ void AlarmasScreen() {
 void RelojScreen() {
   currentScreen = 4;
   drawRelojScreen();
-  strcpy(buffer, "hh:mm");
+  strcpy_P(buffer, STR_hhmm);
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -55,7 +55,7 @@ void RelojScreen() {
 void ProgramasScreen() {
   currentScreen = 5;
   drawProgramasScreen();
-  strcpy(buffer, "hh:mm");
+  strcpy_P(buffer, STR_hhmm);
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -67,7 +67,7 @@ void ProgramasScreen() {
 void Programa1Screen() {
   currentScreen = 7;
   drawPrograma1Screen();
-  strcpy(buffer, "hh:mm");
+  strcpy_P(buffer, STR_hhmm);
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -79,7 +79,7 @@ void Programa1Screen() {
 void Programa2Screen() {
   currentScreen = 8;
   drawPrograma2Screen();
-  strcpy(buffer, "hh:mm");
+  strcpy_P(buffer, STR_hhmm);
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -91,7 +91,7 @@ void Programa2Screen() {
 void Programa3Screen() {
   currentScreen = 9;
   drawPrograma3Screen();
-  strcpy(buffer, "hh:mm");
+  strcpy_P(buffer, STR_hhmm);
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -103,7 +103,7 @@ void Programa3Screen() {
 void Programa4Screen() {
   currentScreen = 10;
   drawPrograma4Screen();
-  strcpy(buffer, "hh:mm");
+  strcpy_P(buffer, STR_hhmm);
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -115,7 +115,7 @@ void Programa4Screen() {
 void ResetScreen() {
   currentScreen = 6;
   drawResetScreen();
-  strcpy(buffer, "hh:mm");
+  strcpy_P(buffer, STR_hhmm);
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -127,7 +127,7 @@ void ResetScreen() {
 void Z1Screen() {
   currentScreen = 30;
   drawZ1Screen();
-  strcpy(buffer, "hh:mm");
+  strcpy_P(buffer, STR_hhmm);
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -139,7 +139,7 @@ void Z1Screen() {
 void Z1ControlScreen() {
   currentScreen = 31;
   drawZ1ControlScreen();
-  strcpy(buffer, "hh:mm");
+  strcpy_P(buffer, STR_hhmm);
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -152,7 +152,7 @@ void Z1InicioScreen() {
   currentScreen = 32;
   z1fSeleccionada = z1fActiva;
   drawZ1InicioScreen();
-  strcpy(buffer, "hh:mm");
+  strcpy_P(buffer, STR_hhmm);
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -164,7 +164,7 @@ void Z1InicioScreen() {
 void Z1F1Screen() {
   currentScreen = 33;
   drawZ1F1Screen();
-  strcpy(buffer, "hh:mm");
+  strcpy_P(buffer, STR_hhmm);
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -176,7 +176,7 @@ void Z1F1Screen() {
 void Z1F2Screen() {
   currentScreen = 34;
   drawZ1F2Screen();
-  strcpy(buffer, "hh:mm");
+  strcpy_P(buffer, STR_hhmm);
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -188,7 +188,7 @@ void Z1F2Screen() {
 void Z1F3Screen() {
   currentScreen = 35;
   drawZ1F3Screen();
-  strcpy(buffer, "hh:mm");
+  strcpy_P(buffer, STR_hhmm);
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -200,7 +200,7 @@ void Z1F3Screen() {
 void Z1F4Screen() {
   currentScreen = 36;
   drawZ1F4Screen();
-  strcpy(buffer, "hh:mm");
+  strcpy_P(buffer, STR_hhmm);
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -215,7 +215,7 @@ void Z1F4Screen() {
 void NumericKeyboardScreen(uint8_t* intptr, uint8_t bufferSize,
                            const char* title) {
   currentScreen = 255;
-  sprintf(numKBstr, "%d", *intptr);
+  sprintf_P(numKBstr, STR_fdecimal, *intptr);
   numKBvarptr16b = NULL;
   numKBvarptr8b = intptr;
   numKBbufferSize = bufferSize;
@@ -226,7 +226,7 @@ void NumericKeyboardScreen(uint8_t* intptr, uint8_t bufferSize,
 void NumericKeyboardScreen(uint16_t* intptr, uint8_t bufferSize,
                            const char* title) {
   currentScreen = 255;
-  sprintf(numKBstr, "%d", *intptr);
+  sprintf_P(numKBstr, STR_fdecimal, *intptr);
   numKBvarptr16b = intptr;
   numKBvarptr8b = NULL;
   numKBbufferSize = bufferSize;

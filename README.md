@@ -30,8 +30,6 @@ cambia la variable no se guarda en eeprom
 
 se deberia poder cambiar la configuracion de fase mientras esta corriendo el programa
 
-guardar programas en eeprom
-
 prender el ventilador por x tiempo por la noche para refrigerar y cambiar el aire
 
 una prueba de rutina para asegurar que la eeprom sigue funcionando (crc?)

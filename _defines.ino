@@ -3,7 +3,6 @@
 #include <RTClib.h>
 #include <SPI.h>
 #include <avr/wdt.h>
-//#include <string.h>
 
 #include "src/Adafruit_GFX.h"     // Core graphics library
 #include "src/Adafruit_TFTLCD.h"  // Hardware-specific library
@@ -110,6 +109,7 @@ Adafruit_GFX_Button programa4Buttons[5];
 Adafruit_GFX_Button resetButtons[2];
 Adafruit_GFX_Button numericKeyboardButtons[16];
 
+
 uint8_t currentScreen;  // acá guardo la pantalla activa
 uint8_t prevScreen;     // acá guardo la pantalla anterior
 
@@ -174,15 +174,15 @@ uint8_t hTierra;  // humedad tierra
 uint8_t lasthTierra = 255;
 
 // ins
-const uint8_t SENSORTIERRAPIN = A8;
-const uint8_t DHTPIN = 0x40;  // pin 31 en el port c
+const uint8_t SENSORTIERRAPIN PROGMEM = A8;
+const uint8_t DHTPIN PROGMEM = 0x40;  // pin 31 en el port c
 
 // outs
-const uint8_t HEATPIN = 0x20;   // pin 32 en el port c
-const uint8_t FANPIN = 0x10;    // pin 33 en el port c
-const uint8_t LUZPIN = 0x08;    // pin 34 en el port c
-const uint8_t VAPPIN = 0x04;    // pin 35 en el port c
-const uint8_t RIEGOPIN = 0x01;  // pin 37 en el port c
+const uint8_t HEATPIN PROGMEM = 0x20;   // pin 32 en el port c
+const uint8_t FANPIN PROGMEM = 0x10;    // pin 33 en el port c
+const uint8_t LUZPIN PROGMEM = 0x08;    // pin 34 en el port c
+const uint8_t VAPPIN PROGMEM = 0x04;    // pin 35 en el port c
+const uint8_t RIEGOPIN PROGMEM = 0x01;  // pin 37 en el port c
 
 uint8_t PORTCSTATE;
 
@@ -204,8 +204,15 @@ unsigned long time;      // acá guardo el tiempo que lleva el programa
 unsigned long lastTime;  // acá guardo el tiempo de programa en el que
 // llamé al dht por última vez
 
-const char daysOfTheWeek[7][10] = {"Domingo", "Lunes",   "Martes", "Miercoles",
-                                   "Jueves",  "Viernes", "Sabado"};
+const char STR_DDMMYY[] PROGMEM = "DD/MM/YY";
+const char STR_hhmm[] PROGMEM = "hh:mm";
+const char STR_fdecimal[] PROGMEM = "%d";
+const char STR_f02decimal[] PROGMEM = "%02d";
+const char STR_percent[] PROGMEM = "%";
+const char STR_celsius[] PROGMEM = "C";
+const char STR_hum[] PROGMEM = "H";
+const char daysOfTheWeek[7][10] PROGMEM = {
+    "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"};
 
 DateTime now;
 uint32_t prevTime;
@@ -221,7 +228,7 @@ DHT dht(DHTPIN, DHT22);
 
 RTC_DS3231 rtc;
 
-const uint8_t riegoTiempo = 5;  // tiempo que dura la rafaga de riego
+const uint8_t riegoTiempo PROGMEM = 5;  // tiempo que dura la rafaga de riego
 uint32_t tRiegoBomba;    // cuando deberia terminar la rafaga - unix timestamp
 uint32_t tRiegoEspera;   // cuando deberia terminar la espera - unix timestamp
 uint8_t LASTRIEGOSTATE;  // ultimo estado de riego - esto es para actualizar la

@@ -96,59 +96,57 @@ void eeprom_hardReset() {
   p4.f3.dias = 666;
   p4.f4.dias = 666;
 
-
-
   EEPROM.update(0, 0x00);
-  Serial.println("device information restored");
+  Serial.println(F("device information restored"));
   for (uint8_t i = 10; i < 30; i++) {
     EEPROM.update(i, 0x00);
   }
   EEPROM.update(22, 1);
-  Serial.println("phase information restored");
+  Serial.println(F("phase information restored"));
   EEPROM.put(30, F1DefaultSettings);
-  Serial.println("F1 settings restored");
+  Serial.println(F("F1 settings restored"));
   EEPROM.put(50, F2DefaultSettings);
-  Serial.println("F2 settings restored");
+  Serial.println(F("F2 settings restored"));
   EEPROM.put(70, F3DefaultSettings);
-  Serial.println("F3 settings restored");
+  Serial.println(F("F3 settings restored"));
   EEPROM.put(90, F4DefaultSettings);
-  Serial.println("F4 settings restored");
+  Serial.println(F("F4 settings restored"));
 
   EEPROM.put(110, p1.f1);
-  Serial.println("P1F1 settings restored");
+  Serial.println(F("P1F1 settings restored"));
   EEPROM.put(130, p1.f2);
-  Serial.println("P1F2 settings restored");
+  Serial.println(F("P1F2 settings restored"));
   EEPROM.put(150, p1.f3);
-  Serial.println("P1F3 settings restored");
+  Serial.println(F("P1F3 settings restored"));
   EEPROM.put(170, p1.f4);
-  Serial.println("P1F4 settings restored");
+  Serial.println(F("P1F4 settings restored"));
 
   EEPROM.put(210, p2.f1);
-  Serial.println("P2F1 settings restored");
+  Serial.println(F("P2F1 settings restored"));
   EEPROM.put(230, p2.f2);
-  Serial.println("P2F2 settings restored");
+  Serial.println(F("P2F2 settings restored"));
   EEPROM.put(250, p2.f3);
-  Serial.println("P2F3 settings restored");
+  Serial.println(F("P2F3 settings restored"));
   EEPROM.put(270, p2.f4);
-  Serial.println("P2F4 settings restored");
+  Serial.println(F("P2F4 settings restored"));
 
   EEPROM.put(310, p3.f1);
-  Serial.println("P3F1 settings restored");
+  Serial.println(F("P3F1 settings restored"));
   EEPROM.put(330, p3.f2);
-  Serial.println("P3F2 settings restored");
+  Serial.println(F("P3F2 settings restored"));
   EEPROM.put(350, p3.f3);
-  Serial.println("P3F3 settings restored");
+  Serial.println(F("P3F3 settings restored"));
   EEPROM.put(370, p3.f4);
-  Serial.println("P3F4 settings restored");
+  Serial.println(F("P3F4 settings restored"));
 
   EEPROM.put(410, p4.f1);
-  Serial.println("P4F1 settings restored");
+  Serial.println(F("P4F1 settings restored"));
   EEPROM.put(430, p4.f2);
-  Serial.println("P4F2 settings restored");
+  Serial.println(F("P4F2 settings restored"));
   EEPROM.put(450, p4.f3);
-  Serial.println("P4F3 settings restored");
+  Serial.println(F("P4F3 settings restored"));
   EEPROM.put(470, p4.f4);
-  Serial.println("P4F4 settings restored");
+  Serial.println(F("P4F4 settings restored"));
 
   delay(100);
 
@@ -161,104 +159,104 @@ void eeprom_clear() {
   for (uint16_t i = 0; i < EEPROM.length(); i++) {
     EEPROM.update(i, 0xFF);
     if (!(i % 512)) {
-      Serial.print("cleared ");
+      Serial.print(F("cleared "));
       Serial.print(i);
-      Serial.println(" EEPROM bytes");
+      Serial.println(F(" EEPROM bytes"));
     }
   }
-  Serial.println("eeprom cleared to 0xFF");
+  Serial.println(F("eeprom cleared to 0xFF"));
 }
 
 void eeprom_read() {
-  Serial.println("Reading EEPROM: ");
+  Serial.println(F("Reading EEPROM: "));
   for (uint16_t i = 0; i < 500; i++) {
     switch (i) {
       case 0:
-        Serial.print("\n\ndevice info");
+        Serial.print(F("\n\ndevice info"));
         break;
       case 10:
-        Serial.print("\n\nphase info");
+        Serial.print(F("\n\nphase info"));
         break;
       case 30:
-        Serial.print("\n\nF1 settings");
+        Serial.print(F("\n\nF1 settings"));
         break;
       case 50:
-        Serial.print("\n\nF2 settings");
+        Serial.print(F("\n\nF2 settings"));
         break;
       case 70:
-        Serial.print("\n\nF3 settings");
+        Serial.print(F("\n\nF3 settings"));
         break;
       case 90:
-        Serial.print("\n\nF4 settings");
+        Serial.print(F("\n\nF4 settings"));
         break;
       case 110:
-        Serial.print("\n\nP1F1 settings");
+        Serial.print(F("\n\nP1F1 settings"));
         break;
       case 130:
-        Serial.print("\n\nP1F2 settings");
+        Serial.print(F("\n\nP1F2 settings"));
         break;
       case 150:
-        Serial.print("\n\nP1F3 settings");
+        Serial.print(F("\n\nP1F3 settings"));
         break;
       case 170:
-        Serial.print("\n\nP1F4 settings");
+        Serial.print(F("\n\nP1F4 settings"));
         break;
       case 190:
-        Serial.print("\n\n...");
+        Serial.print(F("\n\n..."));
         break;
       case 210:
-        Serial.print("\n\nP2F1 settings");
+        Serial.print(F("\n\nP2F1 settings"));
         break;
       case 230:
-        Serial.print("\n\nP2F2 settings");
+        Serial.print(F("\n\nP2F2 settings"));
         break;
       case 250:
-        Serial.print("\n\nP2F3 settings");
+        Serial.print(F("\n\nP2F3 settings"));
         break;
       case 270:
-        Serial.print("\n\nP2F4 settings");
+        Serial.print(F("\n\nP2F4 settings"));
         break;
       case 290:
-        Serial.print("\n\n...");
+        Serial.print(F("\n\n..."));
         break;
       case 310:
-        Serial.print("\n\nP3F1 settings");
+        Serial.print(F("\n\nP3F1 settings"));
         break;
       case 330:
-        Serial.print("\n\nP3F2 settings");
+        Serial.print(F("\n\nP3F2 settings"));
         break;
       case 350:
-        Serial.print("\n\nP3F3 settings");
+        Serial.print(F("\n\nP3F3 settings"));
         break;
       case 370:
-        Serial.print("\n\nP3F4 settings");
+        Serial.print(F("\n\nP3F4 settings"));
         break;
       case 390:
-        Serial.print("\n\n...");
+        Serial.print(F("\n\n..."));
         break;
       case 410:
-        Serial.print("\n\nP4F1 settings");
+        Serial.print(F("\n\nP4F1 settings"));
         break;
       case 430:
-        Serial.print("\n\nP4F2 settings");
+        Serial.print(F("\n\nP4F2 settings"));
         break;
       case 450:
-        Serial.print("\n\nP4F3 settings");
+        Serial.print(F("\n\nP4F3 settings"));
         break;
       case 470:
-        Serial.print("\n\nP4F4 settings");
+        Serial.print(F("\n\nP4F4 settings"));
         break;
       case 490:
-        Serial.print("\n\n...");
+        Serial.print(F("\n\n..."));
         break;
     }
     if (!(i % 5)) {
-      Serial.print("\n");
+      Serial.print(F("\n"));
       Serial.print(i);
-      Serial.print("\t\t");
+      Serial.print(F("\t\t"));
     }
     Serial.print(EEPROM.read(i));
-    Serial.print("\t");
+    Serial.print(F("\t"));
   }
-  Serial.print("\n");
+  Serial.print(F("\n"));
 }
