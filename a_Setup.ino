@@ -69,23 +69,3 @@ void setup() {
   delay(1500);
   HomeScreen();
 }
-
-void cargarEstado() {
-  z1fActiva = EEPROM.read(10);
-  z1fActivalast = z1fActiva;
-  z1fSeleccionada = z1fActiva;
-  EEPROM.get(11, diaIniciodefase);
-  EEPROM.get(15, diaFindefase);
-  hInicioLuz = EEPROM.read(19);
-  hFinLuz = EEPROM.read(20);
-  mInicioFinLuz = EEPROM.read(21);
-  ciclos = EEPROM.read(22);
-}
-
-void cargarFases() {  // podria hacer esto mucho mas facil con eeprom.get si
-                      // usara structs para las fases
-  EEPROM.get(30, f1);
-  EEPROM.get(50, f2);
-  EEPROM.get(70, f3);
-  EEPROM.get(90, f4);
-}
