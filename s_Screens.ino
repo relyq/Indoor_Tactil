@@ -357,8 +357,8 @@ void drawPrograma1Screen() {
   programa1Buttons[4].initButtonUL(&tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
                                    "Confirmar", BUTTON_TEXTSIZE);
 
-  programa1Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, RED,
-                                   WHITE, "Cancelar", BUTTON_TEXTSIZE);
+  programa1Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, RED, WHITE,
+                                   "Cancelar", BUTTON_TEXTSIZE);
   programa1Buttons[0].drawButton();
 }
 
@@ -386,8 +386,8 @@ void drawPrograma2Screen() {
   programa2Buttons[4].initButtonUL(&tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
                                    "Confirmar", BUTTON_TEXTSIZE);
 
-  programa2Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, RED,
-                                   WHITE, "Cancelar", BUTTON_TEXTSIZE);
+  programa2Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, RED, WHITE,
+                                   "Cancelar", BUTTON_TEXTSIZE);
   programa2Buttons[0].drawButton();
 }
 
@@ -415,8 +415,8 @@ void drawPrograma3Screen() {
   programa3Buttons[4].initButtonUL(&tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
                                    "Confirmar", BUTTON_TEXTSIZE);
 
-  programa3Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, RED,
-                                   WHITE, "Cancelar", BUTTON_TEXTSIZE);
+  programa3Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, RED, WHITE,
+                                   "Cancelar", BUTTON_TEXTSIZE);
   programa3Buttons[0].drawButton();
 }
 
@@ -444,8 +444,8 @@ void drawPrograma4Screen() {
   programa4Buttons[4].initButtonUL(&tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
                                    "Confirmar", BUTTON_TEXTSIZE);
 
-  programa4Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, RED,
-                                   WHITE, "Cancelar", BUTTON_TEXTSIZE);
+  programa4Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, RED, WHITE,
+                                   "Cancelar", BUTTON_TEXTSIZE);
   programa4Buttons[0].drawButton();
 }
 
@@ -1155,8 +1155,15 @@ void drawStartupScreen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
   tft.setTextSize(3);
-  tft.setCursor(120 - (6 * 3 * 6) / 2, 160 - (7 * 3));
+
+  // tft.setCursor(120 - (6 * 3 * 6) / 2, 160 - (7 * 3));
+  uint16_t x1, y1, w, h;
+  tft.getTextBounds("Silics", 120, 139, &x1, &y1, &w, &h);
+  tft.setCursor(x1 - w / 2, y1 - h / 2);
   tft.print("Silics");
-  tft.setCursor(120 - (6 * 3 * 6) / 2, 170);
-  tft.print("GrowOS");
+
+  tft.setCursor(120 - (6 * 3 * 10) / 2, 170);
+  // tft.getTextBounds("GrowOS 0.9", 120, 170, &x1, &y1, &w, &h);
+  // tft.setCursor(x1, y1);
+  tft.print("GrowOS 0.9");
 }
