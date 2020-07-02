@@ -102,31 +102,12 @@ Adafruit_GFX_Button z1InicioButtons[6];
 Adafruit_GFX_Button ajustesButtons[5];
 Adafruit_GFX_Button alarmasButtons[1];
 Adafruit_GFX_Button relojButtons[2];
-Adafruit_GFX_Button programasButtons[1];
+Adafruit_GFX_Button programasButtons[5];
 Adafruit_GFX_Button resetButtons[2];
 Adafruit_GFX_Button numericKeyboardButtons[16];
 
 uint8_t currentScreen;  // acá guardo la pantalla activa
-/*
-  0 - dashboard/home screen
-  1 - menu
-  2 - ajustes
-  3 - alarmas
-  4 - reloj
-  5 - programas
-  6 - reset
-
-  30 - zona 1 menu
-  31 - zona 1 control
-  32 - zona 1 inicio
-  33 - zona 1 fase 1
-  34 - zona 1 fase 2
-  35 - zona 1 fase 3
-  36 - zona 1 fase 4
-
-  255 - numKB
-*/
-uint8_t prevScreen;  // acá guardo la pantalla anterior
+uint8_t prevScreen;     // acá guardo la pantalla anterior
 
 uint8_t z1fActiva;
 uint8_t z1fActivalast;
@@ -231,6 +212,25 @@ uint8_t LASTRIEGOSTATE;  // ultimo estado de riego - esto es para actualizar la
                          // luz del dashboard
 
 /*
+  screens:
+  0 - dashboard/home screen
+  1 - menu
+  2 - ajustes
+  3 - alarmas
+  4 - reloj
+  5 - programas
+  6 - reset
+
+  30 - zona 1 menu
+  31 - zona 1 control
+  32 - zona 1 inicio
+  33 - zona 1 fase 1
+  34 - zona 1 fase 2
+  35 - zona 1 fase 3
+  36 - zona 1 fase 4
+
+  255 - numKB
+
 
   EEPROM:
   [0-9] = id, device info, etc

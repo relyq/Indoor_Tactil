@@ -29,6 +29,8 @@ prender el ventilador por x tiempo por la noche para refrigerar y cambiar el air
 
 una prueba de rutina para asegurar que la eeprom sigue funcionando (crc?)
 
+tengo que cambiar todos los centrados de texto por getTextBounds()
+
 eliminar botones (los que no tienen texto o no lo tienen centrado) y variables que no necesite para ahorrar memoria
 
 cuando termine no puedo olvidarme de eliminar todos los settext etc que no necesito volver a repetir

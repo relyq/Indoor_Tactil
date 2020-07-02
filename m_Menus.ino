@@ -64,6 +64,18 @@ void ProgramasScreen() {
   prevScreen = currentScreen;
 }
 
+void Programa1Screen() {
+  currentScreen = 7;
+  drawPrograma1Screen();
+  strcpy(buffer, "hh:mm");
+  now.toString(buffer);
+  tft.setTextSize(2);
+  tft.setTextColor(WHITE, BLACK);
+  tft.setCursor(170, 10);
+  tft.print(buffer);
+  prevScreen = currentScreen;
+}
+
 void ResetScreen() {
   currentScreen = 6;
   drawResetScreen();
@@ -164,7 +176,8 @@ void Z1F4Screen() {
 // pantalla de teclado numerico para modificar valores
 // str          string a modificar
 // bufferSize   el tamaño maximo de la string a modificar
-void NumericKeyboardScreen(uint8_t* intptr, uint8_t bufferSize, const char* title) {
+void NumericKeyboardScreen(uint8_t* intptr, uint8_t bufferSize,
+                           const char* title) {
   currentScreen = 255;
   sprintf(numKBstr, "%d", *intptr);
   numKBvarptr16b = NULL;
@@ -174,7 +187,8 @@ void NumericKeyboardScreen(uint8_t* intptr, uint8_t bufferSize, const char* titl
   prevScreen = currentScreen;
 }
 
-void NumericKeyboardScreen(uint16_t* intptr, uint8_t bufferSize, const char* title) {
+void NumericKeyboardScreen(uint16_t* intptr, uint8_t bufferSize,
+                           const char* title) {
   currentScreen = 255;
   sprintf(numKBstr, "%d", *intptr);
   numKBvarptr16b = intptr;
