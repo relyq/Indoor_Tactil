@@ -310,20 +310,20 @@ void drawProgramasScreen() {
   tft.setCursor(x1 - w / 2, y1 - h / 2);
   tft.print("Programas");
 
-  programasButtons[1].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE,
-                                   YELLOW, "Prog. 1", BUTTON_TEXTSIZE);
+  programasButtons[1].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
+                                   "Prog. 1", BUTTON_TEXTSIZE);
   programasButtons[1].drawButton();
 
-  programasButtons[2].initButtonUL(&tft, 5, 80, 230, 40, WHITE, ORANGE,
-                                   YELLOW, "Prog. 2", BUTTON_TEXTSIZE);
+  programasButtons[2].initButtonUL(&tft, 5, 80, 230, 40, WHITE, ORANGE, YELLOW,
+                                   "Prog. 2", BUTTON_TEXTSIZE);
   programasButtons[2].drawButton();
 
-  programasButtons[3].initButtonUL(&tft, 5, 125, 230, 40, WHITE, ORANGE,
-                                   YELLOW, "Prog. 3", BUTTON_TEXTSIZE);
+  programasButtons[3].initButtonUL(&tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
+                                   "Prog. 3", BUTTON_TEXTSIZE);
   programasButtons[3].drawButton();
 
-  programasButtons[4].initButtonUL(&tft, 5, 170, 230, 40, WHITE, ORANGE,
-                                   YELLOW, "Prog. 4", BUTTON_TEXTSIZE);
+  programasButtons[4].initButtonUL(&tft, 5, 170, 230, 40, WHITE, ORANGE, YELLOW,
+                                   "Prog. 4", BUTTON_TEXTSIZE);
   programasButtons[4].drawButton();
 
   programasButtons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
@@ -333,7 +333,121 @@ void drawProgramasScreen() {
   Serial.println("programas dibujado");
 }
 
-void drawPrograma1Screen() {}
+void drawPrograma1Screen() {
+  tft.fillScreen(BLACK);
+  tft.setTextColor(WHITE);
+  tft.setTextSize(2);
+  uint16_t x1, y1, w, h;
+  tft.getTextBounds("Prog. 1", 110, 17, &x1, &y1, &w, &h);
+  tft.setCursor(x1 - w / 2, y1 - h / 2);
+  tft.print("Prog. 1");
+
+  programa1Buttons[1].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
+                                   "Cargar", BUTTON_TEXTSIZE);
+  programa1Buttons[1].drawButton();
+
+  programa1Buttons[2].initButtonUL(&tft, 5, 80, 230, 40, WHITE, ORANGE, YELLOW,
+                                   "Guardar", BUTTON_TEXTSIZE);
+  programa1Buttons[2].drawButton();
+
+  programa1Buttons[3].initButtonUL(&tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
+                                   "Reestablecer", BUTTON_TEXTSIZE);
+  programa1Buttons[3].drawButton();
+
+  programa1Buttons[4].initButtonUL(&tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
+                                   "Confirmar", BUTTON_TEXTSIZE);
+
+  programa1Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, RED,
+                                   WHITE, "Cancelar", BUTTON_TEXTSIZE);
+  programa1Buttons[0].drawButton();
+}
+
+void drawPrograma2Screen() {
+  tft.fillScreen(BLACK);
+  tft.setTextColor(WHITE);
+  tft.setTextSize(2);
+  uint16_t x1, y1, w, h;
+  tft.getTextBounds("Prog. 2", 110, 17, &x1, &y1, &w, &h);
+  tft.setCursor(x1 - w / 2, y1 - h / 2);
+  tft.print("Prog. 2");
+
+  programa2Buttons[1].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
+                                   "Cargar", BUTTON_TEXTSIZE);
+  programa2Buttons[1].drawButton();
+
+  programa2Buttons[2].initButtonUL(&tft, 5, 80, 230, 40, WHITE, ORANGE, YELLOW,
+                                   "Guardar", BUTTON_TEXTSIZE);
+  programa2Buttons[2].drawButton();
+
+  programa2Buttons[3].initButtonUL(&tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
+                                   "Reestablecer", BUTTON_TEXTSIZE);
+  programa2Buttons[3].drawButton();
+
+  programa2Buttons[4].initButtonUL(&tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
+                                   "Confirmar", BUTTON_TEXTSIZE);
+
+  programa2Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, RED,
+                                   WHITE, "Cancelar", BUTTON_TEXTSIZE);
+  programa2Buttons[0].drawButton();
+}
+
+void drawPrograma3Screen() {
+  tft.fillScreen(BLACK);
+  tft.setTextColor(WHITE);
+  tft.setTextSize(2);
+  uint16_t x1, y1, w, h;
+  tft.getTextBounds("Prog. 3", 110, 17, &x1, &y1, &w, &h);
+  tft.setCursor(x1 - w / 2, y1 - h / 2);
+  tft.print("Prog. 3");
+
+  programa3Buttons[1].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
+                                   "Cargar", BUTTON_TEXTSIZE);
+  programa3Buttons[1].drawButton();
+
+  programa3Buttons[2].initButtonUL(&tft, 5, 80, 230, 40, WHITE, ORANGE, YELLOW,
+                                   "Guardar", BUTTON_TEXTSIZE);
+  programa3Buttons[2].drawButton();
+
+  programa3Buttons[3].initButtonUL(&tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
+                                   "Reestablecer", BUTTON_TEXTSIZE);
+  programa3Buttons[3].drawButton();
+
+  programa3Buttons[4].initButtonUL(&tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
+                                   "Confirmar", BUTTON_TEXTSIZE);
+
+  programa3Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, RED,
+                                   WHITE, "Cancelar", BUTTON_TEXTSIZE);
+  programa3Buttons[0].drawButton();
+}
+
+void drawPrograma4Screen() {
+  tft.fillScreen(BLACK);
+  tft.setTextColor(WHITE);
+  tft.setTextSize(2);
+  uint16_t x1, y1, w, h;
+  tft.getTextBounds("Prog. 4", 110, 17, &x1, &y1, &w, &h);
+  tft.setCursor(x1 - w / 2, y1 - h / 2);
+  tft.print("Prog. 4");
+
+  programa4Buttons[1].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
+                                   "Cargar", BUTTON_TEXTSIZE);
+  programa4Buttons[1].drawButton();
+
+  programa4Buttons[2].initButtonUL(&tft, 5, 80, 230, 40, WHITE, ORANGE, YELLOW,
+                                   "Guardar", BUTTON_TEXTSIZE);
+  programa4Buttons[2].drawButton();
+
+  programa4Buttons[3].initButtonUL(&tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
+                                   "Reestablecer", BUTTON_TEXTSIZE);
+  programa4Buttons[3].drawButton();
+
+  programa4Buttons[4].initButtonUL(&tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
+                                   "Confirmar", BUTTON_TEXTSIZE);
+
+  programa4Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, RED,
+                                   WHITE, "Cancelar", BUTTON_TEXTSIZE);
+  programa4Buttons[0].drawButton();
+}
 
 void drawResetScreen() {
   tft.fillScreen(BLACK);

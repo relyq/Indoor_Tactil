@@ -103,6 +103,10 @@ Adafruit_GFX_Button ajustesButtons[5];
 Adafruit_GFX_Button alarmasButtons[1];
 Adafruit_GFX_Button relojButtons[2];
 Adafruit_GFX_Button programasButtons[5];
+Adafruit_GFX_Button programa1Buttons[5];
+Adafruit_GFX_Button programa2Buttons[5];
+Adafruit_GFX_Button programa3Buttons[5];
+Adafruit_GFX_Button programa4Buttons[5];
 Adafruit_GFX_Button resetButtons[2];
 Adafruit_GFX_Button numericKeyboardButtons[16];
 
@@ -114,6 +118,11 @@ uint8_t z1fActivalast;
 uint8_t z1fSeleccionada;  // fase seleccionada en la pantalla de inicio de fases
 
 bool z1TerminarConfirmar = 0;
+// 0
+// 1 - cargar
+// 2 - guardar
+// 3 - reestablecer
+uint8_t programasConfirmar = 0;
 
 //// valores default
 
@@ -127,6 +136,13 @@ typedef struct Fase {
   uint8_t huml;
   uint8_t humh;
 } Fase;
+
+typedef struct Programa {
+  Fase f1;
+  Fase f2;
+  Fase f3;
+  Fase f4;
+} Programa;
 
 Fase f1;
 Fase f2;
@@ -143,7 +159,7 @@ uint8_t hFinLuz;           // hora de fin de iluminacion
 uint8_t mInicioFinLuz;     // minuto de inicio/fin de iluminacion
 uint8_t ciclos;            // cantidad de ciclos - 0 = ciclo continuo
 
-uint16_t dias;               // dias que lleva la fase activa
+uint16_t dias = 0;           // dias que lleva la fase activa
 uint16_t lastdias = 0xffff;  // esto lo uso para mostrar en la pantalla cuando
                              // cambia el dia que lleva la fase
 
@@ -220,6 +236,10 @@ uint8_t LASTRIEGOSTATE;  // ultimo estado de riego - esto es para actualizar la
   4 - reloj
   5 - programas
   6 - reset
+  7 - programa 1
+  8 - programa 2
+  9 - programa 3
+  10 - programa 4
 
   30 - zona 1 menu
   31 - zona 1 control
@@ -254,4 +274,24 @@ uint8_t LASTRIEGOSTATE;  // ultimo estado de riego - esto es para actualizar la
   [50-69] = configuracion fase 2
   [70-89] = configuracion fase 3
   [90-109] = configuracion fase 4
+  [110-189] = programa 1
+    [110-129] = programa 1 fase 1
+    [130-149] = programa 1 fase 2
+    [150-169] = programa 1 fase 3
+    [170-189] = programa 1 fase 4
+  [210-289] = programa 2
+    [210-229] = programa 2 fase 1
+    [230-249] = programa 2 fase 2
+    [250-269] = programa 2 fase 3
+    [270-289] = programa 2 fase 4
+  [310-389] = programa 3
+    [310-329] = programa 3 fase 1
+    [330-349] = programa 3 fase 2
+    [350-369] = programa 3 fase 3
+    [370-389] = programa 3 fase 4
+  [410-489] = programa 4
+    [410-429] = programa 4 fase 1
+    [430-449] = programa 4 fase 2
+    [450-469] = programa 4 fase 3
+    [470-489] = programa 4 fase 4
 */

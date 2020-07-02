@@ -384,6 +384,14 @@ void tsMenu() {
       case 5:
         if (programasButtons[0].contains(p.x, p.y)) {
           AjustesScreen();
+        } else if (programasButtons[1].contains(p.x, p.y)) {
+          Programa1Screen();
+        } else if (programasButtons[2].contains(p.x, p.y)) {
+          Programa2Screen();
+        } else if (programasButtons[3].contains(p.x, p.y)) {
+          Programa3Screen();
+        } else if (programasButtons[4].contains(p.x, p.y)) {
+          Programa4Screen();
         }
         break;
       case 6:
@@ -394,6 +402,180 @@ void tsMenu() {
         }
         break;
       case 7:
+        if (programa1Buttons[0].contains(p.x, p.y)) {
+          programasConfirmar = 0;
+          ProgramasScreen();
+        } else if (programa1Buttons[1].contains(p.x, p.y) &&
+                   programasConfirmar != 1) {
+          programa1Buttons[4].drawButton();
+          programasConfirmar = 1;
+        } else if (programa1Buttons[2].contains(p.x, p.y) &&
+                   programasConfirmar != 2) {
+          programa1Buttons[4].drawButton();
+          programasConfirmar = 2;
+        } else if (programa1Buttons[4].contains(p.x, p.y) &&
+                   programasConfirmar) {
+          switch (programasConfirmar) {
+            case 1:  // cargar
+              Programa p1;
+              EEPROM.get(110, p1.f1);
+              EEPROM.get(130, p1.f2);
+              EEPROM.get(150, p1.f3);
+              EEPROM.get(170, p1.f4);
+
+              EEPROM.put(30, p1.f1);
+              EEPROM.put(50, p1.f2);
+              EEPROM.put(70, p1.f3);
+              EEPROM.put(90, p1.f4);
+
+              cargarFases();
+
+              Serial.println("Programa 1 cargado");
+              break;
+            case 2:  // guardar
+              EEPROM.put(110, f1);
+              EEPROM.put(130, f2);
+              EEPROM.put(150, f3);
+              EEPROM.put(170, f4);
+
+              Serial.println("Programa 1 guardado");
+              break;
+          }
+          programasConfirmar = 0;
+          tft.fillRect(5, 170, 230, 40, BLACK);
+        }
+        break;
+      case 8:
+        if (programa2Buttons[0].contains(p.x, p.y)) {
+          programasConfirmar = 0;
+          ProgramasScreen();
+        } else if (programa2Buttons[1].contains(p.x, p.y) &&
+                   programasConfirmar != 1) {
+          programa2Buttons[4].drawButton();
+          programasConfirmar = 1;
+        } else if (programa2Buttons[2].contains(p.x, p.y) &&
+                   programasConfirmar != 2) {
+          programa2Buttons[4].drawButton();
+          programasConfirmar = 2;
+        } else if (programa2Buttons[4].contains(p.x, p.y) &&
+                   programasConfirmar) {
+          switch (programasConfirmar) {
+            case 1:  // cargar
+              Programa p2;
+              EEPROM.get(210, p2.f1);
+              EEPROM.get(230, p2.f2);
+              EEPROM.get(250, p2.f3);
+              EEPROM.get(270, p2.f4);
+
+              EEPROM.put(30, p2.f1);
+              EEPROM.put(50, p2.f2);
+              EEPROM.put(70, p2.f3);
+              EEPROM.put(90, p2.f4);
+
+              cargarFases();
+
+              Serial.println("Programa 2 cargado");
+              break;
+            case 2:  // guardar
+              EEPROM.put(210, f1);
+              EEPROM.put(230, f2);
+              EEPROM.put(250, f3);
+              EEPROM.put(270, f4);
+
+              Serial.println("Programa 2 guardado");
+              break;
+          }
+          programasConfirmar = 0;
+          tft.fillRect(5, 170, 230, 40, BLACK);
+        }
+        break;
+      case 9:
+        if (programa3Buttons[0].contains(p.x, p.y)) {
+          programasConfirmar = 0;
+          ProgramasScreen();
+        } else if (programa3Buttons[1].contains(p.x, p.y) &&
+                   programasConfirmar != 1) {
+          programa3Buttons[4].drawButton();
+          programasConfirmar = 1;
+        } else if (programa3Buttons[2].contains(p.x, p.y) &&
+                   programasConfirmar != 2) {
+          programa3Buttons[4].drawButton();
+          programasConfirmar = 2;
+        } else if (programa3Buttons[4].contains(p.x, p.y) &&
+                   programasConfirmar) {
+          switch (programasConfirmar) {
+            case 1:  // cargar
+              Programa p3;
+              EEPROM.get(310, p3.f1);
+              EEPROM.get(330, p3.f2);
+              EEPROM.get(350, p3.f3);
+              EEPROM.get(370, p3.f4);
+
+              EEPROM.put(30, p3.f1);
+              EEPROM.put(50, p3.f2);
+              EEPROM.put(70, p3.f3);
+              EEPROM.put(90, p3.f4);
+
+              cargarFases();
+
+              Serial.println("Programa 3 cargado");
+              break;
+            case 2:  // guardar
+              EEPROM.put(310, f1);
+              EEPROM.put(330, f2);
+              EEPROM.put(350, f3);
+              EEPROM.put(370, f4);
+
+              Serial.println("Programa 3 guardado");
+              break;
+          }
+          programasConfirmar = 0;
+          tft.fillRect(5, 170, 230, 40, BLACK);
+        }
+        break;
+      case 10:
+        if (programa4Buttons[0].contains(p.x, p.y)) {
+          programasConfirmar = 0;
+          ProgramasScreen();
+        } else if (programa4Buttons[1].contains(p.x, p.y) &&
+                   programasConfirmar != 1) {
+          programa4Buttons[4].drawButton();
+          programasConfirmar = 1;
+        } else if (programa4Buttons[2].contains(p.x, p.y) &&
+                   programasConfirmar != 2) {
+          programa4Buttons[4].drawButton();
+          programasConfirmar = 2;
+        } else if (programa4Buttons[4].contains(p.x, p.y) &&
+                   programasConfirmar) {
+          switch (programasConfirmar) {
+            case 1:  // cargar
+              Programa p4;
+              EEPROM.get(410, p4.f1);
+              EEPROM.get(430, p4.f2);
+              EEPROM.get(450, p4.f3);
+              EEPROM.get(470, p4.f4);
+
+              EEPROM.put(30, p4.f1);
+              EEPROM.put(50, p4.f2);
+              EEPROM.put(70, p4.f3);
+              EEPROM.put(90, p4.f4);
+
+              cargarFases();
+
+              Serial.println("Programa 4 cargado");
+              break;
+            case 2:  // guardar
+              EEPROM.put(410, f1);
+              EEPROM.put(430, f2);
+              EEPROM.put(450, f3);
+              EEPROM.put(470, f4);
+
+              Serial.println("Programa 4 guardado");
+              break;
+          }
+          programasConfirmar = 0;
+          tft.fillRect(5, 170, 230, 40, BLACK);
+        }
         break;
       case 30:
         if (z1Buttons[5].contains(p.x, p.y)) {
@@ -433,6 +615,7 @@ void tsMenu() {
           Serial.println("eeprom 10 to 29 cleared to 0x00\n");
           eeprom_read();
           z1fActiva = 0;
+
           z1TerminarConfirmar = 0;
           tft.fillRect(5, 170, 230, 40, BLACK);
         }

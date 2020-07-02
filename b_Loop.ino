@@ -341,11 +341,6 @@ void DEBUG() {
         val += msgval[1] - '0';
         hTierra = val;
         break;
-      case 'D':  // dias
-        val = (msgval[0] - '0') * 10;
-        val += msgval[1] - '0';
-        dias = val;
-        break;
       case 'E':  // eeprom
         if (!strcmp(msg, "ERDD")) {
           eeprom_read();

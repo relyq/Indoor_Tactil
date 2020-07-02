@@ -1,7 +1,7 @@
 # Indoor_Tactil
 el dia de fin de fase solo se calcula al cambiar de fase, por lo tanto si pasa el tiempo mas alla del dia de fin de fase, no continua a la fase que deberia, solo comienza la fase que continuaba a la que termino
 
-podria usar objetos para las fases - lo voy a hacer para una version futura // definitivamente deberia usar structs - por dios XD
+podria usar objetos para las fases - lo voy a hacer para una version futura // definitivamente deberia usar structs - por dios XD // esta hecho :D
 
 desde que agregue el rtc cada tanto se congela todo y se necesita reiniciar (quiza un delay al final del loop lo arregla) // si alguno de los cables del rtc se mueve y se desconecta por un momento se freezea todo el sistema
 
@@ -19,7 +19,14 @@ al terminar o cambiar de fase deberia llevar al dashboard????
 
 quizá debería mostrar un mensaje antes de reiniciar el dispositivo de fabrica
 
+si cargas un programa no cambia la configuracion activa hasta que cambie la fase activa
+
+hay que probar si funciona la carga y guardado de todos los programas
+
 todo:
+
+no se puede cambiar la configuracion de fases porque cuando se
+cambia la variable no se guarda en eeprom
 
 se deberia poder cambiar la configuracion de fase mientras esta corriendo el programa
 

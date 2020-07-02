@@ -76,6 +76,42 @@ void Programa1Screen() {
   prevScreen = currentScreen;
 }
 
+void Programa2Screen() {
+  currentScreen = 8;
+  drawPrograma2Screen();
+  strcpy(buffer, "hh:mm");
+  now.toString(buffer);
+  tft.setTextSize(2);
+  tft.setTextColor(WHITE, BLACK);
+  tft.setCursor(170, 10);
+  tft.print(buffer);
+  prevScreen = currentScreen;
+}
+
+void Programa3Screen() {
+  currentScreen = 9;
+  drawPrograma3Screen();
+  strcpy(buffer, "hh:mm");
+  now.toString(buffer);
+  tft.setTextSize(2);
+  tft.setTextColor(WHITE, BLACK);
+  tft.setCursor(170, 10);
+  tft.print(buffer);
+  prevScreen = currentScreen;
+}
+
+void Programa4Screen() {
+  currentScreen = 10;
+  drawPrograma4Screen();
+  strcpy(buffer, "hh:mm");
+  now.toString(buffer);
+  tft.setTextSize(2);
+  tft.setTextColor(WHITE, BLACK);
+  tft.setCursor(170, 10);
+  tft.print(buffer);
+  prevScreen = currentScreen;
+}
+
 void ResetScreen() {
   currentScreen = 6;
   drawResetScreen();
