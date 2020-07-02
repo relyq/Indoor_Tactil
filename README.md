@@ -21,6 +21,8 @@ quizá debería mostrar un mensaje antes de reiniciar el dispositivo de fabrica
 
 todo:
 
+se deberia poder cambiar la configuracion de fase mientras esta corriendo el programa
+
 guardar programas en eeprom
 
 prender el ventilador por x tiempo por la noche para refrigerar y cambiar el aire

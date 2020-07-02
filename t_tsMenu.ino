@@ -402,82 +402,82 @@ void tsMenu() {
       if (z1f1Buttons[4].contains(p.x, p.y)) {
         Z1Screen();
       } else if (z1f1Buttons[0].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f1dias, 3, "Dias");
+        NumericKeyboardScreen(&f1.dias, 3, "Dias");
       } else if (z1f1Buttons[1].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f1hLuz, 2, "Horas luz");
+        NumericKeyboardScreen(&f1.hLuz, 2, "Horas luz");
       } else if (z1f1Buttons[6].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f1templ, 2, "Temp baja");
+        NumericKeyboardScreen(&f1.templ, 2, "Temp baja");
       } else if (z1f1Buttons[5].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f1temph, 2, "Temp alta");
+        NumericKeyboardScreen(&f1.temph, 2, "Temp alta");
       } else if (z1f1Buttons[8].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f1riegol, 2, "Riego bajo");
+        NumericKeyboardScreen(&f1.riegol, 2, "Riego bajo");
       } else if (z1f1Buttons[7].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f1riegoh, 2, "Riego alto");
+        NumericKeyboardScreen(&f1.riegoh, 2, "Riego alto");
       } else if (z1f1Buttons[11].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f1huml, 2, "Hum baja");
+        NumericKeyboardScreen(&f1.huml, 2, "Hum baja");
       } else if (z1f1Buttons[10].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f1humh, 2, "Hum alta");
+        NumericKeyboardScreen(&f1.humh, 2, "Hum alta");
       }
 
     } else if (currentScreen == 34) {
       if (z1f2Buttons[4].contains(p.x, p.y)) {
         Z1Screen();
       } else if (z1f2Buttons[0].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f2dias, 3, "Dias");
+        NumericKeyboardScreen(&f2.dias, 3, "Dias");
       } else if (z1f2Buttons[1].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f2hLuz, 2, "Horas luz");
+        NumericKeyboardScreen(&f2.hLuz, 2, "Horas luz");
       } else if (z1f2Buttons[6].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f2templ, 2, "Temp baja");
+        NumericKeyboardScreen(&f2.templ, 2, "Temp baja");
       } else if (z1f2Buttons[5].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f2temph, 2, "Temp alta");
+        NumericKeyboardScreen(&f2.temph, 2, "Temp alta");
       } else if (z1f2Buttons[8].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f2riegol, 2, "Riego bajo");
+        NumericKeyboardScreen(&f2.riegol, 2, "Riego bajo");
       } else if (z1f2Buttons[7].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f2riegoh, 2, "Riego alto");
+        NumericKeyboardScreen(&f2.riegoh, 2, "Riego alto");
       } else if (z1f2Buttons[11].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f2huml, 2, "Hum baja");
+        NumericKeyboardScreen(&f2.huml, 2, "Hum baja");
       } else if (z1f2Buttons[10].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f2humh, 2, "Hum alta");
+        NumericKeyboardScreen(&f2.humh, 2, "Hum alta");
       }
     } else if (currentScreen == 35) {
       if (z1f3Buttons[4].contains(p.x, p.y)) {
         Z1Screen();
       } else if (z1f3Buttons[0].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f3dias, 3, "Dias");
+        NumericKeyboardScreen(&f3.dias, 3, "Dias");
       } else if (z1f3Buttons[1].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f3hLuz, 2, "Horas luz");
+        NumericKeyboardScreen(&f3.hLuz, 2, "Horas luz");
       } else if (z1f3Buttons[6].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f3templ, 2, "Temp baja");
+        NumericKeyboardScreen(&f3.templ, 2, "Temp baja");
       } else if (z1f3Buttons[5].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f3temph, 2, "Temp alta");
+        NumericKeyboardScreen(&f3.temph, 2, "Temp alta");
       } else if (z1f3Buttons[8].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f3riegol, 2, "Riego bajo");
+        NumericKeyboardScreen(&f3.riegol, 2, "Riego bajo");
       } else if (z1f3Buttons[7].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f3riegoh, 2, "Riego alto");
+        NumericKeyboardScreen(&f3.riegoh, 2, "Riego alto");
       } else if (z1f3Buttons[11].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f3huml, 2, "Hum baja");
+        NumericKeyboardScreen(&f3.huml, 2, "Hum baja");
       } else if (z1f3Buttons[10].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f3humh, 2, "Hum alta");
+        NumericKeyboardScreen(&f3.humh, 2, "Hum alta");
       }
     } else if (currentScreen == 36) {
       if (z1f4Buttons[4].contains(p.x, p.y)) {
         Z1Screen();
       } else if (z1f4Buttons[0].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f4dias, 3, "Dias");
+        NumericKeyboardScreen(&f4.dias, 3, "Dias");
       } else if (z1f4Buttons[1].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f4hLuz, 2, "Horas luz");
+        NumericKeyboardScreen(&f4.hLuz, 2, "Horas luz");
       } else if (z1f4Buttons[6].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f4templ, 2, "Temp baja");
+        NumericKeyboardScreen(&f4.templ, 2, "Temp baja");
       } else if (z1f4Buttons[5].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f4temph, 2, "Temp alta");
+        NumericKeyboardScreen(&f4.temph, 2, "Temp alta");
       } else if (z1f4Buttons[8].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f4riegol, 2, "Riego bajo");
+        NumericKeyboardScreen(&f4.riegol, 2, "Riego bajo");
       } else if (z1f4Buttons[7].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f4riegoh, 2, "Riego alto");
+        NumericKeyboardScreen(&f4.riegoh, 2, "Riego alto");
       } else if (z1f4Buttons[11].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f4huml, 2, "Hum baja");
+        NumericKeyboardScreen(&f4.huml, 2, "Hum baja");
       } else if (z1f4Buttons[10].contains(p.x, p.y)) {
-        NumericKeyboardScreen(&z1f4humh, 2, "Hum alta");
+        NumericKeyboardScreen(&f4.humh, 2, "Hum alta");
       }
 
     } else if (currentScreen == 31) {
@@ -876,6 +876,9 @@ void eeprom_read() {
         break;
       case 90:
         Serial.print("\n\nF4 settings");
+        break;
+      case 110:
+        Serial.print("\n\n");
         break;
     }
     if (!(i % 5)) {

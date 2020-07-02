@@ -74,7 +74,7 @@ void drawHomeScreen() {
   tft.setCursor(134, 183);
   tft.print(buffer);
 
-  sprintf(buffer, "%d", diasSP);
+  sprintf(buffer, "%d", fActivaSP.dias);
   tft.setCursor(10, 200);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
@@ -87,12 +87,12 @@ void drawHomeScreen() {
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
   tft.print("Riego ");
-  sprintf(buffer, "%d", riegohSP);
+  sprintf(buffer, "%d", fActivaSP.riegoh);
   strcat(buffer, "%");
   tft.setCursor(130, 220);
   tft.setTextColor(ORANGE);
   tft.print(buffer);  // riego sp h
-  sprintf(buffer, "%d", riegolSP);
+  sprintf(buffer, "%d", fActivaSP.riegol);
   strcat(buffer, "%");
   tft.setCursor(130, 240);
   tft.setTextColor(BLUE);
@@ -102,12 +102,12 @@ void drawHomeScreen() {
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
   tft.print("T.");
-  sprintf(buffer, "%d", templSP);
+  sprintf(buffer, "%d", fActivaSP.templ);
   strcat(buffer, "C");
   tft.setCursor(77 - (strlen(buffer) * 12), 260);
   tft.setTextColor(BLUE);
   tft.print(buffer);  // temp sp l
-  sprintf(buffer, "%d", temphSP);
+  sprintf(buffer, "%d", fActivaSP.temph);
   strcat(buffer, "C");
   tft.setCursor(125 - (strlen(buffer) * 12), 260);
   tft.setTextColor(ORANGE);
@@ -117,12 +117,12 @@ void drawHomeScreen() {
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
   tft.print("Humedad ");
-  sprintf(buffer, "%d", humhSP);
+  sprintf(buffer, "%d", fActivaSP.humh);
   strcat(buffer, "%");
   tft.setCursor(130, 280);
   tft.setTextColor(ORANGE);
   tft.print(buffer);  // humedad sp h
-  sprintf(buffer, "%d", humlSP);
+  sprintf(buffer, "%d", fActivaSP.huml);
   strcat(buffer, "%");
   tft.setCursor(130, 300);
   tft.setTextColor(BLUE);
@@ -321,7 +321,9 @@ void drawResetScreen() {
   tft.print("Reset");
 
   tft.setCursor(5, 35);
-  tft.print("\tEsta seguro que\n desea reiniciar el\n dispositivo a la\n configuracion de\n fabrica?");
+  tft.print(
+      "\tEsta seguro que\n desea reiniciar el\n dispositivo a la\n "
+      "configuracion de\n fabrica?");
 
   resetButtons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                                "Volver", BUTTON_TEXTSIZE);
@@ -430,28 +432,28 @@ void drawZ1F1Screen() {
   tft.setTextSize(3);
 
   //// dias
-  sprintf(buffer, "%d", z1f1dias);
+  sprintf(buffer, "%d", f1.dias);
 
   tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
   //// hluz
-  if (z1f1hLuz > 24) z1f1hLuz = 24;
-  sprintf(buffer, "%d", z1f1hLuz);
+  if (f1.hLuz > 24) f1.hLuz = 24;
+  sprintf(buffer, "%d", f1.hLuz);
   strcat(buffer, "H");
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
-  if (z1f1temph > 80) z1f1temph = 80;
-  sprintf(buffer, "%d", z1f1temph);
+  if (f1.temph > 80) f1.temph = 80;
+  sprintf(buffer, "%d", f1.temph);
   uint8_t z1f1temphSTRlen = strlen(buffer);
   strcat(buffer, "C");
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
-  if (z1f1templ > 80) z1f1templ = 80;
-  sprintf(buffer, "%d", z1f1templ);
+  if (f1.templ > 80) f1.templ = 80;
+  sprintf(buffer, "%d", f1.templ);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f1temphSTRlen * 18), 135);
   tft.print(buffer);
 
@@ -459,13 +461,13 @@ void drawZ1F1Screen() {
   tft.print("-");
 
   //// riego
-  sprintf(buffer, "%d", z1f1riegoh);
+  sprintf(buffer, "%d", f1.riegoh);
   uint8_t z1f1riegohSTRlen = strlen(buffer);
   strcat(buffer, "%");
   tft.setCursor(228 - (strlen(buffer) * 18), 180);
   tft.print(buffer);
 
-  sprintf(buffer, "%d", z1f1riegol);
+  sprintf(buffer, "%d", f1.riegol);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f1riegohSTRlen * 18), 180);
   tft.print(buffer);
 
@@ -473,13 +475,13 @@ void drawZ1F1Screen() {
   tft.print("-");
 
   //// humedad
-  sprintf(buffer, "%d", z1f1humh);
+  sprintf(buffer, "%d", f1.humh);
   uint8_t z1f1humhSTRlen = strlen(buffer);
   strcat(buffer, "%");
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
 
-  sprintf(buffer, "%d", z1f1huml);
+  sprintf(buffer, "%d", f1.huml);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f1humhSTRlen * 18), 225);
   tft.print(buffer);
 
@@ -549,28 +551,28 @@ void drawZ1F2Screen() {
   tft.setTextSize(3);
 
   //// dias
-  sprintf(buffer, "%d", z1f2dias);
+  sprintf(buffer, "%d", f2.dias);
 
   tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
   //// hluz
-  if (z1f2hLuz > 24) z1f2hLuz = 24;
-  sprintf(buffer, "%d", z1f2hLuz);
+  if (f2.hLuz > 24) f2.hLuz = 24;
+  sprintf(buffer, "%d", f2.hLuz);
   strcat(buffer, "H");
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
-  if (z1f2temph > 80) z1f2temph = 80;
-  sprintf(buffer, "%d", z1f2temph);
+  if (f2.temph > 80) f2.temph = 80;
+  sprintf(buffer, "%d", f2.temph);
   uint8_t z1f2temphSTRlen = strlen(buffer);
   strcat(buffer, "C");
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
-  if (z1f2templ > 80) z1f2templ = 80;
-  sprintf(buffer, "%d", z1f2templ);
+  if (f2.templ > 80) f2.templ = 80;
+  sprintf(buffer, "%d", f2.templ);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f2temphSTRlen * 18), 135);
   tft.print(buffer);
 
@@ -578,13 +580,13 @@ void drawZ1F2Screen() {
   tft.print("-");
 
   //// riego
-  sprintf(buffer, "%d", z1f2riegoh);
+  sprintf(buffer, "%d", f2.riegoh);
   uint8_t z1f2riegohSTRlen = strlen(buffer);
   strcat(buffer, "%");
   tft.setCursor(228 - (strlen(buffer) * 18), 180);
   tft.print(buffer);
 
-  sprintf(buffer, "%d", z1f2riegol);
+  sprintf(buffer, "%d", f2.riegol);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f2riegohSTRlen * 18), 180);
   tft.print(buffer);
 
@@ -592,13 +594,13 @@ void drawZ1F2Screen() {
   tft.print("-");
 
   //// humedad
-  sprintf(buffer, "%d", z1f2humh);
+  sprintf(buffer, "%d", f2.humh);
   uint8_t z1f2humhSTRlen = strlen(buffer);
   strcat(buffer, "%");
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
 
-  sprintf(buffer, "%d", z1f2huml);
+  sprintf(buffer, "%d", f2.huml);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f2humhSTRlen * 18), 225);
   tft.print(buffer);
 
@@ -668,28 +670,28 @@ void drawZ1F3Screen() {
   tft.setTextSize(3);
 
   //// dias
-  sprintf(buffer, "%d", z1f3dias);
+  sprintf(buffer, "%d", f3.dias);
 
   tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
   //// hluz
-  if (z1f3hLuz > 24) z1f3hLuz = 24;
-  sprintf(buffer, "%d", z1f3hLuz);
+  if (f3.hLuz > 24) f3.hLuz = 24;
+  sprintf(buffer, "%d", f3.hLuz);
   strcat(buffer, "H");
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
-  if (z1f3temph > 80) z1f3temph = 80;
-  sprintf(buffer, "%d", z1f3temph);
+  if (f3.temph > 80) f3.temph = 80;
+  sprintf(buffer, "%d", f3.temph);
   uint8_t z1f3temphSTRlen = strlen(buffer);
   strcat(buffer, "C");
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
-  if (z1f3templ > 80) z1f3templ = 80;
-  sprintf(buffer, "%d", z1f3templ);
+  if (f3.templ > 80) f3.templ = 80;
+  sprintf(buffer, "%d", f3.templ);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f3temphSTRlen * 18), 135);
   tft.print(buffer);
 
@@ -697,13 +699,13 @@ void drawZ1F3Screen() {
   tft.print("-");
 
   //// riego
-  sprintf(buffer, "%d", z1f3riegoh);
+  sprintf(buffer, "%d", f3.riegoh);
   uint8_t z1f3riegohSTRlen = strlen(buffer);
   strcat(buffer, "%");
   tft.setCursor(228 - (strlen(buffer) * 18), 180);
   tft.print(buffer);
 
-  sprintf(buffer, "%d", z1f3riegol);
+  sprintf(buffer, "%d", f3.riegol);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f3riegohSTRlen * 18), 180);
   tft.print(buffer);
 
@@ -711,13 +713,13 @@ void drawZ1F3Screen() {
   tft.print("-");
 
   //// humedad
-  sprintf(buffer, "%d", z1f3humh);
+  sprintf(buffer, "%d", f3.humh);
   uint8_t z1f3humhSTRlen = strlen(buffer);
   strcat(buffer, "%");
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
 
-  sprintf(buffer, "%d", z1f3huml);
+  sprintf(buffer, "%d", f3.huml);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f3humhSTRlen * 18), 225);
   tft.print(buffer);
 
@@ -787,28 +789,28 @@ void drawZ1F4Screen() {
   tft.setTextSize(3);
 
   //// dias
-  sprintf(buffer, "%d", z1f4dias);
+  sprintf(buffer, "%d", f4.dias);
 
   tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
   //// hluz
-  if (z1f4hLuz > 24) z1f4hLuz = 24;
-  sprintf(buffer, "%d", z1f4hLuz);
+  if (f4.hLuz > 24) f4.hLuz = 24;
+  sprintf(buffer, "%d", f4.hLuz);
   strcat(buffer, "H");
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
-  if (z1f4temph > 80) z1f4temph = 80;
-  sprintf(buffer, "%d", z1f4temph);
+  if (f4.temph > 80) f4.temph = 80;
+  sprintf(buffer, "%d", f4.temph);
   uint8_t z1f4temphSTRlen = strlen(buffer);
   strcat(buffer, "C");
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
-  if (z1f4templ > 80) z1f4templ = 80;
-  sprintf(buffer, "%d", z1f4templ);
+  if (f4.templ > 80) f4.templ = 80;
+  sprintf(buffer, "%d", f4.templ);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f4temphSTRlen * 18), 135);
   tft.print(buffer);
 
@@ -816,13 +818,13 @@ void drawZ1F4Screen() {
   tft.print("-");
 
   //// riego
-  sprintf(buffer, "%d", z1f4riegoh);
+  sprintf(buffer, "%d", f4.riegoh);
   uint8_t z1f4riegohSTRlen = strlen(buffer);
   strcat(buffer, "%");
   tft.setCursor(228 - (strlen(buffer) * 18), 180);
   tft.print(buffer);
 
-  sprintf(buffer, "%d", z1f4riegol);
+  sprintf(buffer, "%d", f4.riegol);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f4riegohSTRlen * 18), 180);
   tft.print(buffer);
 
@@ -830,13 +832,13 @@ void drawZ1F4Screen() {
   tft.print("-");
 
   //// humedad
-  sprintf(buffer, "%d", z1f4humh);
+  sprintf(buffer, "%d", f4.humh);
   uint8_t z1f4humhSTRlen = strlen(buffer);
   strcat(buffer, "%");
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
 
-  sprintf(buffer, "%d", z1f4huml);
+  sprintf(buffer, "%d", f4.huml);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f4humhSTRlen * 18), 225);
   tft.print(buffer);
 

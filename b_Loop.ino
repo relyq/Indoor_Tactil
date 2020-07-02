@@ -11,59 +11,30 @@ void loop() {
     Serial.println("fase activa cambiada");
     switch (z1fActiva) {
       case 0:
-        diasSP = 0;
-        hLuz = 0;
-        templSP = 0;
-        temphSP = 0;
-        humlSP = 0;
-        humhSP = 0;
-        riegolSP = 0;
-        riegohSP = 0;
+        fActivaSP.dias = 0;
+        fActivaSP.templ = 0;
+        fActivaSP.temph = 0;
+        fActivaSP.huml = 0;
+        fActivaSP.humh = 0;
+        fActivaSP.riegol = 0;
+        fActivaSP.riegoh = 0;
         break;
       case 1:
-        diasSP = z1f1dias;
-        hLuz = z1f1hLuz;
-        templSP = z1f1templ;
-        temphSP = z1f1temph;
-        humlSP = z1f1huml;
-        humhSP = z1f1humh;
-        riegolSP = z1f1riegol;
-        riegohSP = z1f1riegoh;
+        fActivaSP = f1;
         break;
       case 2:
-        diasSP = z1f2dias;
-        hLuz = z1f2hLuz;
-        templSP = z1f2templ;
-        temphSP = z1f2temph;
-        humlSP = z1f2huml;
-        humhSP = z1f2humh;
-        riegolSP = z1f2riegol;
-        riegohSP = z1f2riegoh;
+        fActivaSP = f2;
         break;
       case 3:
-        diasSP = z1f3dias;
-        hLuz = z1f3hLuz;
-        templSP = z1f3templ;
-        temphSP = z1f3temph;
-        humlSP = z1f3huml;
-        humhSP = z1f3humh;
-        riegolSP = z1f3riegol;
-        riegohSP = z1f3riegoh;
+        fActivaSP = f3;
         break;
       case 4:
-        diasSP = z1f4dias;
-        hLuz = z1f4hLuz;
-        templSP = z1f4templ;
-        temphSP = z1f4temph;
-        humlSP = z1f4huml;
-        humhSP = z1f4humh;
-        riegolSP = z1f4riegol;
-        riegohSP = z1f4riegoh;
+        fActivaSP = f4;
         break;
     }
 
     diaIniciodefase = now.unixtime();
-    diaFindefase = now.unixtime() + diasSP * 86400;
+    diaFindefase = now.unixtime() + fActivaSP.dias * 86400;
 
     hInicioLuz = now.hour();
     mInicioFinLuz = now.minute();
@@ -100,74 +71,31 @@ void loop() {
   if (z1fActiva != 0) {
     PORTCSTATE = PINC;
 
-    if (t >= temphSP) {
+    if (t >= fActivaSP.temph) {
       PORTCSTATE &= ~HEATPIN;
       PORTCSTATE |= FANPIN;
-    } else if (t <= templSP) {
+    } else if (t <= fActivaSP.templ) {
       PORTCSTATE &= ~FANPIN;
       PORTCSTATE |= HEATPIN;
-    } else if (t <= ((float)temphSP + (float)templSP) / 2) {
+    } else if (t <= ((float)fActivaSP.temph + (float)fActivaSP.templ) / 2) {
       PORTCSTATE &= ~FANPIN;
-    } else if (t >= ((float)temphSP + (float)templSP) / 2) {
+    } else if (t >= ((float)fActivaSP.temph + (float)fActivaSP.templ) / 2) {
       PORTCSTATE &= ~HEATPIN;
     }
 
-    if (h <= humhSP) {
+    if (h <= fActivaSP.humh) {
       PORTCSTATE |= VAPPIN;
-    } else if (h >= ((float)humhSP + (float)humlSP) / 2) {
+    } else if (h >= ((float)fActivaSP.humh + (float)fActivaSP.huml) / 2) {
       PORTCSTATE &= ~VAPPIN;
     }
 
-    // el sistema de riego que pensaba usar originalmente
-    // no funciono y uso el que diseño mi viejo más abajo
-    // 0 - riego activo
-    // 1 - riego espera
-    // 2 - riego activo primera vez
-    // 3 - riego espera primera vez
-    /*
-
-    if (hTierra <= riegolSP) {
-      eRiego = 1;
-      riegoEspera = 2;
-    } else if (hTierra >= riegohSP) {
-      eRiego = 0;
-    }
-
-
-    if (eRiego) {
-      if (riegoEspera == 0 || riegoEspera == 2) {
-        if (riegoEspera == 2) {
-          riegoFin = now.unixtime() + riegoTiempo; // solo tengo que cambiar el
-    tiempo de fin la primera vez que entro aca
-        }
-        PORTCSTATE |= RIEGOPIN;
-        riegoEspera = 0;
-        if (now.unixtime() >= riegoFin) {
-          riegoEspera = 3;
-        }
-      }
-      if (riegoEspera == 1 || riegoEspera == 3) {
-        if (riegoEspera == 3) {
-          riegoFin = now.unixtime() + riegoTiempo * 2;
-        }
-        PORTCSTATE &= ~RIEGOPIN;
-        riegoEspera = 1;
-        if (now.unixtime() >= riegoFin) {
-          riegoEspera = 2;
-        }
-      }
-    } else if (!eRiego) {
-      PORTCSTATE &= ~RIEGOPIN;
-    }
-    */
-
     // sistema de riego de mi viejo
 
-    if (hTierra <= riegolSP && (tRiegoEspera + tRiegoBomba) == 0) {
+    if (hTierra <= fActivaSP.riegol && (tRiegoEspera + tRiegoBomba) == 0) {
       tRiegoBomba = now.unixtime() + riegoTiempo;
       PORTCSTATE |= RIEGOPIN;
       Serial.println("tRiegoBomba sobreescrito");
-    } else if (hTierra >= riegohSP) {
+    } else if (hTierra >= fActivaSP.riegoh) {
       tRiegoEspera = 0;
       tRiegoBomba = 0;
       PORTCSTATE &= ~RIEGOPIN;
@@ -176,7 +104,7 @@ void loop() {
     if (tRiegoBomba && !tRiegoEspera) {
       if (now.unixtime() >= tRiegoBomba) {
         tRiegoBomba = 0;
-        tRiegoEspera = now.unixtime() + riegoTiempo * 3;  // tiempo apagado
+        tRiegoEspera = now.unixtime() + riegoTiempo * 6;  // tiempo apagado
         PORTCSTATE &= ~RIEGOPIN;
       }
     }
@@ -423,7 +351,7 @@ void DEBUG() {
           eeprom_read();
         } else if (!strcmp(msg, "ECLR")) {
           eeprom_clear();
-        } else if(!strcmp(msg, "ERST")){
+        } else if (!strcmp(msg, "ERST")) {
           eeprom_hardReset();
         }
         break;

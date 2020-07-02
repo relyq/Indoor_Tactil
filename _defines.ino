@@ -136,55 +136,30 @@ bool z1TerminarConfirmar = 0;
 
 //// valores default
 
-uint16_t z1f1dias;
-uint8_t z1f1hLuz;
-uint8_t z1f1templ;
-uint8_t z1f1temph;
-uint8_t z1f1riegol;
-uint8_t z1f1riegoh;
-uint8_t z1f1huml;
-uint8_t z1f1humh;
+typedef struct Fase {
+  uint16_t dias;
+  uint8_t hLuz;
+  uint8_t templ;
+  uint8_t temph;
+  uint8_t riegol;
+  uint8_t riegoh;
+  uint8_t huml;
+  uint8_t humh;
+} Fase;
 
-uint16_t z1f2dias;
-uint8_t z1f2hLuz;
-uint8_t z1f2templ;
-uint8_t z1f2temph;
-uint8_t z1f2riegol;
-uint8_t z1f2riegoh;
-uint8_t z1f2huml;
-uint8_t z1f2humh;
+Fase f1;
+Fase f2;
+Fase f3;
+Fase f4;
 
-uint16_t z1f3dias;
-uint8_t z1f3hLuz;
-uint8_t z1f3templ;
-uint8_t z1f3temph;
-uint8_t z1f3riegol;
-uint8_t z1f3riegoh;
-uint8_t z1f3huml;
-uint8_t z1f3humh;
+Fase fActivaSP;
 
-uint16_t z1f4dias;
-uint8_t z1f4hLuz;
-uint8_t z1f4templ;
-uint8_t z1f4temph;
-uint8_t z1f4riegol;
-uint8_t z1f4riegoh;
-uint8_t z1f4huml;
-uint8_t z1f4humh;
-
-uint16_t diasSP;           // dias de la fase
 uint32_t diaIniciodefase;  // dia en unixtime del inicio de la fase activa
 uint32_t diaFindefase;     // dia en unixtime del fin de la fase activa
 uint8_t hLuz;              // horas luz de la fase
 uint8_t hInicioLuz;        // hora de inicio de iluminacion
 uint8_t hFinLuz;           // hora de fin de iluminacion
 uint8_t mInicioFinLuz;     // minuto de inicio/fin de iluminacion
-uint8_t templSP;           // temperatura limite l
-uint8_t temphSP;           // temperatura limite h
-uint8_t humlSP;            // humedad aire limite l
-uint8_t humhSP;            // humedad aire limite h
-uint8_t riegolSP;          // riego limite l
-uint8_t riegohSP;          // riego limite h
 uint8_t ciclos;            // cantidad de ciclos - 0 = ciclo continuo
 
 uint16_t dias;               // dias que lleva la fase activa
@@ -217,14 +192,15 @@ uint8_t PORTCSTATE;
 char numKBstr[10];  // aca guardo la str que estoy modificando en el teclado
                     // numerico
 uint8_t numKBPrevScreen;  // la pantalla a la que tengo que volver
-uint8_t*
-    numKBvarptr8b;  // puntero a la variable que quiero modificar si es un byte
+
+// puntero a la variable que quiero modificar si es un byte
+uint8_t* numKBvarptr8b;
 uint16_t* numKBvarptr16b;  // si es de 2 byte. probablemente hay una mejor forma
                            // de hacerlo.
 uint8_t numKBstrLength;    // el largo que puede tener la variable - para evitar
                            // overflow
-uint8_t
-    numKBbufferSize;  // no estoy seguro para que sirve esto pero es necesario
+// no estoy seguro para que sirve esto pero es necesario
+uint8_t numKBbufferSize;
 
 unsigned long time;      // acá guardo el tiempo que lleva el programa
                          // MILLIS() LLEGA A SU OVERFLOW A LOS 50 DIAS
@@ -248,12 +224,6 @@ DHT dht(DHTPIN, DHT22);
 
 RTC_DS3231 rtc;
 
-// uint8_t riegoEspera;  // 0 - riego activo
-// 1 - riego espera
-// 2 - riego activo primera vez
-// 3 - riego espera primera vez
-// uint8_t eRiego;
-// uint8_t riegoFin;
 const uint8_t riegoTiempo = 5;  // tiempo que dura la rafaga de riego
 uint32_t tRiegoBomba;    // cuando deberia terminar la rafaga - unix timestamp
 uint32_t tRiegoEspera;   // cuando deberia terminar la espera - unix timestamp
