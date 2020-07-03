@@ -3,7 +3,7 @@ void drawHomeScreen() {
 
   // menu principal
   homeButtons[0].initButtonUL(&tft, 5, 10, 230, 40, YELLOW, DARKGREEN, YELLOW,
-                              PSTR("Menu"), BUTTON_TEXTSIZE);
+                              "Menu", BUTTON_TEXTSIZE);
   homeButtons[0].drawButton();
 
   tft.setCursor(10, 65);
@@ -173,16 +173,16 @@ void drawMenuScreen() {
 
   // boton 1 - zona 1
   menuButtons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
-                              PSTR("Zona 1"), BUTTON_TEXTSIZE);
+                              "Zona 1", BUTTON_TEXTSIZE);
   menuButtons[0].drawButton();
 
   // boton 2 - ajustes
   menuButtons[1].initButtonUL(&tft, 5, 80, 230, 40, WHITE, ORANGE, YELLOW,
-                              PSTR("Ajustes"), BUTTON_TEXTSIZE);
+                              "Ajustes", BUTTON_TEXTSIZE);
   menuButtons[1].drawButton();
 
   menuButtons[2].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                              PSTR("Volver"), BUTTON_TEXTSIZE);
+                              "Volver", BUTTON_TEXTSIZE);
   menuButtons[2].drawButton();
 
   Serial.println(F("menu dibujado"));
@@ -200,27 +200,27 @@ void drawAjustesScreen() {
 
   // boton 1 - alarmas
   ajustesButtons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
-                                 PSTR("Alarmas"), BUTTON_TEXTSIZE);
+                                 "Alarmas", BUTTON_TEXTSIZE);
   ajustesButtons[0].drawButton();
 
   // boton 2 - reloj
   ajustesButtons[1].initButtonUL(&tft, 5, 80, 230, 40, WHITE, ORANGE, YELLOW,
-                                 PSTR("Reloj"), BUTTON_TEXTSIZE);
+                                 "Reloj", BUTTON_TEXTSIZE);
   ajustesButtons[1].drawButton();
 
   // boton 3 - programas
   ajustesButtons[2].initButtonUL(&tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
-                                 PSTR("Programas"), BUTTON_TEXTSIZE);
+                                 "Programas", BUTTON_TEXTSIZE);
   ajustesButtons[2].drawButton();
 
   // boton 4 - hard reset
   ajustesButtons[3].initButtonUL(&tft, 5, 170, 230, 40, WHITE, ORANGE, YELLOW,
-                                 PSTR("H. Reset"), BUTTON_TEXTSIZE);
+                                 "H. Reset", BUTTON_TEXTSIZE);
   ajustesButtons[3].drawButton();
 
   // boton 5 - Volver
   ajustesButtons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                                 PSTR("Volver"), BUTTON_TEXTSIZE);
+                                 "Volver", BUTTON_TEXTSIZE);
   ajustesButtons[4].drawButton();
 
   Serial.println(F("ajustes dibujado"));
@@ -234,7 +234,7 @@ void drawAlarmasScreen() {
   tft.print(F("Alarmas"));
 
   alarmasButtons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                                 PSTR("Volver"), BUTTON_TEXTSIZE);
+                                 "Volver", BUTTON_TEXTSIZE);
   alarmasButtons[0].drawButton();
 
   Serial.println(F("alarmas dibujado"));
@@ -292,11 +292,11 @@ void drawRelojScreen() {
   tft.fillTriangle(146, 197, 134, 181, 158, 181, ORANGE);  // minuto--
 
   relojButtons[1].initButtonUL(&tft, 20, 210, 200, 40, WHITE, DARKGREEN, WHITE,
-                               PSTR("Aceptar"), BUTTON_TEXTSIZE);
+                               "Aceptar", BUTTON_TEXTSIZE);
   relojButtons[1].drawButton();
 
   relojButtons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                               PSTR("Volver"), BUTTON_TEXTSIZE);
+                               "Volver", BUTTON_TEXTSIZE);
   relojButtons[0].drawButton();
 
   Serial.println(F("reloj dibujado"));
@@ -313,23 +313,23 @@ void drawProgramasScreen() {
   tft.print(F("Programas"));
 
   programasButtons[1].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
-                                   PSTR("Prog. 1"), BUTTON_TEXTSIZE);
+                                   "Prog. 1", BUTTON_TEXTSIZE);
   programasButtons[1].drawButton();
 
   programasButtons[2].initButtonUL(&tft, 5, 80, 230, 40, WHITE, ORANGE, YELLOW,
-                                   PSTR("Prog. 2"), BUTTON_TEXTSIZE);
+                                   "Prog. 2", BUTTON_TEXTSIZE);
   programasButtons[2].drawButton();
 
   programasButtons[3].initButtonUL(&tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
-                                   PSTR("Prog. 3"), BUTTON_TEXTSIZE);
+                                   "Prog. 3", BUTTON_TEXTSIZE);
   programasButtons[3].drawButton();
 
   programasButtons[4].initButtonUL(&tft, 5, 170, 230, 40, WHITE, ORANGE, YELLOW,
-                                   PSTR("Prog. 4"), BUTTON_TEXTSIZE);
+                                   "Prog. 4", BUTTON_TEXTSIZE);
   programasButtons[4].drawButton();
 
   programasButtons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
-                                   WHITE, PSTR("Volver"), BUTTON_TEXTSIZE);
+                                   WHITE, "Volver", BUTTON_TEXTSIZE);
   programasButtons[0].drawButton();
 
   Serial.println(F("programas dibujado"));
@@ -346,22 +346,22 @@ void drawPrograma1Screen() {
   tft.print(F("Prog. 1"));
 
   programa1Buttons[1].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
-                                   PSTR("Cargar"), BUTTON_TEXTSIZE);
+                                   "Cargar", BUTTON_TEXTSIZE);
   programa1Buttons[1].drawButton();
 
   programa1Buttons[2].initButtonUL(&tft, 5, 80, 230, 40, WHITE, ORANGE, YELLOW,
-                                   PSTR("Guardar"), BUTTON_TEXTSIZE);
+                                   "Guardar", BUTTON_TEXTSIZE);
   programa1Buttons[2].drawButton();
 
   programa1Buttons[3].initButtonUL(&tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
-                                   PSTR("Reestablecer"), BUTTON_TEXTSIZE);
+                                   "Reestablecer", BUTTON_TEXTSIZE);
   programa1Buttons[3].drawButton();
 
   programa1Buttons[4].initButtonUL(&tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
-                                   PSTR("Confirmar"), BUTTON_TEXTSIZE);
+                                   "Confirmar", BUTTON_TEXTSIZE);
 
-  programa1Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, RED, WHITE,
-                                   PSTR("Cancelar"), BUTTON_TEXTSIZE);
+  programa1Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
+                                   "Volver", BUTTON_TEXTSIZE);
   programa1Buttons[0].drawButton();
 }
 
@@ -376,22 +376,22 @@ void drawPrograma2Screen() {
   tft.print(F("Prog. 2"));
 
   programa2Buttons[1].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
-                                   PSTR("Cargar"), BUTTON_TEXTSIZE);
+                                   "Cargar", BUTTON_TEXTSIZE);
   programa2Buttons[1].drawButton();
 
   programa2Buttons[2].initButtonUL(&tft, 5, 80, 230, 40, WHITE, ORANGE, YELLOW,
-                                   PSTR("Guardar"), BUTTON_TEXTSIZE);
+                                   "Guardar", BUTTON_TEXTSIZE);
   programa2Buttons[2].drawButton();
 
   programa2Buttons[3].initButtonUL(&tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
-                                   PSTR("Reestablecer"), BUTTON_TEXTSIZE);
+                                   "Reestablecer", BUTTON_TEXTSIZE);
   programa2Buttons[3].drawButton();
 
   programa2Buttons[4].initButtonUL(&tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
-                                   PSTR("Confirmar"), BUTTON_TEXTSIZE);
+                                   "Confirmar", BUTTON_TEXTSIZE);
 
-  programa2Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, RED, WHITE,
-                                   PSTR("Cancelar"), BUTTON_TEXTSIZE);
+  programa2Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
+                                   "Volver", BUTTON_TEXTSIZE);
   programa2Buttons[0].drawButton();
 }
 
@@ -406,22 +406,22 @@ void drawPrograma3Screen() {
   tft.print(F("Prog. 3"));
 
   programa3Buttons[1].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
-                                   PSTR("Cargar"), BUTTON_TEXTSIZE);
+                                   "Cargar", BUTTON_TEXTSIZE);
   programa3Buttons[1].drawButton();
 
   programa3Buttons[2].initButtonUL(&tft, 5, 80, 230, 40, WHITE, ORANGE, YELLOW,
-                                   PSTR("Guardar"), BUTTON_TEXTSIZE);
+                                   "Guardar", BUTTON_TEXTSIZE);
   programa3Buttons[2].drawButton();
 
   programa3Buttons[3].initButtonUL(&tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
-                                   PSTR("Reestablecer"), BUTTON_TEXTSIZE);
+                                   "Reestablecer", BUTTON_TEXTSIZE);
   programa3Buttons[3].drawButton();
 
   programa3Buttons[4].initButtonUL(&tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
-                                   PSTR("Confirmar"), BUTTON_TEXTSIZE);
+                                   "Confirmar", BUTTON_TEXTSIZE);
 
-  programa3Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, RED, WHITE,
-                                   PSTR("Cancelar"), BUTTON_TEXTSIZE);
+  programa3Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
+                                   "Volver", BUTTON_TEXTSIZE);
   programa3Buttons[0].drawButton();
 }
 
@@ -436,22 +436,22 @@ void drawPrograma4Screen() {
   tft.print(F("Prog. 4"));
 
   programa4Buttons[1].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
-                                   PSTR("Cargar"), BUTTON_TEXTSIZE);
+                                   "Cargar", BUTTON_TEXTSIZE);
   programa4Buttons[1].drawButton();
 
   programa4Buttons[2].initButtonUL(&tft, 5, 80, 230, 40, WHITE, ORANGE, YELLOW,
-                                   PSTR("Guardar"), BUTTON_TEXTSIZE);
+                                   "Guardar", BUTTON_TEXTSIZE);
   programa4Buttons[2].drawButton();
 
   programa4Buttons[3].initButtonUL(&tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
-                                   PSTR("Reestablecer"), BUTTON_TEXTSIZE);
+                                   "Reestablecer", BUTTON_TEXTSIZE);
   programa4Buttons[3].drawButton();
 
   programa4Buttons[4].initButtonUL(&tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
-                                   PSTR("Confirmar"), BUTTON_TEXTSIZE);
+                                   "Confirmar", BUTTON_TEXTSIZE);
 
-  programa4Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, RED, WHITE,
-                                   PSTR("Cancelar"), BUTTON_TEXTSIZE);
+  programa4Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
+                                   "Volver", BUTTON_TEXTSIZE);
   programa4Buttons[0].drawButton();
 }
 
@@ -468,11 +468,11 @@ void drawResetScreen() {
       "configuracion de\n fabrica?"));
 
   resetButtons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                               PSTR("Volver"), BUTTON_TEXTSIZE);
+                               "Volver", BUTTON_TEXTSIZE);
   resetButtons[0].drawButton();
 
   resetButtons[1].initButtonUL(&tft, 20, 170, 200, 40, WHITE, RED, WHITE,
-                               PSTR("Confirmar"), BUTTON_TEXTSIZE);
+                               "Confirmar", BUTTON_TEXTSIZE);
   resetButtons[1].drawButton();
 
   Serial.println(F("reset dibujado"));
@@ -487,32 +487,32 @@ void drawZ1Screen() {
 
   // boton 1 - fase 1
   z1Buttons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
-                            PSTR("Fase 1"), BUTTON_TEXTSIZE);
+                            "Fase 1", BUTTON_TEXTSIZE);
   z1Buttons[0].drawButton();
 
   // boton 2 - fase 2
   z1Buttons[1].initButtonUL(&tft, 5, 80, 230, 40, WHITE, ORANGE, YELLOW,
-                            PSTR("Fase 2"), BUTTON_TEXTSIZE);
+                            "Fase 2", BUTTON_TEXTSIZE);
   z1Buttons[1].drawButton();
 
   // boton 3 - fase 3
   z1Buttons[2].initButtonUL(&tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
-                            PSTR("Fase 3"), BUTTON_TEXTSIZE);
+                            "Fase 3", BUTTON_TEXTSIZE);
   z1Buttons[2].drawButton();
 
   // boton 4 - fase 4
   z1Buttons[3].initButtonUL(&tft, 5, 170, 230, 40, WHITE, ORANGE, YELLOW,
-                            PSTR("Fase 4"), BUTTON_TEXTSIZE);
+                            "Fase 4", BUTTON_TEXTSIZE);
   z1Buttons[3].drawButton();
 
   // boton 5 - control
   z1Buttons[4].initButtonUL(&tft, 5, 215, 230, 40, WHITE, ORANGE, YELLOW,
-                            PSTR("Control"), BUTTON_TEXTSIZE);
+                            "Control", BUTTON_TEXTSIZE);
   z1Buttons[4].drawButton();
 
   // boton 6 - volver
   z1Buttons[5].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                            PSTR("Volver"), BUTTON_TEXTSIZE);
+                            "Volver", BUTTON_TEXTSIZE);
   z1Buttons[5].drawButton();
 
   Serial.println(F("z1 dibujado"));
@@ -631,7 +631,7 @@ void drawZ1F1Screen() {
   tft.print(F("-"));
 
   z1f1Buttons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                              PSTR("Volver"), BUTTON_TEXTSIZE);
+                              "Volver", BUTTON_TEXTSIZE);
   z1f1Buttons[4].drawButton();
 
   Serial.println(F("z1f1 dibujado"));
@@ -750,7 +750,7 @@ void drawZ1F2Screen() {
   tft.print(F("-"));
 
   z1f2Buttons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                              PSTR("Volver"), BUTTON_TEXTSIZE);
+                              "Volver", BUTTON_TEXTSIZE);
   z1f2Buttons[4].drawButton();
 
   Serial.println(F("z1f2 dibujado"));
@@ -869,7 +869,7 @@ void drawZ1F3Screen() {
   tft.print(F("-"));
 
   z1f3Buttons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                              PSTR("Volver"), BUTTON_TEXTSIZE);
+                              "Volver", BUTTON_TEXTSIZE);
   z1f3Buttons[4].drawButton();
 
   Serial.println(F("z1f3 dibujado"));
@@ -988,7 +988,7 @@ void drawZ1F4Screen() {
   tft.print(F("-"));
 
   z1f4Buttons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                              PSTR("Volver"), BUTTON_TEXTSIZE);
+                              "Volver", BUTTON_TEXTSIZE);
   z1f4Buttons[4].drawButton();
 
   Serial.println(F("z1f4 dibujado"));
@@ -1002,15 +1002,15 @@ void drawZ1ControlScreen() {
   tft.print(F("Control"));
 
   z1ControlButtons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
-                                   PSTR("Inicio"), BUTTON_TEXTSIZE);
+                                   "Inicio", BUTTON_TEXTSIZE);
   z1ControlButtons[0].drawButton();
 
   z1ControlButtons[1].initButtonUL(&tft, 5, 80, 230, 40, WHITE, ORANGE, YELLOW,
-                                   PSTR("Terminar"), BUTTON_TEXTSIZE);
+                                   "Terminar", BUTTON_TEXTSIZE);
   z1ControlButtons[1].drawButton();
 
   z1ControlButtons[3].initButtonUL(&tft, 20, 170, 200, 40, WHITE, RED, WHITE,
-                                   PSTR("Confirmar"), BUTTON_TEXTSIZE);
+                                   "Confirmar", BUTTON_TEXTSIZE);
 
   tft.drawRect(5, 125, 230, 40, WHITE);
   tft.setTextSize(3);
@@ -1023,7 +1023,7 @@ void drawZ1ControlScreen() {
   tft.print(buffer);
 
   z1ControlButtons[2].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
-                                   WHITE, PSTR("Volver"), BUTTON_TEXTSIZE);
+                                   WHITE, "Volver", BUTTON_TEXTSIZE);
   z1ControlButtons[2].drawButton();
 
   Serial.println(F("z1control dibujado"));
@@ -1042,33 +1042,33 @@ void drawZ1InicioScreen() {
   tft.print(F("Fases"));
 
   z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, DARKGREY, WHITE,
-                                  PSTR("1"), BUTTON_TEXTSIZE);
+                                  "1", BUTTON_TEXTSIZE);
 
   z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE, DARKGREY, WHITE,
-                                  PSTR("2"), BUTTON_TEXTSIZE);
+                                  "2", BUTTON_TEXTSIZE);
 
   z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE, DARKGREY, WHITE,
-                                  PSTR("3"), BUTTON_TEXTSIZE);
+                                  "3", BUTTON_TEXTSIZE);
 
   z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE, DARKGREY,
-                                  WHITE, PSTR("4"), BUTTON_TEXTSIZE);
+                                  WHITE, "4", BUTTON_TEXTSIZE);
 
   switch (z1fActiva) {
     case 1:
       z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, OLIVE, WHITE,
-                                      PSTR("1"), BUTTON_TEXTSIZE);
+                                      "1", BUTTON_TEXTSIZE);
       break;
     case 2:
       z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE, OLIVE,
-                                      WHITE, PSTR("2"), BUTTON_TEXTSIZE);
+                                      WHITE, "2", BUTTON_TEXTSIZE);
       break;
     case 3:
       z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE, OLIVE,
-                                      WHITE, PSTR("3"), BUTTON_TEXTSIZE);
+                                      WHITE, "3", BUTTON_TEXTSIZE);
       break;
     case 4:
       z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE, OLIVE,
-                                      WHITE, PSTR("4"), BUTTON_TEXTSIZE);
+                                      WHITE, "4", BUTTON_TEXTSIZE);
       break;
   }
 
@@ -1078,11 +1078,11 @@ void drawZ1InicioScreen() {
   z1InicioButtons[3].drawRectButton();
 
   z1InicioButtons[4].initButtonUL(&tft, 5, 215, 230, 40, WHITE, DARKGREEN,
-                                  WHITE, PSTR("Confirmar"), BUTTON_TEXTSIZE);
+                                  WHITE, "Confirmar", BUTTON_TEXTSIZE);
   z1InicioButtons[4].drawButton();
 
   z1InicioButtons[5].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
-                                  WHITE, PSTR("Volver"), BUTTON_TEXTSIZE);
+                                  WHITE, "Volver", BUTTON_TEXTSIZE);
   z1InicioButtons[5].drawButton();
 
   Serial.println(F("z1inicio dibujado"));
@@ -1097,7 +1097,7 @@ void drawNumericKeyboardScreen(const char* title) {
   tft.setTextSize(BUTTON_TEXTSIZE);
 
   numericKeyboardButtons[0].initButtonUL(&tft, 5, 5, 60, 30, WHITE, ORANGE,
-                                         WHITE, PSTR("<"), BUTTON_TEXTSIZE);
+                                         WHITE, "<", BUTTON_TEXTSIZE);
   numericKeyboardButtons[0].drawButton();
 
   tft.setTextSize(2);
@@ -1112,47 +1112,47 @@ void drawNumericKeyboardScreen(const char* title) {
   tft.print(numKBstr);
 
   numericKeyboardButtons[1].initButtonUL(&tft, 30, 82, 40, 40, WHITE, BLACK,
-                                         WHITE, PSTR("0"), BUTTON_TEXTSIZE);
+                                         WHITE, "0", BUTTON_TEXTSIZE);
   numericKeyboardButtons[1].drawButton();
   // numericKeyboardButtons[2].initButtonUL(&tft, 100, 82, 40, 40, WHITE, BLACK,
   //                                       WHITE, "-", BUTTON_TEXTSIZE);
   // numericKeyboardButtons[2].drawButton();
   numericKeyboardButtons[3].initButtonUL(&tft, 155, 82, 80, 40, WHITE, BLACK,
-                                         WHITE, PSTR("Del"), BUTTON_TEXTSIZE);
+                                         WHITE, "Del", BUTTON_TEXTSIZE);
   numericKeyboardButtons[3].drawButton();
 
   numericKeyboardButtons[4].initButtonUL(&tft, 30, 125, 40, 40, WHITE, BLACK,
-                                         WHITE, PSTR("1"), BUTTON_TEXTSIZE);
+                                         WHITE, "1", BUTTON_TEXTSIZE);
   numericKeyboardButtons[4].drawButton();
   numericKeyboardButtons[5].initButtonUL(&tft, 100, 125, 40, 40, WHITE, BLACK,
-                                         WHITE, PSTR("2"), BUTTON_TEXTSIZE);
+                                         WHITE, "2", BUTTON_TEXTSIZE);
   numericKeyboardButtons[5].drawButton();
   numericKeyboardButtons[6].initButtonUL(&tft, 175, 125, 40, 40, WHITE, BLACK,
-                                         WHITE, PSTR("3"), BUTTON_TEXTSIZE);
+                                         WHITE, "3", BUTTON_TEXTSIZE);
   numericKeyboardButtons[6].drawButton();
 
   numericKeyboardButtons[7].initButtonUL(&tft, 30, 177, 40, 40, WHITE, BLACK,
-                                         WHITE, PSTR("4"), BUTTON_TEXTSIZE);
+                                         WHITE, "4", BUTTON_TEXTSIZE);
   numericKeyboardButtons[7].drawButton();
   numericKeyboardButtons[8].initButtonUL(&tft, 100, 177, 40, 40, WHITE, BLACK,
-                                         WHITE, PSTR("5"), BUTTON_TEXTSIZE);
+                                         WHITE, "5", BUTTON_TEXTSIZE);
   numericKeyboardButtons[8].drawButton();
   numericKeyboardButtons[9].initButtonUL(&tft, 175, 177, 40, 40, WHITE, BLACK,
-                                         WHITE, PSTR("6"), BUTTON_TEXTSIZE);
+                                         WHITE, "6", BUTTON_TEXTSIZE);
   numericKeyboardButtons[9].drawButton();
 
   numericKeyboardButtons[10].initButtonUL(&tft, 30, 230, 40, 40, WHITE, BLACK,
-                                          WHITE, PSTR("7"), BUTTON_TEXTSIZE);
+                                          WHITE, "7", BUTTON_TEXTSIZE);
   numericKeyboardButtons[10].drawButton();
   numericKeyboardButtons[11].initButtonUL(&tft, 100, 230, 40, 40, WHITE, BLACK,
-                                          WHITE, PSTR("8"), BUTTON_TEXTSIZE);
+                                          WHITE, "8", BUTTON_TEXTSIZE);
   numericKeyboardButtons[11].drawButton();
   numericKeyboardButtons[12].initButtonUL(&tft, 175, 230, 40, 40, WHITE, BLACK,
-                                          WHITE, PSTR("9"), BUTTON_TEXTSIZE);
+                                          WHITE, "9", BUTTON_TEXTSIZE);
   numericKeyboardButtons[12].drawButton();
 
   numericKeyboardButtons[13].initButtonUL(&tft, 5, 280, 230, 40, WHITE,
-                                          DARKCYAN, WHITE, PSTR("Aceptar"),
+                                          DARKCYAN, WHITE, "Aceptar",
                                           BUTTON_TEXTSIZE);
   numericKeyboardButtons[13].drawButton();
 }

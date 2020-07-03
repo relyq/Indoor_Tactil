@@ -627,34 +627,34 @@ void tsMenu() {
                    (z1fActiva != 1 && z1fSeleccionada != 1)) {
           z1fSeleccionada = 1;
           z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, YELLOW,
-                                          WHITE, PSTR("1"), BUTTON_TEXTSIZE);
+                                          WHITE, "1", BUTTON_TEXTSIZE);
 
           z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE,
-                                          DARKGREY, WHITE, PSTR("2"),
+                                          DARKGREY, WHITE, "2",
                                           BUTTON_TEXTSIZE);
 
           z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE,
-                                          DARKGREY, WHITE, PSTR("3"),
+                                          DARKGREY, WHITE, "3",
                                           BUTTON_TEXTSIZE);
 
           z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
-                                          DARKGREY, WHITE, PSTR("4"),
+                                          DARKGREY, WHITE, "4",
                                           BUTTON_TEXTSIZE);
           switch (z1fActiva) {
             break;
             case 2:
               z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE,
-                                              OLIVE, WHITE, PSTR("2"),
+                                              OLIVE, WHITE, "2",
                                               BUTTON_TEXTSIZE);
               break;
             case 3:
               z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE,
-                                              OLIVE, WHITE, PSTR("3"),
+                                              OLIVE, WHITE, "3",
                                               BUTTON_TEXTSIZE);
               break;
             case 4:
               z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
-                                              OLIVE, WHITE, PSTR("4"),
+                                              OLIVE, WHITE, "4",
                                               BUTTON_TEXTSIZE);
               break;
           }
@@ -667,33 +667,33 @@ void tsMenu() {
                    (z1fActiva != 2 && z1fSeleccionada != 2)) {
           z1fSeleccionada = 2;
           z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE, YELLOW,
-                                          WHITE, PSTR("2"), BUTTON_TEXTSIZE);
+                                          WHITE, "2", BUTTON_TEXTSIZE);
 
           z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, DARKGREY,
-                                          WHITE, PSTR("1"), BUTTON_TEXTSIZE);
+                                          WHITE, "1", BUTTON_TEXTSIZE);
 
           z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE,
-                                          DARKGREY, WHITE, PSTR("3"),
+                                          DARKGREY, WHITE, "3",
                                           BUTTON_TEXTSIZE);
 
           z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
-                                          DARKGREY, WHITE, PSTR("4"),
+                                          DARKGREY, WHITE, "4",
                                           BUTTON_TEXTSIZE);
 
           switch (z1fActiva) {
             case 1:
               z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE,
-                                              OLIVE, WHITE, PSTR("1"),
+                                              OLIVE, WHITE, "1",
                                               BUTTON_TEXTSIZE);
               break;
             case 3:
               z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE,
-                                              OLIVE, WHITE, PSTR("3"),
+                                              OLIVE, WHITE, "3",
                                               BUTTON_TEXTSIZE);
               break;
             case 4:
               z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
-                                              OLIVE, WHITE, PSTR("4"),
+                                              OLIVE, WHITE, "4",
                                               BUTTON_TEXTSIZE);
               break;
           }
@@ -706,33 +706,33 @@ void tsMenu() {
                    (z1fActiva != 3 && z1fSeleccionada != 3)) {
           z1fSeleccionada = 3;
           z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE, YELLOW,
-                                          WHITE, PSTR("3"), BUTTON_TEXTSIZE);
+                                          WHITE, "3", BUTTON_TEXTSIZE);
 
           z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, DARKGREY,
-                                          WHITE, PSTR("1"), BUTTON_TEXTSIZE);
+                                          WHITE, "1", BUTTON_TEXTSIZE);
 
           z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE,
-                                          DARKGREY, WHITE, PSTR("2"),
+                                          DARKGREY, WHITE, "2",
                                           BUTTON_TEXTSIZE);
 
           z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
-                                          DARKGREY, WHITE, PSTR("4"),
+                                          DARKGREY, WHITE, "4",
                                           BUTTON_TEXTSIZE);
 
           switch (z1fActiva) {
             case 1:
               z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE,
-                                              OLIVE, WHITE, PSTR("1"),
+                                              OLIVE, WHITE, "1",
                                               BUTTON_TEXTSIZE);
               break;
             case 2:
               z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE,
-                                              OLIVE, WHITE, PSTR("2"),
+                                              OLIVE, WHITE, "2",
                                               BUTTON_TEXTSIZE);
               break;
             case 4:
               z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
-                                              OLIVE, WHITE, PSTR("4"),
+                                              OLIVE, WHITE, "4",
                                               BUTTON_TEXTSIZE);
               break;
           }
@@ -745,33 +745,33 @@ void tsMenu() {
                    (z1fActiva != 4 && z1fSeleccionada != 4)) {
           z1fSeleccionada = 4;
           z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE, YELLOW,
-                                          WHITE, PSTR("4"), BUTTON_TEXTSIZE);
+                                          WHITE, "4", BUTTON_TEXTSIZE);
 
           z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, DARKGREY,
-                                          WHITE, PSTR("1"), BUTTON_TEXTSIZE);
+                                          WHITE, "1", BUTTON_TEXTSIZE);
 
           z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE,
-                                          DARKGREY, WHITE, PSTR("2"),
+                                          DARKGREY, WHITE, "2",
                                           BUTTON_TEXTSIZE);
 
           z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE,
-                                          DARKGREY, WHITE, PSTR("3"),
+                                          DARKGREY, WHITE, "3",
                                           BUTTON_TEXTSIZE);
 
           switch (z1fActiva) {
             case 1:
               z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE,
-                                              OLIVE, WHITE, PSTR("1"),
+                                              OLIVE, WHITE, "1",
                                               BUTTON_TEXTSIZE);
               break;
             case 2:
               z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE,
-                                              OLIVE, WHITE, PSTR("2"),
+                                              OLIVE, WHITE, "2",
                                               BUTTON_TEXTSIZE);
               break;
             case 3:
               z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE,
-                                              OLIVE, WHITE, PSTR("3"),
+                                              OLIVE, WHITE, "3",
                                               BUTTON_TEXTSIZE);
               break;
           }
@@ -784,38 +784,38 @@ void tsMenu() {
                    (z1fActiva != z1fSeleccionada)) {
           z1fActiva = z1fSeleccionada;
           z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE, DARKGREY,
-                                          WHITE, PSTR("1"), BUTTON_TEXTSIZE);
+                                          WHITE, "1", BUTTON_TEXTSIZE);
 
           z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE,
-                                          DARKGREY, WHITE, PSTR("2"),
+                                          DARKGREY, WHITE, "2",
                                           BUTTON_TEXTSIZE);
 
           z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE,
-                                          DARKGREY, WHITE, PSTR("3"),
+                                          DARKGREY, WHITE, "3",
                                           BUTTON_TEXTSIZE);
 
           z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
-                                          DARKGREY, WHITE, PSTR("4"),
+                                          DARKGREY, WHITE, "4",
                                           BUTTON_TEXTSIZE);
           switch (z1fActiva) {
             case 1:
               z1InicioButtons[0].initButtonUL(&tft, 35, 55, 50, 50, WHITE,
-                                              OLIVE, WHITE, PSTR("1"),
+                                              OLIVE, WHITE, "1",
                                               BUTTON_TEXTSIZE);
               break;
             case 2:
               z1InicioButtons[1].initButtonUL(&tft, 155, 55, 50, 50, WHITE,
-                                              OLIVE, WHITE, PSTR("2"),
+                                              OLIVE, WHITE, "2",
                                               BUTTON_TEXTSIZE);
               break;
             case 3:
               z1InicioButtons[2].initButtonUL(&tft, 35, 130, 50, 50, WHITE,
-                                              OLIVE, WHITE, PSTR("3"),
+                                              OLIVE, WHITE, "3",
                                               BUTTON_TEXTSIZE);
               break;
             case 4:
               z1InicioButtons[3].initButtonUL(&tft, 155, 130, 50, 50, WHITE,
-                                              OLIVE, WHITE, PSTR("4"),
+                                              OLIVE, WHITE, "4",
                                               BUTTON_TEXTSIZE);
               break;
           }
