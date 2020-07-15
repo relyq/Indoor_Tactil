@@ -23,12 +23,16 @@ si cargas un programa no cambia la configuracion activa hasta que cambie la fase
 
 hay que probar si funciona la carga y guardado de todos los programas
 
+debería hacer que el programa cambie las variables cuando se toca el boton que cambia la variable, en vez de ver si la variable cambió
+
 todo:
+
+se deberia poder cambiar la configuracion de fase mientras esta corriendo el programa
 
 no se puede cambiar la configuracion de fases porque cuando se
 cambia la variable no se guarda en eeprom
 
-se deberia poder cambiar la configuracion de fase mientras esta corriendo el programa
+configurar los programas default
 
 prender el ventilador por x tiempo por la noche para refrigerar y cambiar el aire
 

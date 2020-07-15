@@ -109,7 +109,6 @@ Adafruit_GFX_Button programa4Buttons[5];
 Adafruit_GFX_Button resetButtons[2];
 Adafruit_GFX_Button numericKeyboardButtons[16];
 
-
 uint8_t currentScreen;  // acá guardo la pantalla activa
 uint8_t prevScreen;     // acá guardo la pantalla anterior
 

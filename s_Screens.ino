@@ -62,19 +62,19 @@ void drawHomeScreen() {
     tft.print(F("-"));
   }
 
-  strcpy_P(buffer, STR_hhmm);
+  strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
   tft.setCursor(170, 165);
   tft.print(buffer);
 
-  strcpy_P(buffer, STR_DDMMYY);
+  strcpy_P(buffer, PSTR("DD/MM/YY"));
   now.toString(buffer);
   tft.setCursor(134, 183);
   tft.print(buffer);
 
-  sprintf_P(buffer, STR_fdecimal, fActivaSP.dias);
+  sprintf_P(buffer, PSTR("%d"), fActivaSP.dias);
   tft.setCursor(10, 200);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
@@ -87,13 +87,13 @@ void drawHomeScreen() {
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
   tft.print(F("Riego "));
-  sprintf_P(buffer, STR_fdecimal, fActivaSP.riegoh);
-  strcat_P(buffer, STR_percent);
+  sprintf_P(buffer, PSTR("%d"), fActivaSP.riegoh);
+  strcat_P(buffer, PSTR("%"));
   tft.setCursor(130, 220);
   tft.setTextColor(ORANGE);
   tft.print(buffer);  // riego sp h
-  sprintf_P(buffer, STR_fdecimal, fActivaSP.riegol);
-  strcat_P(buffer, STR_percent);
+  sprintf_P(buffer, PSTR("%d"), fActivaSP.riegol);
+  strcat_P(buffer, PSTR("%"));
   tft.setCursor(130, 240);
   tft.setTextColor(BLUE);
   tft.print(buffer);  // riego sp l
@@ -102,13 +102,13 @@ void drawHomeScreen() {
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
   tft.print(F("T."));
-  sprintf_P(buffer, STR_fdecimal, fActivaSP.templ);
-  strcat_P(buffer, STR_celsius);
+  sprintf_P(buffer, PSTR("%d"), fActivaSP.templ);
+  strcat_P(buffer, PSTR("C"));
   tft.setCursor(77 - (strlen(buffer) * 12), 260);
   tft.setTextColor(BLUE);
   tft.print(buffer);  // temp sp l
-  sprintf_P(buffer, STR_fdecimal, fActivaSP.temph);
-  strcat_P(buffer, STR_celsius);
+  sprintf_P(buffer, PSTR("%d"), fActivaSP.temph);
+  strcat_P(buffer, PSTR("C"));
   tft.setCursor(125 - (strlen(buffer) * 12), 260);
   tft.setTextColor(ORANGE);
   tft.print(buffer);  // temp sp h
@@ -117,39 +117,39 @@ void drawHomeScreen() {
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
   tft.print(F("Humedad "));
-  sprintf_P(buffer, STR_fdecimal, fActivaSP.humh);
-  strcat_P(buffer, STR_percent);
+  sprintf_P(buffer, PSTR("%d"), fActivaSP.humh);
+  strcat_P(buffer, PSTR("%"));
   tft.setCursor(130, 280);
   tft.setTextColor(ORANGE);
   tft.print(buffer);  // humedad sp h
-  sprintf_P(buffer, STR_fdecimal, fActivaSP.huml);
-  strcat_P(buffer, STR_percent);
+  sprintf_P(buffer, PSTR("%d"), fActivaSP.huml);
+  strcat_P(buffer, PSTR("%"));
   tft.setCursor(130, 300);
   tft.setTextColor(BLUE);
   tft.print(buffer);  // humedad sp l
 
-  sprintf_P(buffer, STR_fdecimal, dias);
+  sprintf_P(buffer, PSTR("%d"), dias);
   tft.setCursor(125 - (strlen(buffer) * 18), 230);
   tft.setTextSize(3);
   tft.setTextColor(WHITE, BLACK);
   tft.print(buffer);
 
-  sprintf_P(buffer, STR_fdecimal, hTierra);
-  strcat_P(buffer, STR_percent);
+  sprintf_P(buffer, PSTR("%d"), hTierra);
+  strcat_P(buffer, PSTR("%"));
   tft.setCursor(230 - (strlen(buffer) * 18), 230);
   tft.setTextSize(3);
   tft.setTextColor(WHITE, BLACK);
   tft.print(buffer);
 
   dtostrf(t, 4, 1, buffer);
-  strcat_P(buffer, STR_celsius);
+  strcat_P(buffer, PSTR("C"));
   tft.setCursor(125 - (strlen(buffer) * 18), 285);
   tft.setTextSize(3);
   tft.setTextColor(WHITE, BLACK);
   tft.print(buffer);  // temperatura leida por el DHT
 
-  sprintf_P(buffer, STR_fdecimal, (uint8_t)h);
-  strcat_P(buffer, STR_percent);
+  sprintf_P(buffer, PSTR("%d"), (uint8_t)h);
+  strcat_P(buffer, PSTR("%"));
   tft.setCursor(230 - (strlen(buffer) * 18), 285);
   tft.setTextSize(3);
   tft.setTextColor(WHITE, BLACK);
@@ -261,7 +261,7 @@ void drawRelojScreen() {
   tft.fillTriangle(136, 34, 124, 50, 148, 50, ORANGE);  // mes++
   tft.fillTriangle(192, 34, 180, 50, 204, 50, ORANGE);  // dia++
 
-  sprintf_P(buffer, STR_fdecimal, relojYYYY);
+  sprintf_P(buffer, PSTR("%d"), relojYYYY);
   tft.setCursor(28, 60);
   tft.print(buffer);
 
@@ -574,28 +574,28 @@ void drawZ1F1Screen() {
   tft.setTextSize(3);
 
   //// dias
-  sprintf_P(buffer, STR_fdecimal, f1.dias);
+  sprintf_P(buffer, PSTR("%d"), f1.dias);
 
   tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
   //// hluz
   if (f1.hLuz > 24) f1.hLuz = 24;
-  sprintf_P(buffer, STR_fdecimal, f1.hLuz);
+  sprintf_P(buffer, PSTR("%d"), f1.hLuz);
   strcat_P(buffer, STR_hum);
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
   if (f1.temph > 80) f1.temph = 80;
-  sprintf_P(buffer, STR_fdecimal, f1.temph);
+  sprintf_P(buffer, PSTR("%d"), f1.temph);
   uint8_t z1f1temphSTRlen = strlen(buffer);
-  strcat_P(buffer, STR_celsius);
+  strcat_P(buffer, PSTR("C"));
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
   if (f1.templ > 80) f1.templ = 80;
-  sprintf_P(buffer, STR_fdecimal, f1.templ);
+  sprintf_P(buffer, PSTR("%d"), f1.templ);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f1temphSTRlen * 18), 135);
   tft.print(buffer);
 
@@ -603,13 +603,13 @@ void drawZ1F1Screen() {
   tft.print(F("-"));
 
   //// riego
-  sprintf_P(buffer, STR_fdecimal, f1.riegoh);
+  sprintf_P(buffer, PSTR("%d"), f1.riegoh);
   uint8_t z1f1riegohSTRlen = strlen(buffer);
-  strcat_P(buffer, STR_percent);
+  strcat_P(buffer, PSTR("%"));
   tft.setCursor(228 - (strlen(buffer) * 18), 180);
   tft.print(buffer);
 
-  sprintf_P(buffer, STR_fdecimal, f1.riegol);
+  sprintf_P(buffer, PSTR("%d"), f1.riegol);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f1riegohSTRlen * 18), 180);
   tft.print(buffer);
 
@@ -617,13 +617,13 @@ void drawZ1F1Screen() {
   tft.print(F("-"));
 
   //// humedad
-  sprintf_P(buffer, STR_fdecimal, f1.humh);
+  sprintf_P(buffer, PSTR("%d"), f1.humh);
   uint8_t z1f1humhSTRlen = strlen(buffer);
-  strcat_P(buffer, STR_percent);
+  strcat_P(buffer, PSTR("%"));
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
 
-  sprintf_P(buffer, STR_fdecimal, f1.huml);
+  sprintf_P(buffer, PSTR("%d"), f1.huml);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f1humhSTRlen * 18), 225);
   tft.print(buffer);
 
@@ -693,28 +693,28 @@ void drawZ1F2Screen() {
   tft.setTextSize(3);
 
   //// dias
-  sprintf_P(buffer, STR_fdecimal, f2.dias);
+  sprintf_P(buffer, PSTR("%d"), f2.dias);
 
   tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
   //// hluz
   if (f2.hLuz > 24) f2.hLuz = 24;
-  sprintf_P(buffer, STR_fdecimal, f2.hLuz);
+  sprintf_P(buffer, PSTR("%d"), f2.hLuz);
   strcat_P(buffer, STR_hum);
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
   if (f2.temph > 80) f2.temph = 80;
-  sprintf_P(buffer, STR_fdecimal, f2.temph);
+  sprintf_P(buffer, PSTR("%d"), f2.temph);
   uint8_t z1f2temphSTRlen = strlen(buffer);
-  strcat_P(buffer, STR_celsius);
+  strcat_P(buffer, PSTR("C"));
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
   if (f2.templ > 80) f2.templ = 80;
-  sprintf_P(buffer, STR_fdecimal, f2.templ);
+  sprintf_P(buffer, PSTR("%d"), f2.templ);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f2temphSTRlen * 18), 135);
   tft.print(buffer);
 
@@ -722,13 +722,13 @@ void drawZ1F2Screen() {
   tft.print(F("-"));
 
   //// riego
-  sprintf_P(buffer, STR_fdecimal, f2.riegoh);
+  sprintf_P(buffer, PSTR("%d"), f2.riegoh);
   uint8_t z1f2riegohSTRlen = strlen(buffer);
-  strcat_P(buffer, STR_percent);
+  strcat_P(buffer, PSTR("%"));
   tft.setCursor(228 - (strlen(buffer) * 18), 180);
   tft.print(buffer);
 
-  sprintf_P(buffer, STR_fdecimal, f2.riegol);
+  sprintf_P(buffer, PSTR("%d"), f2.riegol);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f2riegohSTRlen * 18), 180);
   tft.print(buffer);
 
@@ -736,13 +736,13 @@ void drawZ1F2Screen() {
   tft.print(F("-"));
 
   //// humedad
-  sprintf_P(buffer, STR_fdecimal, f2.humh);
+  sprintf_P(buffer, PSTR("%d"), f2.humh);
   uint8_t z1f2humhSTRlen = strlen(buffer);
-  strcat_P(buffer, STR_percent);
+  strcat_P(buffer, PSTR("%"));
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
 
-  sprintf_P(buffer, STR_fdecimal, f2.huml);
+  sprintf_P(buffer, PSTR("%d"), f2.huml);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f2humhSTRlen * 18), 225);
   tft.print(buffer);
 
@@ -812,28 +812,28 @@ void drawZ1F3Screen() {
   tft.setTextSize(3);
 
   //// dias
-  sprintf_P(buffer, STR_fdecimal, f3.dias);
+  sprintf_P(buffer, PSTR("%d"), f3.dias);
 
   tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
   //// hluz
   if (f3.hLuz > 24) f3.hLuz = 24;
-  sprintf_P(buffer, STR_fdecimal, f3.hLuz);
+  sprintf_P(buffer, PSTR("%d"), f3.hLuz);
   strcat_P(buffer, STR_hum);
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
   if (f3.temph > 80) f3.temph = 80;
-  sprintf_P(buffer, STR_fdecimal, f3.temph);
+  sprintf_P(buffer, PSTR("%d"), f3.temph);
   uint8_t z1f3temphSTRlen = strlen(buffer);
-  strcat_P(buffer, STR_celsius);
+  strcat_P(buffer, PSTR("C"));
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
   if (f3.templ > 80) f3.templ = 80;
-  sprintf_P(buffer, STR_fdecimal, f3.templ);
+  sprintf_P(buffer, PSTR("%d"), f3.templ);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f3temphSTRlen * 18), 135);
   tft.print(buffer);
 
@@ -841,13 +841,13 @@ void drawZ1F3Screen() {
   tft.print(F("-"));
 
   //// riego
-  sprintf_P(buffer, STR_fdecimal, f3.riegoh);
+  sprintf_P(buffer, PSTR("%d"), f3.riegoh);
   uint8_t z1f3riegohSTRlen = strlen(buffer);
-  strcat_P(buffer, STR_percent);
+  strcat_P(buffer, PSTR("%"));
   tft.setCursor(228 - (strlen(buffer) * 18), 180);
   tft.print(buffer);
 
-  sprintf_P(buffer, STR_fdecimal, f3.riegol);
+  sprintf_P(buffer, PSTR("%d"), f3.riegol);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f3riegohSTRlen * 18), 180);
   tft.print(buffer);
 
@@ -855,13 +855,13 @@ void drawZ1F3Screen() {
   tft.print(F("-"));
 
   //// humedad
-  sprintf_P(buffer, STR_fdecimal, f3.humh);
+  sprintf_P(buffer, PSTR("%d"), f3.humh);
   uint8_t z1f3humhSTRlen = strlen(buffer);
-  strcat_P(buffer, STR_percent);
+  strcat_P(buffer, PSTR("%"));
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
 
-  sprintf_P(buffer, STR_fdecimal, f3.huml);
+  sprintf_P(buffer, PSTR("%d"), f3.huml);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f3humhSTRlen * 18), 225);
   tft.print(buffer);
 
@@ -931,28 +931,28 @@ void drawZ1F4Screen() {
   tft.setTextSize(3);
 
   //// dias
-  sprintf_P(buffer, STR_fdecimal, f4.dias);
+  sprintf_P(buffer, PSTR("%d"), f4.dias);
 
   tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
   //// hluz
   if (f4.hLuz > 24) f4.hLuz = 24;
-  sprintf_P(buffer, STR_fdecimal, f4.hLuz);
+  sprintf_P(buffer, PSTR("%d"), f4.hLuz);
   strcat_P(buffer, STR_hum);
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
   if (f4.temph > 80) f4.temph = 80;
-  sprintf_P(buffer, STR_fdecimal, f4.temph);
+  sprintf_P(buffer, PSTR("%d"), f4.temph);
   uint8_t z1f4temphSTRlen = strlen(buffer);
-  strcat_P(buffer, STR_celsius);
+  strcat_P(buffer, PSTR("C"));
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
   if (f4.templ > 80) f4.templ = 80;
-  sprintf_P(buffer, STR_fdecimal, f4.templ);
+  sprintf_P(buffer, PSTR("%d"), f4.templ);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f4temphSTRlen * 18), 135);
   tft.print(buffer);
 
@@ -960,13 +960,13 @@ void drawZ1F4Screen() {
   tft.print(F("-"));
 
   //// riego
-  sprintf_P(buffer, STR_fdecimal, f4.riegoh);
+  sprintf_P(buffer, PSTR("%d"), f4.riegoh);
   uint8_t z1f4riegohSTRlen = strlen(buffer);
-  strcat_P(buffer, STR_percent);
+  strcat_P(buffer, PSTR("%"));
   tft.setCursor(228 - (strlen(buffer) * 18), 180);
   tft.print(buffer);
 
-  sprintf_P(buffer, STR_fdecimal, f4.riegol);
+  sprintf_P(buffer, PSTR("%d"), f4.riegol);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f4riegohSTRlen * 18), 180);
   tft.print(buffer);
 
@@ -974,13 +974,13 @@ void drawZ1F4Screen() {
   tft.print(F("-"));
 
   //// humedad
-  sprintf_P(buffer, STR_fdecimal, f4.humh);
+  sprintf_P(buffer, PSTR("%d"), f4.humh);
   uint8_t z1f4humhSTRlen = strlen(buffer);
-  strcat_P(buffer, STR_percent);
+  strcat_P(buffer, PSTR("%"));
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
 
-  sprintf_P(buffer, STR_fdecimal, f4.huml);
+  sprintf_P(buffer, PSTR("%d"), f4.huml);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f4humhSTRlen * 18), 225);
   tft.print(buffer);
 
@@ -1018,7 +1018,7 @@ void drawZ1ControlScreen() {
   tft.setCursor(15, 135);
   tft.print(F("Ciclos"));
 
-  sprintf_P(buffer, STR_fdecimal, ciclos);
+  sprintf_P(buffer, PSTR("%d"), ciclos);
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
