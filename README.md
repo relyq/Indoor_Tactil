@@ -27,6 +27,8 @@ debería hacer que el programa cambie las variables cuando se toca el boton que 
 
 todo:
 
+contar loops para dibujar la pantalla; actualizar la dashboard cada 21 loops
+
 se deberia poder cambiar la configuracion de fase mientras esta corriendo el programa
 
 no se puede cambiar la configuracion de fases porque cuando se

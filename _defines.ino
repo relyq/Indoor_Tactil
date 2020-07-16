@@ -197,6 +197,7 @@ uint8_t numKBstrLength;    // el largo que puede tener la variable - para evitar
                            // overflow
 // no estoy seguro para que sirve esto pero es necesario
 uint8_t numKBbufferSize;
+uint16_t numKBeeprom;
 
 unsigned long time;      // acá guardo el tiempo que lleva el programa
                          // MILLIS() LLEGA A SU OVERFLOW A LOS 50 DIAS
@@ -276,7 +277,7 @@ uint8_t LASTRIEGOSTATE;  // ultimo estado de riego - esto es para actualizar la
     35 = riego low
     36 = riego high
     37 = hum low
-    38 = hum low
+    38 = hum high
   [50-69] = configuracion fase 2
   [70-89] = configuracion fase 3
   [90-109] = configuracion fase 4

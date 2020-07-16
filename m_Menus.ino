@@ -211,24 +211,28 @@ void Z1F4Screen() {
 
 // pantalla de teclado numerico para modificar valores
 // str          string a modificar
+// eepromdir    dirección eeprom en la que guardar el valor
 // bufferSize   el tamaño maximo de la string a modificar
-void NumericKeyboardScreen(uint8_t* intptr, uint8_t bufferSize,
-                           const char* title) {
+// title        titulo de la pantalla de teclado
+void NumericKeyboardScreen(uint8_t* intptr, uint16_t eepromdir,
+                           uint8_t bufferSize, const char* title) {
   currentScreen = 255;
   sprintf_P(numKBstr, STR_fdecimal, *intptr);
   numKBvarptr16b = NULL;
   numKBvarptr8b = intptr;
+  numKBeeprom = eepromdir;
   numKBbufferSize = bufferSize;
   drawNumericKeyboardScreen(title);
   prevScreen = currentScreen;
 }
 
-void NumericKeyboardScreen(uint16_t* intptr, uint8_t bufferSize,
-                           const char* title) {
+void NumericKeyboardScreen(uint16_t* intptr, uint16_t eepromdir,
+                           uint8_t bufferSize, const char* title) {
   currentScreen = 255;
   sprintf_P(numKBstr, STR_fdecimal, *intptr);
   numKBvarptr16b = intptr;
   numKBvarptr8b = NULL;
+  numKBeeprom = eepromdir;
   numKBbufferSize = bufferSize;
   drawNumericKeyboardScreen(title);
   prevScreen = currentScreen;
