@@ -9,21 +9,19 @@ las librerias actualizadas no funcionaban por pin_magic.h
 
 no se que tan bien funciona el sistema de iluminacion aunque parece estar funcionando bien
 
-deberia haber algo que baje la humedad? // la ventilación baja la humedad
-
-podria usar memoria dinamica para guardar informacion que solo se necesita por momentos
-
 hay algunas cosas en español y algunas en ingles deberia arreglarlo lmao
 
 al terminar o cambiar de fase deberia llevar al dashboard????
 
-quizá debería mostrar un mensaje antes de reiniciar el dispositivo de fabrica
-
-si cargas un programa no cambia la configuracion activa hasta que cambie la fase activa
-
 hay que probar si funciona la carga y guardado de todos los programas
 
 debería hacer que el programa cambie las variables cuando se toca el boton que cambia la variable, en vez de ver si la variable cambió - ver: if (z1fActivalast != z1fActiva), switch (z1fActiva)
+
+podría hacer que los colores sean personalizables
+
+si se cambia la configuración de una fase o se cambia el programa mientras está el sistema funcionando no cambia la configuración activa. esto pasa porque la configuración activa está en fActivaSP y no lo cambio al cambiar la configuración
+
+
 
 todo:
 
@@ -43,8 +41,14 @@ sistema de fertilizante
 
 LIMPIEZA:
 
-tengo que cambiar todos los centrados de texto por getTextBounds() // como se usaba esto lol
+tengo que cambiar todos los centrados de texto por getTextBounds() // getTextBounds() no funciona bien?
 
 eliminar botones (los que no tienen texto o no lo tienen centrado) y variables que no necesite para ahorrar memoria
 
 cuando termine no puedo olvidarme de eliminar todos los settext etc que no necesito volver a repetir
+
+debería limpiar _defines.ino de cosas que no se usan
+
+quizá debería comentar todos los serial.print de la version final - podría hacer que solo se compile con serial.print si una variable DEBUG esta activa
+
+tengo que ponerle mejor nombres a las variables

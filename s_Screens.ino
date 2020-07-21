@@ -8,7 +8,7 @@ void drawHomeScreen() {
 
   tft.setCursor(10, 65);
   tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
+  tft.setTextColor(WHITE);
   tft.print(F("Iluminacion"));
 
   if (PINC & LUZPIN) {
@@ -18,8 +18,6 @@ void drawHomeScreen() {
   }
 
   tft.setCursor(10, 90);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
   tft.print(F("Ventilacion"));
 
   if (PINC & FANPIN && !(PINC & HEATPIN)) {
@@ -31,8 +29,6 @@ void drawHomeScreen() {
   }
 
   tft.setCursor(10, 115);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
   tft.print(F("Vaporizacion"));
 
   if (PINC & VAPPIN) {
@@ -42,8 +38,6 @@ void drawHomeScreen() {
   }
 
   tft.setCursor(10, 140);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
   tft.print(F("Riego"));
 
   if (PINC & RIEGOPIN) {
@@ -53,8 +47,6 @@ void drawHomeScreen() {
   }
 
   tft.setCursor(10, 165);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
   tft.print(F("Fase "));
   if (z1fActiva != 0) {
     tft.print(z1fActiva);
@@ -64,8 +56,6 @@ void drawHomeScreen() {
 
   strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
   tft.setCursor(170, 165);
   tft.print(buffer);
 
@@ -76,22 +66,22 @@ void drawHomeScreen() {
 
   sprintf_P(buffer, PSTR("%d"), fActivaSP.dias);
   tft.setCursor(10, 200);
-  tft.setTextColor(WHITE);
-  tft.setTextSize(2);
   tft.print(F("Dias   "));
+
   tft.setCursor(125 - (strlen(buffer) * 12), 200);
   tft.setTextColor(ORANGE);
   tft.print(buffer);
 
   tft.setCursor(130, 200);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
   tft.print(F("Riego "));
+
   sprintf_P(buffer, PSTR("%d"), fActivaSP.riegoh);
   strcat_P(buffer, PSTR("%"));
   tft.setCursor(130, 220);
   tft.setTextColor(ORANGE);
   tft.print(buffer);  // riego sp h
+
   sprintf_P(buffer, PSTR("%d"), fActivaSP.riegol);
   strcat_P(buffer, PSTR("%"));
   tft.setCursor(130, 240);
@@ -100,13 +90,14 @@ void drawHomeScreen() {
 
   tft.setCursor(10, 260);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
   tft.print(F("T."));
+
   sprintf_P(buffer, PSTR("%d"), fActivaSP.templ);
   strcat_P(buffer, PSTR("C"));
   tft.setCursor(77 - (strlen(buffer) * 12), 260);
   tft.setTextColor(BLUE);
   tft.print(buffer);  // temp sp l
+
   sprintf_P(buffer, PSTR("%d"), fActivaSP.temph);
   strcat_P(buffer, PSTR("C"));
   tft.setCursor(125 - (strlen(buffer) * 12), 260);
@@ -115,13 +106,14 @@ void drawHomeScreen() {
 
   tft.setCursor(130, 260);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
   tft.print(F("Humedad "));
+
   sprintf_P(buffer, PSTR("%d"), fActivaSP.humh);
   strcat_P(buffer, PSTR("%"));
   tft.setCursor(130, 280);
   tft.setTextColor(ORANGE);
   tft.print(buffer);  // humedad sp h
+
   sprintf_P(buffer, PSTR("%d"), fActivaSP.huml);
   strcat_P(buffer, PSTR("%"));
   tft.setCursor(130, 300);
@@ -131,35 +123,23 @@ void drawHomeScreen() {
   sprintf_P(buffer, PSTR("%d"), dias);
   tft.setCursor(125 - (strlen(buffer) * 18), 230);
   tft.setTextSize(3);
-  tft.setTextColor(WHITE, BLACK);
+  tft.setTextColor(WHITE);
   tft.print(buffer);
 
   sprintf_P(buffer, PSTR("%d"), hTierra);
   strcat_P(buffer, PSTR("%"));
   tft.setCursor(230 - (strlen(buffer) * 18), 230);
-  tft.setTextSize(3);
-  tft.setTextColor(WHITE, BLACK);
   tft.print(buffer);
 
   dtostrf(t, 4, 1, buffer);
   strcat_P(buffer, PSTR("C"));
   tft.setCursor(125 - (strlen(buffer) * 18), 285);
-  tft.setTextSize(3);
-  tft.setTextColor(WHITE, BLACK);
   tft.print(buffer);  // temperatura leida por el DHT
 
   sprintf_P(buffer, PSTR("%d"), (uint8_t)h);
   strcat_P(buffer, PSTR("%"));
   tft.setCursor(230 - (strlen(buffer) * 18), 285);
-  tft.setTextSize(3);
-  tft.setTextColor(WHITE, BLACK);
   tft.print(buffer);  // humedad leida por el DHT
-
-  // tft.drawFastHLine(0, 190, 240, WHITE);
-
-  // tft.drawFastHLine(20, 255, 200, WHITE);
-
-  // tft.drawFastVLine(120, 210, 90, WHITE);
 
   Serial.println(F("home dibujada"));
 }
@@ -167,8 +147,8 @@ void drawHomeScreen() {
 void drawMenuScreen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
-  tft.setCursor(120 - (((6 * 2 * 4) - 3) / 2), 10);
+  tft.setTextSize(TITLE_TEXTSIZE);
+  tft.setCursor(120 - (((CHARACTER_WIDTH * TITLE_TEXTSIZE * 4) - 3) / 2), 10);
   tft.print(F("Menu"));
 
   // boton 1 - zona 1
@@ -191,10 +171,10 @@ void drawMenuScreen() {
 void drawAjustesScreen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
+  tft.setTextSize(TITLE_TEXTSIZE);
   int16_t x1, y1;
   uint16_t w, h;
-  tft.getTextBounds(F("Ajustes"), 120, 17, &x1, &y1, &w, &h);
+  tft.getTextBounds(F("Ajustes"), 120, 18, &x1, &y1, &w, &h);
   tft.setCursor(x1 - w / 2, y1 - h / 2);
   tft.print(F("Ajustes"));
 
@@ -229,8 +209,8 @@ void drawAjustesScreen() {
 void drawAlarmasScreen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
-  tft.setCursor(120 - (((6 * 2 * 7) - 3) / 2), 10);
+  tft.setTextSize(TITLE_TEXTSIZE);
+  tft.setCursor(120 - (((CHARACTER_WIDTH * TITLE_TEXTSIZE * 7) - 3) / 2), 10);
   tft.print(F("Alarmas"));
 
   alarmasButtons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
@@ -243,8 +223,8 @@ void drawAlarmasScreen() {
 void drawRelojScreen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
-  tft.setCursor(120 - (((6 * 2 * 5) - 3) / 2), 10);
+  tft.setTextSize(TITLE_TEXTSIZE);
+  tft.setCursor(120 - (((CHARACTER_WIDTH * TITLE_TEXTSIZE * 5) - 3) / 2), 10);
   tft.print(F("Reloj"));
 
   now = rtc.now();
@@ -305,10 +285,10 @@ void drawRelojScreen() {
 void drawProgramasScreen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
+  tft.setTextSize(TITLE_TEXTSIZE);
   int16_t x1, y1;
   uint16_t w, h;
-  tft.getTextBounds(F("Programas"), 110, 17, &x1, &y1, &w, &h);
+  tft.getTextBounds(F("Programas"), 110, 18, &x1, &y1, &w, &h);
   tft.setCursor(x1 - w / 2, y1 - h / 2);
   tft.print(F("Programas"));
 
@@ -338,10 +318,10 @@ void drawProgramasScreen() {
 void drawPrograma1Screen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
+  tft.setTextSize(TITLE_TEXTSIZE);
   int16_t x1, y1;
   uint16_t w, h;
-  tft.getTextBounds(F("Prog. 1"), 110, 17, &x1, &y1, &w, &h);
+  tft.getTextBounds(F("Prog. 1"), 120, 18, &x1, &y1, &w, &h);
   tft.setCursor(x1 - w / 2, y1 - h / 2);
   tft.print(F("Prog. 1"));
 
@@ -360,18 +340,18 @@ void drawPrograma1Screen() {
   programa1Buttons[4].initButtonUL(&tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
                                    "Confirmar", BUTTON_TEXTSIZE);
 
-  programa1Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                                   "Volver", BUTTON_TEXTSIZE);
+  programa1Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
+                                   WHITE, "Volver", BUTTON_TEXTSIZE);
   programa1Buttons[0].drawButton();
 }
 
 void drawPrograma2Screen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
+  tft.setTextSize(TITLE_TEXTSIZE);
   int16_t x1, y1;
   uint16_t w, h;
-  tft.getTextBounds(F("Prog. 2"), 110, 17, &x1, &y1, &w, &h);
+  tft.getTextBounds(F("Prog. 2"), 120, 18, &x1, &y1, &w, &h);
   tft.setCursor(x1 - w / 2, y1 - h / 2);
   tft.print(F("Prog. 2"));
 
@@ -390,18 +370,18 @@ void drawPrograma2Screen() {
   programa2Buttons[4].initButtonUL(&tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
                                    "Confirmar", BUTTON_TEXTSIZE);
 
-  programa2Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                                   "Volver", BUTTON_TEXTSIZE);
+  programa2Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
+                                   WHITE, "Volver", BUTTON_TEXTSIZE);
   programa2Buttons[0].drawButton();
 }
 
 void drawPrograma3Screen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
+  tft.setTextSize(TITLE_TEXTSIZE);
   int16_t x1, y1;
   uint16_t w, h;
-  tft.getTextBounds(F("Prog. 3"), 110, 17, &x1, &y1, &w, &h);
+  tft.getTextBounds(F("Prog. 3"), 120, 18, &x1, &y1, &w, &h);
   tft.setCursor(x1 - w / 2, y1 - h / 2);
   tft.print(F("Prog. 3"));
 
@@ -420,18 +400,18 @@ void drawPrograma3Screen() {
   programa3Buttons[4].initButtonUL(&tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
                                    "Confirmar", BUTTON_TEXTSIZE);
 
-  programa3Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                                   "Volver", BUTTON_TEXTSIZE);
+  programa3Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
+                                   WHITE, "Volver", BUTTON_TEXTSIZE);
   programa3Buttons[0].drawButton();
 }
 
 void drawPrograma4Screen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
+  tft.setTextSize(TITLE_TEXTSIZE);
   int16_t x1, y1;
   uint16_t w, h;
-  tft.getTextBounds(F("Prog. 4"), 110, 17, &x1, &y1, &w, &h);
+  tft.getTextBounds(F("Prog. 4"), 120, 18, &x1, &y1, &w, &h);
   tft.setCursor(x1 - w / 2, y1 - h / 2);
   tft.print(F("Prog. 4"));
 
@@ -450,22 +430,22 @@ void drawPrograma4Screen() {
   programa4Buttons[4].initButtonUL(&tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
                                    "Confirmar", BUTTON_TEXTSIZE);
 
-  programa4Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
-                                   "Volver", BUTTON_TEXTSIZE);
+  programa4Buttons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
+                                   WHITE, "Volver", BUTTON_TEXTSIZE);
   programa4Buttons[0].drawButton();
 }
 
 void drawResetScreen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
-  tft.setCursor(120 - (((6 * 2 * 5) - 3) / 2), 10);
+  tft.setTextSize(TITLE_TEXTSIZE);
+  tft.setCursor(120 - (((CHARACTER_WIDTH * TITLE_TEXTSIZE * 5) - 3) / 2), 10);
   tft.print(F("Reset"));
 
   tft.setCursor(5, 35);
-  tft.print(F(
-      "\tEsta seguro que\n desea reiniciar el\n dispositivo a la\n "
-      "configuracion de\n fabrica?"));
+  tft.print(
+      F("\tEsta seguro que\n desea reiniciar el\n dispositivo a la\n "
+        "configuracion de\n fabrica?"));
 
   resetButtons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                                "Volver", BUTTON_TEXTSIZE);
@@ -481,8 +461,8 @@ void drawResetScreen() {
 void drawZ1Screen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
-  tft.setCursor(120 - (((6 * 2 * 6) - 3) / 2), 10);
+  tft.setTextSize(TITLE_TEXTSIZE);
+  tft.setCursor(120 - (((CHARACTER_WIDTH * TITLE_TEXTSIZE * 6) - 3) / 2), 10);
   tft.print(F("Zona 1"));
 
   // boton 1 - fase 1
@@ -521,8 +501,8 @@ void drawZ1Screen() {
 void drawZ1F1Screen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
-  tft.setCursor(120 - (((6 * 2 * 6) - 3) / 2), 10);
+  tft.setTextSize(TITLE_TEXTSIZE);
+  tft.setCursor(120 - (((CHARACTER_WIDTH * TITLE_TEXTSIZE * 6) - 3) / 2), 10);
   tft.print(F("Fase 1"));
 
   z1f1Buttons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, BLACK, WHITE, "", 2);
@@ -640,8 +620,8 @@ void drawZ1F1Screen() {
 void drawZ1F2Screen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
-  tft.setCursor(120 - (((6 * 2 * 6) - 3) / 2), 10);
+  tft.setTextSize(TITLE_TEXTSIZE);
+  tft.setCursor(120 - (((CHARACTER_WIDTH * TITLE_TEXTSIZE * 6) - 3) / 2), 10);
   tft.print(F("Fase 2"));
 
   z1f2Buttons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, BLACK, WHITE, "", 2);
@@ -759,8 +739,8 @@ void drawZ1F2Screen() {
 void drawZ1F3Screen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
-  tft.setCursor(120 - (((6 * 2 * 6) - 3) / 2), 10);
+  tft.setTextSize(TITLE_TEXTSIZE);
+  tft.setCursor(120 - (((CHARACTER_WIDTH * TITLE_TEXTSIZE * 6) - 3) / 2), 10);
   tft.print(F("Fase 3"));
 
   z1f3Buttons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, BLACK, WHITE, "", 2);
@@ -878,8 +858,8 @@ void drawZ1F3Screen() {
 void drawZ1F4Screen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
-  tft.setCursor(120 - (((6 * 2 * 6) - 3) / 2), 10);
+  tft.setTextSize(TITLE_TEXTSIZE);
+  tft.setCursor(120 - (((CHARACTER_WIDTH * TITLE_TEXTSIZE * 6) - 3) / 2), 10);
   tft.print(F("Fase 4"));
 
   z1f4Buttons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, BLACK, WHITE, "", 2);
@@ -997,8 +977,8 @@ void drawZ1F4Screen() {
 void drawZ1ControlScreen() {
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
-  tft.setTextSize(2);
-  tft.setCursor(120 - (((6 * 2 * 7) - 3) / 2), 10);
+  tft.setTextSize(TITLE_TEXTSIZE);
+  tft.setCursor(120 - (((CHARACTER_WIDTH * TITLE_TEXTSIZE * 7) - 3) / 2), 10);
   tft.print(F("Control"));
 
   z1ControlButtons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
@@ -1031,13 +1011,13 @@ void drawZ1ControlScreen() {
 
 void drawZ1InicioScreen() {
   tft.fillScreen(BLACK);
-  tft.setTextSize(2);
   tft.setTextColor(WHITE);
-  tft.setCursor(120 - (((6 * 2 * 6) - 3) / 2), 10);
+  tft.setTextSize(TITLE_TEXTSIZE);
+  tft.setCursor(120 - (((CHARACTER_WIDTH * TITLE_TEXTSIZE * 6) - 3) / 2), 10);
   tft.print(F("Inicio"));
 
-  tft.setTextSize(3);
-  tft.setCursor(120 - (((6 * 3 * 5) - 3) / 2),
+  tft.setTextSize(BUTTON_TEXTSIZE);
+  tft.setCursor(120 - (((CHARACTER_WIDTH * BUTTON_TEXTSIZE * 5) - 3) / 2),
                 40 - ((7 * BUTTON_TEXTSIZE) / 2));
   tft.print(F("Fases"));
 
@@ -1100,14 +1080,14 @@ void drawNumericKeyboardScreen(const char* title) {
                                          WHITE, "<", BUTTON_TEXTSIZE);
   numericKeyboardButtons[0].drawButton();
 
-  tft.setTextSize(2);
   tft.setTextColor(WHITE);
-  tft.setCursor(152 - (6 * 2 * strlen(title)) / 2, 20 - (7 * 2) / 2);
+  tft.setTextSize(TITLE_TEXTSIZE);
+  tft.setCursor(152 - (CHARACTER_WIDTH * TITLE_TEXTSIZE * strlen(title)) / 2, 20 - (7 * 2) / 2);
   tft.print(title);
 
   tft.drawRect(5, 40, 230, 40, WHITE);
 
-  tft.setTextSize(3);
+  tft.setTextSize(BUTTON_TEXTSIZE);
   tft.setCursor(15, 60 - ((7 * BUTTON_TEXTSIZE) / 2));
   tft.print(numKBstr);
 
@@ -1171,6 +1151,18 @@ void drawStartupScreen() {
 
   tft.setCursor(120 - (6 * 3 * 10) / 2, 170);
   // tft.getTextBounds(F("GrowOS 0.9"), 120, 170, &x1, &y1, &w, &h);
-  // tft.setCursor(x1, y1);
+  // tft.setCursor(x1 - w / 2, y1 - h / 2);
   tft.print(F("GrowOS 0.9"));
+}
+
+void drawGoodbyeScreen() {
+  tft.fillScreen(BLACK);
+  tft.setTextColor(WHITE);
+  tft.setTextSize(3);
+
+  int16_t x1, y1;
+  uint16_t w, h;
+  tft.getTextBounds(F("^_^"), 120, 160, &x1, &y1, &w, &h);
+  tft.setCursor(x1 - w / 2, y1 - h / 2);
+  tft.print(F("^_^"));
 }

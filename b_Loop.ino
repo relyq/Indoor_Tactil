@@ -4,6 +4,7 @@ void loop() {
   // hTierra = map(analogRead(A8), 0, 1023, 100, 0);
 
   DEBUG();
+
   tsMenu();
 
   // aca manejo el cambio de fases
@@ -83,13 +84,17 @@ void loop() {
       PORTCSTATE &= ~HEATPIN;
     }
 
-    if (h <= fActivaSP.humh) {
+    if (h >= fActivaSP.humh) {
+      PORTCSTATE &= ~VAPPIN;
+      PORTCSTATE |= FANPIN;
+    } else if (h <= fActivaSP.huml) {
+      // PORTCSTATE &= ~FANPIN;
       PORTCSTATE |= VAPPIN;
+    } else if (h <= ((float)fActivaSP.humh + (float)fActivaSP.huml) / 2) {
+      // PORTCSTATE &= ~FANPIN;
     } else if (h >= ((float)fActivaSP.humh + (float)fActivaSP.huml) / 2) {
       PORTCSTATE &= ~VAPPIN;
     }
-
-    // sistema de riego de mi viejo
 
     if (hTierra <= fActivaSP.riegol && (tRiegoEspera + tRiegoBomba) == 0) {
       tRiegoBomba = now.unixtime() + riegoTiempo;
@@ -200,7 +205,7 @@ void loop() {
       strcpy_P(buffer, STR_hhmm);
       now.toString(buffer);
       tft.setTextSize(2);
-      tft.setTextColor(WHITE, BLACK);
+      tft.setTextColor(WHITE);
       tft.setCursor(170, 165);
       tft.print(buffer);
 
@@ -226,7 +231,7 @@ void loop() {
       sprintf_P(buffer, STR_fdecimal, dias);
       tft.setCursor(125 - (strlen(buffer) * 18), 230);
       tft.setTextSize(3);
-      tft.setTextColor(WHITE, BLACK);
+      tft.setTextColor(WHITE);
       tft.print(buffer);
     }
 
@@ -236,12 +241,9 @@ void loop() {
       strcat_P(buffer, STR_percent);
       tft.setCursor(230 - (strlen(buffer) * 18), 230);
       tft.setTextSize(3);
-      tft.setTextColor(WHITE, BLACK);
+      tft.setTextColor(WHITE);
       tft.print(buffer);
       LASTRIEGOSTATE = (PINC & RIEGOPIN);
-
-      Serial.print(F("PIN37 = "));
-      Serial.println(PINC & RIEGOPIN);
 
       if (PINC & RIEGOPIN) {
         tft.fillCircle(180, 144, 10, GREEN);
@@ -256,7 +258,7 @@ void loop() {
       strcat_P(buffer, STR_celsius);
       tft.setCursor(125 - (strlen(buffer) * 18), 285);
       tft.setTextSize(3);
-      tft.setTextColor(WHITE, BLACK);
+      tft.setTextColor(WHITE);
       tft.print(buffer);  // temperatura leida por el DHT
 
       if (PINC & FANPIN && !(PINC & HEATPIN)) {
@@ -274,7 +276,7 @@ void loop() {
       strcat_P(buffer, STR_percent);
       tft.setCursor(230 - (strlen(buffer) * 18), 285);
       tft.setTextSize(3);
-      tft.setTextColor(WHITE, BLACK);
+      tft.setTextColor(WHITE);
       tft.print(buffer);  // humedad leida por el DHT
       if (PINC & VAPPIN) {
         tft.fillCircle(180, 119, 10, GREEN);

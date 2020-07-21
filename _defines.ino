@@ -39,33 +39,16 @@
 #define YELLOW 0xFFE0
 #define WHITE 0xFFFF
 
-/******************* UI details */
-#define BUTTON_X 40
-#define BUTTON_Y 100
-#define BUTTON_W 60
-#define BUTTON_H 30
-#define BUTTON_SPACING_X 20
-#define BUTTON_SPACING_Y 20
+#define CHARACTER_WIDTH 6   // including space 1px
+#define CHARACTER_HEIGHT 7  // not including space 1px
 #define BUTTON_TEXTSIZE 3
-#define BUTTON_TEXTSIZE1 2
+#define TITLE_TEXTSIZE 2
 
-// text box where numbers go
-#define TEXT_X 10
-#define TEXT_Y 10
-#define TEXT_W 220
-#define TEXT_H 50
-#define TEXT_TSIZE 3
-#define TEXT_TCOLOR MAGENTA
-// the data (phone #) we store in the textfield
-#define TEXT_LEN 12
-char textfield[TEXT_LEN + 1] = "";
-uint8_t textfield_i = 0;
-
-#define YP A3  // must be an analog pin, use "An" notation! // LCD CS
-#define XM \
-  A2  // must be an analog pin, use "An" notation! // LCD RS - COMMAND/DATA
-#define YM 9  // can be a digital pin                      // LCD D1
-#define XP 8  // can be a digital pin                      // LCD D0
+// touchscreen
+#define YP A3  // must be an analog pin // LCD CS
+#define XM A2  // must be an analog pin // LCD RS - COMMAND/DATA
+#define YM 9   // can be a digital pin  // LCD D1
+#define XP 8   // can be a digital pin  // LCD D0
 
 // puntos maximos y minimos de la pantalla tactil, contando el espacio
 // no-dibujable
@@ -73,10 +56,6 @@ uint8_t textfield_i = 0;
 #define TS_MINY 75
 #define TS_MAXX 900
 #define TS_MAXY 950
-
-// We have a status line for like, is FONA working
-#define STATUS_X 10
-#define STATUS_Y 65
 
 #define MINPRESSURE 10
 #define MAXPRESSURE 1000
@@ -199,11 +178,12 @@ uint8_t numKBstrLength;    // el largo que puede tener la variable - para evitar
 uint8_t numKBbufferSize;
 uint16_t numKBeeprom;
 
-unsigned long time;      // acá guardo el tiempo que lleva el programa
-                         // MILLIS() LLEGA A SU OVERFLOW A LOS 50 DIAS
-unsigned long lastTime;  // acá guardo el tiempo de programa en el que
+uint32_t time;      // acá guardo el tiempo que lleva el programa
+                    // MILLIS() LLEGA A SU OVERFLOW A LOS 50 DIAS
+uint32_t lastTime;  // acá guardo el tiempo de programa en el que
 // llamé al dht por última vez
 
+// esto es completamente innecesario
 const char STR_DDMMYY[] PROGMEM = "DD/MM/YY";
 const char STR_hhmm[] PROGMEM = "hh:mm";
 const char STR_fdecimal[] PROGMEM = "%d";

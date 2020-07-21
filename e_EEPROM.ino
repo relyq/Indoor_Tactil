@@ -148,7 +148,9 @@ void eeprom_hardReset() {
   EEPROM.put(470, p4.f4);
   Serial.println(F("P4F4 settings restored"));
 
-  delay(100);
+  drawGoodbyeScreen();
+
+  delay(250);
 
   wdt_enable(WDTO_15MS);
   while (1)

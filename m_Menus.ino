@@ -210,7 +210,8 @@ void Z1F4Screen() {
 }
 
 // pantalla de teclado numerico para modificar valores
-// str          string a modificar
+// quiza puedo hacer una sola funcion con void*
+// intptr       ptr al int a modificar
 // eepromdir    dirección eeprom en la que guardar el valor
 // bufferSize   el tamaño maximo de la string a modificar
 // title        titulo de la pantalla de teclado
