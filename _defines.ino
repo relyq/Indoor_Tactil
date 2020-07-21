@@ -211,8 +211,8 @@ const char STR_f02decimal[] PROGMEM = "%02d";
 const char STR_percent[] PROGMEM = "%";
 const char STR_celsius[] PROGMEM = "C";
 const char STR_hum[] PROGMEM = "H";
-const char daysOfTheWeek[7][10] PROGMEM = {
-    "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"};
+const char daysOfTheWeek[7][10] = {"Domingo", "Lunes",   "Martes", "Miercoles",
+                                   "Jueves",  "Viernes", "Sabado"};
 
 DateTime now;
 uint32_t prevTime;
@@ -233,6 +233,10 @@ uint32_t tRiegoBomba;    // cuando deberia terminar la rafaga - unix timestamp
 uint32_t tRiegoEspera;   // cuando deberia terminar la espera - unix timestamp
 uint8_t LASTRIEGOSTATE;  // ultimo estado de riego - esto es para actualizar la
                          // luz del dashboard
+
+uint16_t framecount = 0;  // cuenta cada pasada por loop()
+const uint8_t refreshFrames PROGMEM =
+    100;  // cantidad de frames que tarda el dashboard en refrescar
 
 /*
   screens:
@@ -269,18 +273,19 @@ uint8_t LASTRIEGOSTATE;  // ultimo estado de riego - esto es para actualizar la
     20 = hora de fin de iluminacion
     21 = minuto de inicio/fin de iluminacion
     22 = ciclo/s
-  [30-49] = configuracion fase 1
-    30-31 = dias
-    32 = horas luz
-    33 = temp low
-    34 = temp high
-    35 = riego low
-    36 = riego high
-    37 = hum low
-    38 = hum high
-  [50-69] = configuracion fase 2
-  [70-89] = configuracion fase 3
-  [90-109] = configuracion fase 4
+  [30-109] = programa activo
+    [30-49] = configuracion fase 1
+      30-31 = dias
+      32 = horas luz
+      33 = temp low
+      34 = temp high
+      35 = riego low
+      36 = riego high
+      37 = hum low
+      38 = hum high
+    [50-69] = configuracion fase 2
+    [70-89] = configuracion fase 3
+    [90-109] = configuracion fase 4
   [110-189] = programa 1
     [110-129] = programa 1 fase 1
     [130-149] = programa 1 fase 2

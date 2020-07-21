@@ -611,7 +611,7 @@ void tsMenu() {
           for (uint8_t i = 10; i < 29; i++) {
             EEPROM.update(i, 0x00);
           }
-          EEPROM.update(22, 0x01);
+          EEPROM.update(22, ciclos);
           Serial.println(F("eeprom 10 to 29 cleared to 0x00\n"));
           eeprom_read();
           z1fActiva = 0;

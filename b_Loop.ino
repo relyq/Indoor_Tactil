@@ -175,7 +175,11 @@ void loop() {
   }
 
   // aca actualizo el dashboard
-  if (currentScreen == 0) {
+  if (currentScreen == 0 && !(framecount % refreshFrames)) {
+    // Serial.print(F("Framecount: "));
+    // Serial.print(framecount);
+    // Serial.print(F("\n"));
+
     if (now.second() == 0 && now.unixtime() - prevTime >= 2) {
       prevTime = now.unixtime();
       Serial.print(now.year(), DEC);
@@ -289,6 +293,8 @@ void loop() {
     tft.setCursor(170, 10);
     tft.print(buffer);
   }
+
+  framecount++;
 }
 
 void readTH() {

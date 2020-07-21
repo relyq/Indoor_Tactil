@@ -23,31 +23,28 @@ si cargas un programa no cambia la configuracion activa hasta que cambie la fase
 
 hay que probar si funciona la carga y guardado de todos los programas
 
-debería hacer que el programa cambie las variables cuando se toca el boton que cambia la variable, en vez de ver si la variable cambió
+debería hacer que el programa cambie las variables cuando se toca el boton que cambia la variable, en vez de ver si la variable cambió - ver: if (z1fActivalast != z1fActiva), switch (z1fActiva)
 
 todo:
 
-contar loops para dibujar la pantalla; actualizar la dashboard cada 21 loops
-
-se deberia poder cambiar la configuracion de fase mientras esta corriendo el programa
-
-no se puede cambiar la configuracion de fases porque cuando se
-cambia la variable no se guarda en eeprom
-
 configurar los programas default
 
-prender el ventilador por x tiempo por la noche para refrigerar y cambiar el aire
+prender el ventilador por 'x' tiempo por la noche para refrigerar y cambiar el aire
 
-una prueba de rutina para asegurar que la eeprom sigue funcionando (crc?)
-
-tengo que cambiar todos los centrados de texto por getTextBounds()
-
-eliminar botones (los que no tienen texto o no lo tienen centrado) y variables que no necesite para ahorrar memoria
-
-cuando termine no puedo olvidarme de eliminar todos los settext etc que no necesito volver a repetir
+una prueba de rutina para asegurar que la eeprom sigue funcionando (investigar: crc?)
 
 sistema de alarmas para detectar si no esta funcionando un i/o
 
 pantallas de errores (rtc/dht/etc desconectado, rtc perdio el tiempo)
 
 sistema de fertilizante
+
+
+
+LIMPIEZA:
+
+tengo que cambiar todos los centrados de texto por getTextBounds() // como se usaba esto lol
+
+eliminar botones (los que no tienen texto o no lo tienen centrado) y variables que no necesite para ahorrar memoria
+
+cuando termine no puedo olvidarme de eliminar todos los settext etc que no necesito volver a repetir
