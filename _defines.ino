@@ -147,20 +147,27 @@ float t;  // temperatura
 float h;  // humedad
 float lastT = 255;
 float lastH = 255;
-
 uint8_t hTierra;  // humedad tierra
 uint8_t lasthTierra = 255;
 
 // ins
 const uint8_t SENSORTIERRAPIN PROGMEM = A8;
-const uint8_t DHTPIN PROGMEM = 0x40;  // pin 31 en el port c
+const uint8_t DHTPIN PROGMEM = 0x40;  // pin 31 // PC6
 
 // outs
-const uint8_t HEATPIN PROGMEM = 0x20;   // pin 32 en el port c
-const uint8_t FANPIN PROGMEM = 0x10;    // pin 33 en el port c
-const uint8_t LUZPIN PROGMEM = 0x08;    // pin 34 en el port c
-const uint8_t VAPPIN PROGMEM = 0x04;    // pin 35 en el port c
-const uint8_t RIEGOPIN PROGMEM = 0x01;  // pin 37 en el port c
+const uint8_t HEATPIN PROGMEM = 0x20;   // pin 32 // PC5
+const uint8_t FANPIN PROGMEM = 0x10;    // pin 33 // PC4
+const uint8_t LUZPIN PROGMEM = 0x08;    // pin 34 // PC3
+const uint8_t VAPPIN PROGMEM = 0x04;    // pin 35 // PC2
+const uint8_t RIEGOPIN PROGMEM = 0x01;  // pin 37 // PC0
+
+/*
+// supongo que asi se hace convencionalmente
+
+#define HEATPIN PC5
+#define FANPIN PC4
+// etc...
+*/
 
 uint8_t PORTCSTATE;
 
@@ -174,14 +181,12 @@ uint16_t* numKBvarptr16b;  // si es de 2 byte. probablemente hay una mejor forma
                            // de hacerlo.
 uint8_t numKBstrLength;    // el largo que puede tener la variable - para evitar
                            // overflow
-// no estoy seguro para que sirve esto pero es necesario
-uint8_t numKBbufferSize;
-uint16_t numKBeeprom;
+uint8_t numKBbufferSize;   // digitos maximos de la variable
+uint16_t numKBeeprom;      // dir eeprom donde guardar
 
 uint32_t time;      // acá guardo el tiempo que lleva el programa
-                    // MILLIS() LLEGA A SU OVERFLOW A LOS 50 DIAS
 uint32_t lastTime;  // acá guardo el tiempo de programa en el que
-// llamé al dht por última vez
+                    // llamé al dht por última vez
 
 // esto es completamente innecesario
 const char STR_DDMMYY[] PROGMEM = "DD/MM/YY";
@@ -191,6 +196,7 @@ const char STR_f02decimal[] PROGMEM = "%02d";
 const char STR_percent[] PROGMEM = "%";
 const char STR_celsius[] PROGMEM = "C";
 const char STR_hum[] PROGMEM = "H";
+
 const char daysOfTheWeek[7][10] = {"Domingo", "Lunes",   "Martes", "Miercoles",
                                    "Jueves",  "Viernes", "Sabado"};
 

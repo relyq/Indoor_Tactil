@@ -11,6 +11,18 @@ void setup() {
   DDRC |= (HEATPIN | FANPIN | LUZPIN | VAPPIN | RIEGOPIN) & ~(DHTPIN);
   PORTC |= DHTPIN;
 
+  /*
+  // supongo que asi se hace convencionalmente
+
+  DDRC |= (1 << PC5); // DDRC |= (1 << HEATPIN); // etc...
+  DDRC |= (1 << PC4);
+  DDRC |= (1 << PC3);
+  DDRC |= (1 << PC2);
+  DDRC |= (1 << PC0);
+
+  PORTC |= (1 << PC6);
+  */
+
   pinMode(SENSORTIERRAPIN, INPUT);
 
   MCUSR = 0;  // clear out any flags of prior resets.

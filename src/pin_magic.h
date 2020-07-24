@@ -54,17 +54,18 @@
 // This code burns 7 cycles (437.5 nS) doing nothing; the RJMPs are
 // equivalent to two NOPs each, final NOP burns the 7th cycle, and the
 // last line is a radioactive mutant emoticon.
-#define DELAY7                                                                 \
-  asm volatile("rjmp .+0"                                                      \
-               "\n\t"                                                          \
-               "rjmp .+0"                                                      \
-               "\n\t"                                                          \
-               "rjmp .+0"                                                      \
-               "\n\t"                                                          \
-               "nop"                                                           \
-               "\n" ::);
+#define DELAY7   \
+  asm volatile(  \
+      "rjmp .+0" \
+      "\n\t"     \
+      "rjmp .+0" \
+      "\n\t"     \
+      "rjmp .+0" \
+      "\n\t"     \
+      "nop"      \
+      "\n" ::);
 
-#if defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__) ||               \
+#if defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__) || \
     defined(__AVR_ATmega328__) || defined(__AVR_ATmega8__)
 
 // Arduino Uno, Duemilanove, etc.
@@ -85,22 +86,22 @@
 // These are macros for I/O operations...
 
 // Write 8-bit value to LCD data lines
-#define write8inline(d)                                                        \
-  {                                                                            \
-    PORTD = (PORTD & B00101111) | ((d)&B11010000);                             \
-    PORTB = (PORTB & B11010000) | ((d)&B00101111);                             \
-    WR_STROBE;                                                                 \
-  } // STROBEs are defined later
+#define write8inline(d)                            \
+  {                                                \
+    PORTD = (PORTD & B00101111) | ((d)&B11010000); \
+    PORTB = (PORTB & B11010000) | ((d)&B00101111); \
+    WR_STROBE;                                     \
+  }  // STROBEs are defined later
 
 // Read 8-bit value from LCD data lines.  The signle argument
 // is a destination variable; this isn't a function and doesn't
 // return a value in the conventional sense.
-#define read8inline(result)                                                    \
-  {                                                                            \
-    RD_ACTIVE;                                                                 \
-    DELAY7;                                                                    \
-    result = (PIND & B11010000) | (PINB & B00101111);                          \
-    RD_IDLE;                                                                   \
+#define read8inline(result)                           \
+  {                                                   \
+    RD_ACTIVE;                                        \
+    DELAY7;                                           \
+    result = (PIND & B11010000) | (PINB & B00101111); \
+    RD_IDLE;                                          \
   }
 
 // These set the PORT directions as required before the write and read
@@ -109,41 +110,41 @@
 // input before a read, and restore them back to the write state before
 // returning.  This avoids having to set it for output inside every
 // drawing method.  The default state has them initialized for writes.
-#define setWriteDirInline()                                                    \
-  {                                                                            \
-    DDRD |= B11010000;                                                         \
-    DDRB |= B00101111;                                                         \
+#define setWriteDirInline() \
+  {                         \
+    DDRD |= B11010000;      \
+    DDRB |= B00101111;      \
   }
-#define setReadDirInline()                                                     \
-  {                                                                            \
-    DDRD &= ~B11010000;                                                        \
-    DDRB &= ~B00101111;                                                        \
+#define setReadDirInline() \
+  {                        \
+    DDRD &= ~B11010000;    \
+    DDRB &= ~B00101111;    \
   }
 
-#else // Uno w/Breakout board
+#else  // Uno w/Breakout board
 
-#define write8inline(d)                                                        \
-  {                                                                            \
-    PORTD = (PORTD & B00000011) | ((d)&B11111100);                             \
-    PORTB = (PORTB & B11111100) | ((d)&B00000011);                             \
-    WR_STROBE;                                                                 \
+#define write8inline(d)                            \
+  {                                                \
+    PORTD = (PORTD & B00000011) | ((d)&B11111100); \
+    PORTB = (PORTB & B11111100) | ((d)&B00000011); \
+    WR_STROBE;                                     \
   }
-#define read8inline(result)                                                    \
-  {                                                                            \
-    RD_ACTIVE;                                                                 \
-    DELAY7;                                                                    \
-    result = (PIND & B11111100) | (PINB & B00000011);                          \
-    RD_IDLE;                                                                   \
+#define read8inline(result)                           \
+  {                                                   \
+    RD_ACTIVE;                                        \
+    DELAY7;                                           \
+    result = (PIND & B11111100) | (PINB & B00000011); \
+    RD_IDLE;                                          \
   }
-#define setWriteDirInline()                                                    \
-  {                                                                            \
-    DDRD |= B11111100;                                                         \
-    DDRB |= B00000011;                                                         \
+#define setWriteDirInline() \
+  {                         \
+    DDRD |= B11111100;      \
+    DDRB |= B00000011;      \
   }
-#define setReadDirInline()                                                     \
-  {                                                                            \
-    DDRD &= ~B11111100;                                                        \
-    DDRB &= ~B00000011;                                                        \
+#define setReadDirInline() \
+  {                        \
+    DDRD &= ~B11111100;    \
+    DDRB &= ~B00000011;    \
   }
 
 #endif
@@ -156,7 +157,7 @@
 // why only certain cases are inlined for each board.
 #define write8 write8inline
 
-#elif defined(__AVR_ATmega1281__) || defined(__AVR_ATmega2561__) ||            \
+#elif defined(__AVR_ATmega1281__) || defined(__AVR_ATmega2561__) || \
     defined(__AVR_ATmega2560__) || defined(__AVR_ATmega1280__)
 
 // Arduino Mega, ADK, etc.
@@ -180,42 +181,63 @@
     PORTG = (PORTG & B11011111) | (((d)&B00010000) << 1);                      \
     WR_STROBE;                                                                 \
   }
-#define read8inline(result)                                                    \
-  {                                                                            \
-    RD_ACTIVE;                                                                 \
-    DELAY7;                                                                    \
-    result = ((PINH & B00011000) << 3) | ((PINB & B10110000) >> 2) |           \
-             ((PING & B00100000) >> 1) | ((PINH & B01100000) >> 5);            \
-    RD_IDLE;                                                                   \
+#define read8inline(result)                                          \
+  {                                                                  \
+    RD_ACTIVE;                                                       \
+    DELAY7;                                                          \
+    result = ((PINH & B00011000) << 3) | ((PINB & B10110000) >> 2) | \
+             ((PING & B00100000) >> 1) | ((PINH & B01100000) >> 5);  \
+    RD_IDLE;                                                         \
   }
-#define setWriteDirInline()                                                    \
-  {                                                                            \
-    DDRH |= B01111000;                                                         \
-    DDRB |= B10110000;                                                         \
-    DDRG |= B00100000;                                                         \
+#define setWriteDirInline() \
+  {                         \
+    DDRH |= B01111000;      \
+    DDRB |= B10110000;      \
+    DDRG |= B00100000;      \
   }
-#define setReadDirInline()                                                     \
-  {                                                                            \
-    DDRH &= ~B01111000;                                                        \
-    DDRB &= ~B10110000;                                                        \
-    DDRG &= ~B00100000;                                                        \
+#define setReadDirInline() \
+  {                        \
+    DDRH &= ~B01111000;    \
+    DDRB &= ~B10110000;    \
+    DDRG &= ~B00100000;    \
   }
 
-#else // Mega w/Breakout board
-		#define write8inline(d) {\
-		PORTH &= ~(0x78);\
-  	PORTH |= ((d&0xC0) >> 3) | ((d&0x3) << 5);\
-  	PORTE &= ~(0x38);\
-  	PORTE |= ((d & 0xC) << 2) | ((d & 0x20) >> 2);\
-  	PORTG &= ~(0x20);\
-  	PORTG |= (d & 0x10) << 1; \
-    WR_STROBE; }
-  #define read8inline(result) { RD_ACTIVE; DELAY7; result = (PINH & 0x60) >> 5;result |= (PINH & 0x18) << 3;result |= (PINE & 0x8) << 2;result |= (PINE & 0x30) >> 2;result |= (PING & 0x20) >> 1;RD_IDLE;}
-  #define setWriteDirInline() { DDRH |= 0x78;DDRE |= 0x38;DDRG |= 0x20; }
-  #define setReadDirInline()  { DDRH &= ~0x78;DDRE &= ~0x38;DDRG &= ~(0x20); }
+#else  // Mega w/Breakout board
+#define write8inline(d)                            \
+  {                                                \
+    PORTH &= ~(0x78);                              \
+    PORTH |= ((d & 0xC0) >> 3) | ((d & 0x3) << 5); \
+    PORTE &= ~(0x38);                              \
+    PORTE |= ((d & 0xC) << 2) | ((d & 0x20) >> 2); \
+    PORTG &= ~(0x20);                              \
+    PORTG |= (d & 0x10) << 1;                      \
+    WR_STROBE;                                     \
+  }
+#define read8inline(result)       \
+  {                               \
+    RD_ACTIVE;                    \
+    DELAY7;                       \
+    result = (PINH & 0x60) >> 5;  \
+    result |= (PINH & 0x18) << 3; \
+    result |= (PINE & 0x8) << 2;  \
+    result |= (PINE & 0x30) >> 2; \
+    result |= (PING & 0x20) >> 1; \
+    RD_IDLE;                      \
+  }
+#define setWriteDirInline() \
+  {                         \
+    DDRH |= 0x78;           \
+    DDRE |= 0x38;           \
+    DDRG |= 0x20;           \
+  }
+#define setReadDirInline() \
+  {                        \
+    DDRH &= ~0x78;         \
+    DDRE &= ~0x38;         \
+    DDRG &= ~(0x20);       \
+  }
 
-
- #endif
+#endif
 
 // All of the functions are inlined on the Arduino Mega.  When using the
 // breakout board, the macro versions aren't appreciably larger than the
@@ -246,39 +268,39 @@
 #define CD_MASK B00100000
 #define CS_MASK B00010000
 
-#define write8inline(d)                                                        \
-  {                                                                            \
-    PORTE = (PORTE & B10111111) | (((d)&B10000000) >> 1);                      \
-    PORTD = (PORTD & B01101111) | (((d)&B01000000) << 1) | ((d)&B00010000);    \
-    PORTC = (PORTC & B01111111) | (((d)&B00100000) << 2);                      \
-    PORTB = (PORTB & B00001111) | (((d)&B00001111) << 4);                      \
-    WR_STROBE;                                                                 \
+#define write8inline(d)                                                     \
+  {                                                                         \
+    PORTE = (PORTE & B10111111) | (((d)&B10000000) >> 1);                   \
+    PORTD = (PORTD & B01101111) | (((d)&B01000000) << 1) | ((d)&B00010000); \
+    PORTC = (PORTC & B01111111) | (((d)&B00100000) << 2);                   \
+    PORTB = (PORTB & B00001111) | (((d)&B00001111) << 4);                   \
+    WR_STROBE;                                                              \
   }
-#define read8inline(result)                                                    \
-  {                                                                            \
-    RD_ACTIVE;                                                                 \
-    DELAY7;                                                                    \
-    result = ((PINE & B01000000) << 1) | ((PIND & B10000000) >> 1) |           \
-             ((PINC & B10000000) >> 2) | ((PINB & B11110000) >> 4) |           \
-             (PIND & B00010000);                                               \
-    RD_IDLE;                                                                   \
+#define read8inline(result)                                          \
+  {                                                                  \
+    RD_ACTIVE;                                                       \
+    DELAY7;                                                          \
+    result = ((PINE & B01000000) << 1) | ((PIND & B10000000) >> 1) | \
+             ((PINC & B10000000) >> 2) | ((PINB & B11110000) >> 4) | \
+             (PIND & B00010000);                                     \
+    RD_IDLE;                                                         \
   }
-#define setWriteDirInline()                                                    \
-  {                                                                            \
-    DDRE |= B01000000;                                                         \
-    DDRD |= B10010000;                                                         \
-    DDRC |= B10000000;                                                         \
-    DDRB |= B11110000;                                                         \
+#define setWriteDirInline() \
+  {                         \
+    DDRE |= B01000000;      \
+    DDRD |= B10010000;      \
+    DDRC |= B10000000;      \
+    DDRB |= B11110000;      \
   }
-#define setReadDirInline()                                                     \
-  {                                                                            \
-    DDRE &= ~B01000000;                                                        \
-    DDRD &= ~B10010000;                                                        \
-    DDRC &= ~B10000000;                                                        \
-    DDRB &= ~B11110000;                                                        \
+#define setReadDirInline() \
+  {                        \
+    DDRE &= ~B01000000;    \
+    DDRD &= ~B10010000;    \
+    DDRC &= ~B10000000;    \
+    DDRB &= ~B11110000;    \
   }
 
-#else // Leonardo w/Breakout board
+#else  // Leonardo w/Breakout board
 
 #define write8inline(d)                                                        \
   {                                                                            \
@@ -290,29 +312,29 @@
     PORTB = (PORTB & B11001111) | (((d)&B00000011) << 4);                      \
     WR_STROBE;                                                                 \
   }
-#define read8inline(result)                                                    \
-  {                                                                            \
-    RD_ACTIVE;                                                                 \
-    DELAY7;                                                                    \
-    result = (((PINE & B01000000) | (PIND & B00000010)) << 1) |                \
-             (((PINC & B01000000) | (PIND & B10000000)) >> 1) |                \
-             ((PIND & B00000001) << 3) | ((PINB & B00110000) >> 4) |           \
-             (PIND & B00010000);                                               \
-    RD_IDLE;                                                                   \
+#define read8inline(result)                                          \
+  {                                                                  \
+    RD_ACTIVE;                                                       \
+    DELAY7;                                                          \
+    result = (((PINE & B01000000) | (PIND & B00000010)) << 1) |      \
+             (((PINC & B01000000) | (PIND & B10000000)) >> 1) |      \
+             ((PIND & B00000001) << 3) | ((PINB & B00110000) >> 4) | \
+             (PIND & B00010000);                                     \
+    RD_IDLE;                                                         \
   }
-#define setWriteDirInline()                                                    \
-  {                                                                            \
-    DDRE |= B01000000;                                                         \
-    DDRD |= B10010011;                                                         \
-    DDRC |= B01000000;                                                         \
-    DDRB |= B00110000;                                                         \
+#define setWriteDirInline() \
+  {                         \
+    DDRE |= B01000000;      \
+    DDRD |= B10010011;      \
+    DDRC |= B01000000;      \
+    DDRB |= B00110000;      \
   }
-#define setReadDirInline()                                                     \
-  {                                                                            \
-    DDRE &= ~B01000000;                                                        \
-    DDRD &= ~B10010011;                                                        \
-    DDRC &= ~B01000000;                                                        \
-    DDRB &= ~B00110000;                                                        \
+#define setReadDirInline() \
+  {                        \
+    DDRE &= ~B01000000;    \
+    DDRD &= ~B10010011;    \
+    DDRC &= ~B01000000;    \
+    DDRB &= ~B00110000;    \
   }
 
 #endif
@@ -338,68 +360,67 @@
 #define CD_MASK 0x00800000
 #define CS_MASK 0x00400000
 
-#define write8inline(d)                                                        \
-  {                                                                            \
-    PIO_Set(PIOD, (((d)&0x08) << (7 - 3)));                                    \
-    PIO_Clear(PIOD, (((~d) & 0x08) << (7 - 3)));                               \
-    PIO_Set(PIOC, (((d)&0x01) << (22 - 0)) | (((d)&0x02) << (21 - 1)) |        \
-                      (((d)&0x04) << (29 - 2)) | (((d)&0x10) << (26 - 4)) |    \
-                      (((d)&0x40) << (24 - 6)) | (((d)&0x80) << (23 - 7)));    \
-    PIO_Clear(PIOC,                                                            \
-              (((~d) & 0x01) << (22 - 0)) | (((~d) & 0x02) << (21 - 1)) |      \
-                  (((~d) & 0x04) << (29 - 2)) | (((~d) & 0x10) << (26 - 4)) |  \
-                  (((~d) & 0x40) << (24 - 6)) | (((~d) & 0x80) << (23 - 7)));  \
-    PIO_Set(PIOB, (((d)&0x20) << (27 - 5)));                                   \
-    PIO_Clear(PIOB, (((~d) & 0x20) << (27 - 5)));                              \
-    WR_STROBE;                                                                 \
+#define write8inline(d)                                                       \
+  {                                                                           \
+    PIO_Set(PIOD, (((d)&0x08) << (7 - 3)));                                   \
+    PIO_Clear(PIOD, (((~d) & 0x08) << (7 - 3)));                              \
+    PIO_Set(PIOC, (((d)&0x01) << (22 - 0)) | (((d)&0x02) << (21 - 1)) |       \
+                      (((d)&0x04) << (29 - 2)) | (((d)&0x10) << (26 - 4)) |   \
+                      (((d)&0x40) << (24 - 6)) | (((d)&0x80) << (23 - 7)));   \
+    PIO_Clear(PIOC,                                                           \
+              (((~d) & 0x01) << (22 - 0)) | (((~d) & 0x02) << (21 - 1)) |     \
+                  (((~d) & 0x04) << (29 - 2)) | (((~d) & 0x10) << (26 - 4)) | \
+                  (((~d) & 0x40) << (24 - 6)) | (((~d) & 0x80) << (23 - 7))); \
+    PIO_Set(PIOB, (((d)&0x20) << (27 - 5)));                                  \
+    PIO_Clear(PIOB, (((~d) & 0x20) << (27 - 5)));                             \
+    WR_STROBE;                                                                \
   }
 
-#define read8inline(result)                                                    \
-  {                                                                            \
-    \
-   RD_ACTIVE;                                                                  \
-    delayMicroseconds(1);                                                      \
-    result = (((PIOC->PIO_PDSR & (1 << 23)) >> (23 - 7)) |                     \
-              ((PIOC->PIO_PDSR & (1 << 24)) >> (24 - 6)) |                     \
-              ((PIOB->PIO_PDSR & (1 << 27)) >> (27 - 5)) |                     \
-              ((PIOC->PIO_PDSR & (1 << 26)) >> (26 - 4)) |                     \
-              ((PIOD->PIO_PDSR & (1 << 7)) >> (7 - 3)) |                       \
-              ((PIOC->PIO_PDSR & (1 << 29)) >> (29 - 2)) |                     \
-              ((PIOC->PIO_PDSR & (1 << 21)) >> (21 - 1)) |                     \
-              ((PIOC->PIO_PDSR & (1 << 22)) >> (22 - 0)));                     \
-    RD_IDLE;                                                                   \
+#define read8inline(result)                                \
+  {                                                        \
+    RD_ACTIVE;                                             \
+    delayMicroseconds(1);                                  \
+    result = (((PIOC->PIO_PDSR & (1 << 23)) >> (23 - 7)) | \
+              ((PIOC->PIO_PDSR & (1 << 24)) >> (24 - 6)) | \
+              ((PIOB->PIO_PDSR & (1 << 27)) >> (27 - 5)) | \
+              ((PIOC->PIO_PDSR & (1 << 26)) >> (26 - 4)) | \
+              ((PIOD->PIO_PDSR & (1 << 7)) >> (7 - 3)) |   \
+              ((PIOC->PIO_PDSR & (1 << 29)) >> (29 - 2)) | \
+              ((PIOC->PIO_PDSR & (1 << 21)) >> (21 - 1)) | \
+              ((PIOC->PIO_PDSR & (1 << 22)) >> (22 - 0))); \
+    RD_IDLE;                                               \
   }
 
-#define setWriteDirInline()                                                    \
-  {                                                                            \
-    PIOD->PIO_MDDR |= 0x00000080; /*PIOD->PIO_SODR =  0x00000080;*/            \
-    PIOD->PIO_OER |= 0x00000080;                                               \
-    PIOD->PIO_PER |= 0x00000080;                                               \
-    PIOC->PIO_MDDR |= 0x25E00000; /*PIOC->PIO_SODR =  0x25E00000;*/            \
-    PIOC->PIO_OER |= 0x25E00000;                                               \
-    PIOC->PIO_PER |= 0x25E00000;                                               \
-    PIOB->PIO_MDDR |= 0x08000000; /*PIOB->PIO_SODR =  0x08000000;*/            \
-    PIOB->PIO_OER |= 0x08000000;                                               \
-    PIOB->PIO_PER |= 0x08000000;                                               \
+#define setWriteDirInline()                                         \
+  {                                                                 \
+    PIOD->PIO_MDDR |= 0x00000080; /*PIOD->PIO_SODR =  0x00000080;*/ \
+    PIOD->PIO_OER |= 0x00000080;                                    \
+    PIOD->PIO_PER |= 0x00000080;                                    \
+    PIOC->PIO_MDDR |= 0x25E00000; /*PIOC->PIO_SODR =  0x25E00000;*/ \
+    PIOC->PIO_OER |= 0x25E00000;                                    \
+    PIOC->PIO_PER |= 0x25E00000;                                    \
+    PIOB->PIO_MDDR |= 0x08000000; /*PIOB->PIO_SODR =  0x08000000;*/ \
+    PIOB->PIO_OER |= 0x08000000;                                    \
+    PIOB->PIO_PER |= 0x08000000;                                    \
   }
 
-#define setReadDirInline()                                                     \
-  {                                                                            \
-    pmc_enable_periph_clk(ID_PIOD);                                            \
-    pmc_enable_periph_clk(ID_PIOC);                                            \
-    pmc_enable_periph_clk(ID_PIOB);                                            \
-    PIOD->PIO_PUDR |= 0x00000080;                                              \
-    PIOD->PIO_IFDR |= 0x00000080;                                              \
-    PIOD->PIO_ODR |= 0x00000080;                                               \
-    PIOD->PIO_PER |= 0x00000080;                                               \
-    PIOC->PIO_PUDR |= 0x25E00000;                                              \
-    PIOC->PIO_IFDR |= 0x25E00000;                                              \
-    PIOC->PIO_ODR |= 0x25E00000;                                               \
-    PIOC->PIO_PER |= 0x25E00000;                                               \
-    PIOB->PIO_PUDR |= 0x08000000;                                              \
-    PIOB->PIO_IFDR |= 0x08000000;                                              \
-    PIOB->PIO_ODR |= 0x08000000;                                               \
-    PIOB->PIO_PER |= 0x08000000;                                               \
+#define setReadDirInline()          \
+  {                                 \
+    pmc_enable_periph_clk(ID_PIOD); \
+    pmc_enable_periph_clk(ID_PIOC); \
+    pmc_enable_periph_clk(ID_PIOB); \
+    PIOD->PIO_PUDR |= 0x00000080;   \
+    PIOD->PIO_IFDR |= 0x00000080;   \
+    PIOD->PIO_ODR |= 0x00000080;    \
+    PIOD->PIO_PER |= 0x00000080;    \
+    PIOC->PIO_PUDR |= 0x25E00000;   \
+    PIOC->PIO_IFDR |= 0x25E00000;   \
+    PIOC->PIO_ODR |= 0x25E00000;    \
+    PIOC->PIO_PER |= 0x25E00000;    \
+    PIOB->PIO_PUDR |= 0x08000000;   \
+    PIOB->PIO_IFDR |= 0x08000000;   \
+    PIOB->PIO_ODR |= 0x08000000;    \
+    PIOB->PIO_PER |= 0x08000000;    \
   }
 
 // Control signals are ACTIVE LOW (idle is HIGH)
@@ -414,48 +435,48 @@
 #define CS_ACTIVE CS_PORT->PIO_CODR |= CS_MASK
 #define CS_IDLE CS_PORT->PIO_SODR |= CS_MASK
 
-#else // Due w/Breakout board
+#else  // Due w/Breakout board
 
-#define write8inline(d)                                                        \
-  {                                                                            \
-    PIO_Set(PIOC, (((d)&0xFF) << 1));                                          \
-    PIO_Clear(PIOC, (((~d) & 0xFF) << 1));                                     \
-    WR_STROBE;                                                                 \
+#define write8inline(d)                    \
+  {                                        \
+    PIO_Set(PIOC, (((d)&0xFF) << 1));      \
+    PIO_Clear(PIOC, (((~d) & 0xFF) << 1)); \
+    WR_STROBE;                             \
   }
 
-#define read8inline(result)                                                    \
-  {                                                                            \
-    RD_ACTIVE;                                                                 \
-    delayMicroseconds(1);                                                      \
-    result = ((PIOC->PIO_PDSR & 0x1FE) >> 1);                                  \
-    RD_IDLE;                                                                   \
+#define read8inline(result)                   \
+  {                                           \
+    RD_ACTIVE;                                \
+    delayMicroseconds(1);                     \
+    result = ((PIOC->PIO_PDSR & 0x1FE) >> 1); \
+    RD_IDLE;                                  \
   }
 
-#define setWriteDirInline()                                                    \
-  {                                                                            \
-    PIOC->PIO_MDDR |= 0x000001FE; /*PIOC->PIO_SODR |=  0x000001FE;*/           \
-    PIOC->PIO_OER |= 0x000001FE;                                               \
-    PIOC->PIO_PER |= 0x000001FE;                                               \
+#define setWriteDirInline()                                          \
+  {                                                                  \
+    PIOC->PIO_MDDR |= 0x000001FE; /*PIOC->PIO_SODR |=  0x000001FE;*/ \
+    PIOC->PIO_OER |= 0x000001FE;                                     \
+    PIOC->PIO_PER |= 0x000001FE;                                     \
   }
 
-#define setReadDirInline()                                                     \
-  {                                                                            \
-    pmc_enable_periph_clk(ID_PIOC);                                            \
-    PIOC->PIO_PUDR |= 0x000001FE;                                              \
-    PIOC->PIO_IFDR |= 0x000001FE;                                              \
-    PIOC->PIO_ODR |= 0x000001FE;                                               \
-    PIOC->PIO_PER |= 0x000001FE;                                               \
+#define setReadDirInline()          \
+  {                                 \
+    pmc_enable_periph_clk(ID_PIOC); \
+    PIOC->PIO_PUDR |= 0x000001FE;   \
+    PIOC->PIO_IFDR |= 0x000001FE;   \
+    PIOC->PIO_ODR |= 0x000001FE;    \
+    PIOC->PIO_PER |= 0x000001FE;    \
   }
 
 // When using the TFT breakout board, control pins are configurable.
-#define RD_ACTIVE rdPort->PIO_CODR |= rdPinSet  // PIO_Clear(rdPort, rdPinSet)
-#define RD_IDLE rdPort->PIO_SODR |= rdPinSet    // PIO_Set(rdPort, rdPinSet)
-#define WR_ACTIVE wrPort->PIO_CODR |= wrPinSet  // PIO_Clear(wrPort, wrPinSet)
-#define WR_IDLE wrPort->PIO_SODR |= wrPinSet    // PIO_Set(wrPort, wrPinSet)
-#define CD_COMMAND cdPort->PIO_CODR |= cdPinSet // PIO_Clear(cdPort, cdPinSet)
-#define CD_DATA cdPort->PIO_SODR |= cdPinSet    // PIO_Set(cdPort, cdPinSet)
-#define CS_ACTIVE csPort->PIO_CODR |= csPinSet  // PIO_Clear(csPort, csPinSet)
-#define CS_IDLE csPort->PIO_SODR |= csPinSet    // PIO_Set(csPort, csPinSet)
+#define RD_ACTIVE rdPort->PIO_CODR |= rdPinSet   // PIO_Clear(rdPort, rdPinSet)
+#define RD_IDLE rdPort->PIO_SODR |= rdPinSet     // PIO_Set(rdPort, rdPinSet)
+#define WR_ACTIVE wrPort->PIO_CODR |= wrPinSet   // PIO_Clear(wrPort, wrPinSet)
+#define WR_IDLE wrPort->PIO_SODR |= wrPinSet     // PIO_Set(wrPort, wrPinSet)
+#define CD_COMMAND cdPort->PIO_CODR |= cdPinSet  // PIO_Clear(cdPort, cdPinSet)
+#define CD_DATA cdPort->PIO_SODR |= cdPinSet     // PIO_Set(cdPort, cdPinSet)
+#define CS_ACTIVE csPort->PIO_CODR |= csPinSet   // PIO_Clear(csPort, csPinSet)
+#define CS_IDLE csPort->PIO_SODR |= csPinSet     // PIO_Set(csPort, csPinSet)
 
 #endif
 
@@ -482,7 +503,7 @@
 #define CS_ACTIVE CS_PORT &= ~CS_MASK
 #define CS_IDLE CS_PORT |= CS_MASK
 
-#else // Breakout board
+#else  // Breakout board
 
 // When using the TFT breakout board, control pins are configurable.
 #define RD_ACTIVE *rdPort &= rdPinUnset
@@ -498,53 +519,53 @@
 #endif
 
 // Data write strobe, ~2 instructions and always inline
-#define WR_STROBE                                                              \
-  {                                                                            \
-    WR_ACTIVE;                                                                 \
-    WR_IDLE;                                                                   \
+#define WR_STROBE \
+  {               \
+    WR_ACTIVE;    \
+    WR_IDLE;      \
   }
 
 // These higher-level operations are usually functionalized,
 // except on Mega where's there's gobs and gobs of program space.
 
 // Set value of TFT register: 8-bit address, 8-bit value
-#define writeRegister8inline(a, d)                                             \
-  {                                                                            \
-    CD_COMMAND;                                                                \
-    write8(a);                                                                 \
-    CD_DATA;                                                                   \
-    write8(d);                                                                 \
+#define writeRegister8inline(a, d) \
+  {                                \
+    CD_COMMAND;                    \
+    write8(a);                     \
+    CD_DATA;                       \
+    write8(d);                     \
   }
 
 // Set value of TFT register: 16-bit address, 16-bit value
 // See notes at top about macro expansion, hence hi & lo temp vars
-#define writeRegister16inline(a, d)                                            \
-  {                                                                            \
-    uint8_t hi, lo;                                                            \
-    hi = (a) >> 8;                                                             \
-    lo = (a);                                                                  \
-    CD_COMMAND;                                                                \
-    write8(hi);                                                                \
-    write8(lo);                                                                \
-    hi = (d) >> 8;                                                             \
-    lo = (d);                                                                  \
-    CD_DATA;                                                                   \
-    write8(hi);                                                                \
-    write8(lo);                                                                \
+#define writeRegister16inline(a, d) \
+  {                                 \
+    uint8_t hi, lo;                 \
+    hi = (a) >> 8;                  \
+    lo = (a);                       \
+    CD_COMMAND;                     \
+    write8(hi);                     \
+    write8(lo);                     \
+    hi = (d) >> 8;                  \
+    lo = (d);                       \
+    CD_DATA;                        \
+    write8(hi);                     \
+    write8(lo);                     \
   }
 
 // Set value of 2 TFT registers: Two 8-bit addresses (hi & lo), 16-bit value
-#define writeRegisterPairInline(aH, aL, d)                                     \
-  {                                                                            \
-    uint8_t hi = (d) >> 8, lo = (d);                                           \
-    CD_COMMAND;                                                                \
-    write8(aH);                                                                \
-    CD_DATA;                                                                   \
-    write8(hi);                                                                \
-    CD_COMMAND;                                                                \
-    write8(aL);                                                                \
-    CD_DATA;                                                                   \
-    write8(lo);                                                                \
+#define writeRegisterPairInline(aH, aL, d) \
+  {                                        \
+    uint8_t hi = (d) >> 8, lo = (d);       \
+    CD_COMMAND;                            \
+    write8(aH);                            \
+    CD_DATA;                               \
+    write8(hi);                            \
+    CD_COMMAND;                            \
+    write8(aL);                            \
+    CD_DATA;                               \
+    write8(lo);                            \
   }
 
-#endif // _pin_magic_
+#endif  // _pin_magic_

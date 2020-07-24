@@ -213,7 +213,7 @@ void Z1F4Screen() {
 // quiza puedo hacer una sola funcion con void*
 // intptr       ptr al int a modificar
 // eepromdir    dirección eeprom en la que guardar el valor
-// bufferSize   el tamaño maximo de la string a modificar
+// bufferSize   digitos maximos de la string a modificar
 // title        titulo de la pantalla de teclado
 void NumericKeyboardScreen(uint8_t* intptr, uint16_t eepromdir,
                            uint8_t bufferSize, const char* title) {

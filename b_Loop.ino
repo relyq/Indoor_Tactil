@@ -306,15 +306,6 @@ void readTH() {
     lastH = h;
     t = dht.readTemperature();
     h = dht.readHumidity();
-
-    Serial.print(F("Humidity: "));
-    Serial.print(h);
-    Serial.print(F("%  Temperature: "));
-    Serial.print(t);
-    Serial.print(F("°C "));
-    // Serial.print(F("  Heat index: "));
-    // Serial.print(hi);
-    // Serial.println(F("°C "));
     lastTime = millis();
   }
 }

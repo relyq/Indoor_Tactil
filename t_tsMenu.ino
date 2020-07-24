@@ -926,8 +926,7 @@ void tsMenu() {
                          (6 * BUTTON_TEXTSIZE), (7 * BUTTON_TEXTSIZE), BLACK);
             delay(150);
           }
-        } else if (numKBstrLength <
-                   numKBbufferSize) {  // proteccion contra buffer overflow
+        } else if (numKBstrLength < numKBbufferSize) {
           if (numericKeyboardButtons[1].contains(p.x, p.y)) {
             numKBstr[numKBstrLength] = '0';
 
