@@ -487,7 +487,6 @@ void loop() {
     if (hTierra <= fActivaSP.riegol && (tRiegoEspera + tRiegoBomba) == 0) {
       tRiegoBomba = now.unixtime() + riegoTiempo;
       PORTCSTATE |= RIEGOPIN;
-      Serial.println(F("tRiegoBomba sobreescrito"));
     } else if (hTierra >= fActivaSP.riegoh) {
       tRiegoEspera = 0;
       tRiegoBomba = 0;
@@ -510,20 +509,8 @@ void loop() {
       }
     }
 
-    // Serial.print("PINC = 0x");
-    // Serial.println(PINC, HEX);
-    // Serial.print("PORTCSTATE = 0x");
-    // Serial.println(PORTCSTATE, HEX);
-
     if (PINC != PORTCSTATE) {
       PORTC = PORTCSTATE;
-      Serial.println(F("portc actualizado"));
-      Serial.print(F("tRiegoEspera = "));
-      Serial.println(tRiegoEspera);
-      Serial.print(F("tRiegoBomba = "));
-      Serial.println(tRiegoBomba);
-      Serial.print(F("PIN37 = "));
-      Serial.println(PINC & RIEGOPIN);
     }
 
     // si la hora esta entre la hora de inicio de luz y la hora de fin de luz, y
@@ -605,8 +592,6 @@ void loop() {
 
     if (lastLuz != (PINC & LUZPIN)) {
       lastLuz = (PINC & LUZPIN);
-      Serial.print(F("lastLuz: "));
-      Serial.println(lastLuz);
       if (PINC & LUZPIN) {
         tft.fillCircle(180, 69, 10, GREEN);
       } else {
@@ -763,6 +748,7 @@ void tsMenu() {
   // presionada
   if (p.z > MINPRESSURE) {
     // scale from 0->1023 to tft.width
+    /*
     Serial.print(F("Unmapped p: "));
     Serial.print(F("("));
     Serial.print(p.x);
@@ -771,11 +757,11 @@ void tsMenu() {
     Serial.print(F(", "));
     Serial.print(p.z);
     Serial.print(F(") "));
-
+    */
     p.x = map(p.x, TS_MINX, TS_MAXX, tft.width(), 0);
     p.y = map(p.y, TS_MINY, TS_MAXY - 60, tft.height(), 0);
     // if the screen is being touched show cursor position
-
+    /*
     Serial.print(F("Mapped p: "));
     Serial.print(F("("));
     Serial.print(p.x);
@@ -784,6 +770,7 @@ void tsMenu() {
     Serial.print(F(", "));
     Serial.print(p.z);
     Serial.println(F(") "));
+    */
 
     if (currentScreen != 0 && (p.y < -1)) {
       HomeScreen();
@@ -1362,7 +1349,7 @@ void tsMenu() {
             EEPROM.update(i, 0x00);
           }
           EEPROM.update(22, ciclos);
-          Serial.println(F("eeprom 10 to 29 cleared to 0x00\n"));
+          Serial.println(F("EEPROM 10 to 29 cleared to 0x00\n"));
           eeprom_read();
           z1fActiva = 0;
 
@@ -2165,8 +2152,6 @@ void drawHomeScreen() {
   strcat_P(buffer, PSTR("%"));
   tft.setCursor(230 - (strlen(buffer) * 18), 285);
   tft.print(buffer);  // humedad leida por el DHT
-
-  Serial.println(F("home dibujada"));
 }
 
 void drawMenuScreen() {
@@ -2189,8 +2174,6 @@ void drawMenuScreen() {
   menuButtons[2].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                               "Volver", BUTTON_TEXTSIZE);
   menuButtons[2].drawButton();
-
-  Serial.println(F("menu dibujado"));
 }
 
 void drawAjustesScreen() {
@@ -2227,8 +2210,6 @@ void drawAjustesScreen() {
   ajustesButtons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                                  "Volver", BUTTON_TEXTSIZE);
   ajustesButtons[4].drawButton();
-
-  Serial.println(F("ajustes dibujado"));
 }
 
 void drawAlarmasScreen() {
@@ -2241,8 +2222,6 @@ void drawAlarmasScreen() {
   alarmasButtons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                                  "Volver", BUTTON_TEXTSIZE);
   alarmasButtons[0].drawButton();
-
-  Serial.println(F("alarmas dibujado"));
 }
 
 void drawRelojScreen() {
@@ -2303,8 +2282,6 @@ void drawRelojScreen() {
   relojButtons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                                "Volver", BUTTON_TEXTSIZE);
   relojButtons[0].drawButton();
-
-  Serial.println(F("reloj dibujado"));
 }
 
 void drawProgramasScreen() {
@@ -2336,8 +2313,6 @@ void drawProgramasScreen() {
   programasButtons[0].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
                                    WHITE, "Volver", BUTTON_TEXTSIZE);
   programasButtons[0].drawButton();
-
-  Serial.println(F("programas dibujado"));
 }
 
 void drawPrograma1Screen() {
@@ -2479,8 +2454,6 @@ void drawResetScreen() {
   resetButtons[1].initButtonUL(&tft, 20, 170, 200, 40, WHITE, RED, WHITE,
                                "Confirmar", BUTTON_TEXTSIZE);
   resetButtons[1].drawButton();
-
-  Serial.println(F("reset dibujado"));
 }
 
 void drawZ1Screen() {
@@ -2519,8 +2492,6 @@ void drawZ1Screen() {
   z1Buttons[5].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                             "Volver", BUTTON_TEXTSIZE);
   z1Buttons[5].drawButton();
-
-  Serial.println(F("z1 dibujado"));
 }
 
 void drawZ1F1Screen() {
@@ -2638,8 +2609,6 @@ void drawZ1F1Screen() {
   z1f1Buttons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                               "Volver", BUTTON_TEXTSIZE);
   z1f1Buttons[4].drawButton();
-
-  Serial.println(F("z1f1 dibujado"));
 }
 
 void drawZ1F2Screen() {
@@ -2757,8 +2726,6 @@ void drawZ1F2Screen() {
   z1f2Buttons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                               "Volver", BUTTON_TEXTSIZE);
   z1f2Buttons[4].drawButton();
-
-  Serial.println(F("z1f2 dibujado"));
 }
 
 void drawZ1F3Screen() {
@@ -2876,8 +2843,6 @@ void drawZ1F3Screen() {
   z1f3Buttons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                               "Volver", BUTTON_TEXTSIZE);
   z1f3Buttons[4].drawButton();
-
-  Serial.println(F("z1f3 dibujado"));
 }
 
 void drawZ1F4Screen() {
@@ -2995,8 +2960,6 @@ void drawZ1F4Screen() {
   z1f4Buttons[4].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                               "Volver", BUTTON_TEXTSIZE);
   z1f4Buttons[4].drawButton();
-
-  Serial.println(F("z1f4 dibujado"));
 }
 
 void drawZ1ControlScreen() {
@@ -3030,8 +2993,6 @@ void drawZ1ControlScreen() {
   z1ControlButtons[2].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
                                    WHITE, "Volver", BUTTON_TEXTSIZE);
   z1ControlButtons[2].drawButton();
-
-  Serial.println(F("z1control dibujado"));
 }
 
 void drawZ1InicioScreen() {
@@ -3089,13 +3050,10 @@ void drawZ1InicioScreen() {
   z1InicioButtons[5].initButtonUL(&tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
                                   WHITE, "Volver", BUTTON_TEXTSIZE);
   z1InicioButtons[5].drawButton();
-
-  Serial.println(F("z1inicio dibujado"));
 }
 
 void drawNumericKeyboardScreen(const char* title) {
   numKBPrevScreen = prevScreen;
-  Serial.println(numKBPrevScreen);
 
   tft.fillScreen(BLACK);
 
