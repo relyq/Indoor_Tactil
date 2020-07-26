@@ -12,11 +12,13 @@ debería hacer que el programa cambie las variables cuando se toca el boton que 
 
 podría hacer que los colores sean personalizables
 
-si se cambia la configuración de una fase o se cambia el programa mientras está el sistema funcionando no cambia la configuración activa. esto pasa porque la configuración activa está en fActivaSP y no lo cambio al cambiar la configuración
-
 
 
 todo:
+
+al cambiar el dia en la configuracion se cambia el dia que aparece en la dashboard, pero como el dia de fin de fase se calcula al cambiar de fase, la fase va a seguir cambiando cuando llegue el dia configurado originalmente
+
+si se cambia la configuración de una fase o se cambia el programa mientras está el sistema funcionando no cambia la configuración activa. esto pasa porque la configuración activa está en fActivaSP y no lo cambio al cambiar la configuración
 
 configurar los programas default
 
