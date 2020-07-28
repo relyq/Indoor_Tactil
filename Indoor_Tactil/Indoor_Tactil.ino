@@ -135,11 +135,11 @@ Fase fActivaSP;
 
 uint32_t diaIniciodefase;  // dia en unixtime del inicio de la fase activa
 uint32_t diaFindefase;     // dia en unixtime del fin de la fase activa
-uint8_t hLuz;              // horas luz de la fase
-uint8_t hInicioLuz;        // hora de inicio de iluminacion
-uint8_t hFinLuz;           // hora de fin de iluminacion
-uint8_t mInicioFinLuz;     // minuto de inicio/fin de iluminacion
-uint8_t ciclos;            // cantidad de ciclos - 0 = ciclo continuo
+// uint8_t hLuz;              // horas luz de la fase
+uint8_t hInicioLuz;     // hora de inicio de iluminacion
+uint8_t hFinLuz;        // hora de fin de iluminacion
+uint8_t mInicioFinLuz;  // minuto de inicio/fin de iluminacion
+uint8_t ciclos;         // cantidad de ciclos - 0 = ciclo continuo
 
 uint16_t dias = 0;           // dias que lleva la fase activa
 uint16_t lastdias = 0xffff;  // esto lo uso para mostrar en la pantalla cuando
@@ -258,9 +258,9 @@ const uint8_t refreshFrames PROGMEM =
   [10-29] = fase activa, info fase activa, ciclos
     10 = fase activa
     11-14 = UNIX timestamp inicio de fase
-    15-18 = UNIX timestamp fin de fase
+    15 = dias de fase
     19 = hora de inicio de iluminacion
-    20 = hora de fin de iluminacion
+    20 = horas de iluminacion
     21 = minuto de inicio/fin de iluminacion
     22 = ciclo/s
   [30-109] = programa activo
@@ -427,13 +427,13 @@ void loop() {
 
     hInicioLuz = now.hour();
     mInicioFinLuz = now.minute();
-    hFinLuz = (now.unixtime() + (hLuz * 60 * 60)) / 3600 % 24;
+    hFinLuz = (now.unixtime() + (fActivaSP.hLuz * 60 * 60)) / 3600 % 24;
 
     EEPROM.update(10, z1fActiva);
     EEPROM.put(11, diaIniciodefase);
-    EEPROM.put(15, diaFindefase);
+    EEPROM.put(15, fActivaSP.dias);
     EEPROM.update(19, hInicioLuz);
-    EEPROM.update(20, hFinLuz);
+    EEPROM.update(20, fActivaSP.hLuz);
     EEPROM.update(21, mInicioFinLuz);
     EEPROM.update(22, ciclos);
 
@@ -443,7 +443,7 @@ void loop() {
     Serial.println(now.unixtime());
 
     Serial.print(F("horas luz: "));
-    Serial.println(hLuz);
+    Serial.println(fActivaSP.hLuz);
     Serial.print(F("hora fin de luz: "));
     Serial.print(hFinLuz);
     Serial.print(F(":"));
@@ -515,6 +515,8 @@ void loop() {
 
     // si la hora esta entre la hora de inicio de luz y la hora de fin de luz, y
     // la luz no esta prendida
+    hFinLuz = (now.unixtime() + (fActivaSP.hLuz * 60 * 60)) / 3600 % 24;
+
     if (now.hour() > hInicioLuz ||
         (now.hour() == hInicioLuz && now.minute() >= mInicioFinLuz)) {
       if (!(PINC & LUZPIN)) {
@@ -533,6 +535,8 @@ void loop() {
         PORTC &= ~LUZPIN;
       }
     }
+
+    diaFindefase = now.unixtime() + fActivaSP.dias * 86400;
 
     if (now.unixtime() >= diaFindefase) {
       if (z1fActiva == 4) {
@@ -1560,6 +1564,7 @@ void tsMenu() {
           z1InicioButtons[1].drawRectButton();
           z1InicioButtons[2].drawRectButton();
           z1InicioButtons[3].drawRectButton();
+          Z1ControlScreen();
         }
         break;
       case 33:
@@ -3158,9 +3163,9 @@ void cargarEstado() {
   z1fActivalast = z1fActiva;
   z1fSeleccionada = z1fActiva;
   EEPROM.get(11, diaIniciodefase);
-  EEPROM.get(15, diaFindefase);
+  EEPROM.get(15, fActivaSP.dias);
   hInicioLuz = EEPROM.read(19);
-  hFinLuz = EEPROM.read(20);
+  fActivaSP.hLuz = EEPROM.read(20);
   mInicioFinLuz = EEPROM.read(21);
   ciclos = EEPROM.read(22);
 }

@@ -12,11 +12,10 @@ debería hacer que el programa cambie las variables cuando se toca el boton que 
 
 podría hacer que los colores sean personalizables
 
+habria que probar si la hora de iluminacion se termina bien al cambiarla y si el dia de fin de fase cambia la fase luego de cambiarlo
 
-
-todo:
-
-al cambiar el dia en la configuracion se cambia el dia que aparece en la dashboard, pero como el dia de fin de fase se calcula al cambiar de fase, la fase va a seguir cambiando cuando llegue el dia configurado originalmente
+<br><br>
+<h1>todo:</h1>
 
 si se cambia la configuración de una fase o se cambia el programa mientras está el sistema funcionando no cambia la configuración activa. esto pasa porque la configuración activa está en fActivaSP y no lo cambio al cambiar la configuración
 
@@ -32,9 +31,8 @@ pantallas de errores (rtc/dht/etc desconectado, rtc perdio el tiempo)
 
 sistema de fertilizante
 
-
-
-LIMPIEZA:
+<br><br>
+<h1>LIMPIEZA:</h1>
 
 eliminar botones (los que no tienen texto o no lo tienen centrado) y variables que no necesite para ahorrar memoria
 
