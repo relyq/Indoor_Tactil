@@ -192,15 +192,6 @@ uint32_t time;      // acá guardo el tiempo que lleva el programa
 uint32_t lastTime;  // acá guardo el tiempo de programa en el que
                     // llamé al dht por última vez
 
-// esto es completamente innecesario
-const char STR_DDMMYY[] PROGMEM = "DD/MM/YY";
-const char STR_hhmm[] PROGMEM = "hh:mm";
-const char STR_fdecimal[] PROGMEM = "%d";
-const char STR_f02decimal[] PROGMEM = "%02d";
-const char STR_percent[] PROGMEM = "%";
-const char STR_celsius[] PROGMEM = "C";
-const char STR_hum[] PROGMEM = "H";
-
 const char daysOfTheWeek[7][10] = {"Domingo", "Lunes",   "Martes", "Miercoles",
                                    "Jueves",  "Viernes", "Sabado"};
 
@@ -581,14 +572,14 @@ void loop() {
       Serial.print(now.second(), DEC);
       Serial.println();
 
-      strcpy_P(buffer, STR_hhmm);
+      strcpy_P(buffer, PSTR("hh:mm"));
       now.toString(buffer);
       tft.setTextSize(2);
       tft.setTextColor(WHITE, BLACK);
       tft.setCursor(170, 165);
       tft.print(buffer);
 
-      strcpy_P(buffer, STR_DDMMYY);
+      strcpy_P(buffer, PSTR("DD/MM/YY"));
       now.toString(buffer);
       tft.setCursor(134, 183);
       tft.print(buffer);
@@ -605,7 +596,7 @@ void loop() {
 
     if (lastdias != dias) {
       lastdias = dias;
-      sprintf_P(buffer, STR_fdecimal, dias);
+      sprintf_P(buffer, PSTR("%d"), dias);
       tft.setCursor(125 - (strlen(buffer) * 18), 230);
       tft.setTextSize(3);
       tft.setTextColor(WHITE, BLACK);
@@ -614,8 +605,8 @@ void loop() {
 
     if (lasthTierra != hTierra || LASTRIEGOSTATE != (PINC & RIEGOPIN)) {
       lasthTierra = hTierra;
-      sprintf_P(buffer, STR_fdecimal, hTierra);
-      strcat_P(buffer, STR_percent);
+      sprintf_P(buffer, PSTR("%d"), hTierra);
+      strcat_P(buffer, PSTR("%"));
       tft.setCursor(230 - (strlen(buffer) * 18), 230);
       tft.setTextSize(3);
       tft.setTextColor(WHITE);
@@ -632,7 +623,7 @@ void loop() {
     if (lastT != t) {
       lastT = t;
       dtostrf(t, 4, 1, buffer);
-      strcat_P(buffer, STR_celsius);
+      strcat_P(buffer, PSTR("C"));
       tft.setCursor(125 - (strlen(buffer) * 18), 285);
       tft.setTextSize(3);
       tft.setTextColor(WHITE, BLACK);
@@ -649,8 +640,8 @@ void loop() {
 
     if (lastH != h) {
       lastH = h;
-      sprintf_P(buffer, STR_fdecimal, (uint8_t)h);
-      strcat_P(buffer, STR_percent);
+      sprintf_P(buffer, PSTR("%d"), (uint8_t)h);
+      strcat_P(buffer, PSTR("%"));
       tft.setCursor(230 - (strlen(buffer) * 18), 285);
       tft.setTextSize(3);
       tft.setTextColor(WHITE, BLACK);
@@ -665,7 +656,7 @@ void loop() {
   // aca actualizo la hora en todas las pantallas excepto dashboard y numpad
   if ((currentScreen != 0 && currentScreen != 255) &&
       (now.second() == 0 && now.unixtime() - prevTime >= 2)) {
-    strcpy_P(buffer, STR_hhmm);
+    strcpy_P(buffer, PSTR("hh:mm"));
     now.toString(buffer);
     tft.setTextSize(2);
     tft.setTextColor(WHITE, BLACK);
@@ -825,7 +816,7 @@ void tsMenu() {
           AjustesScreen();
         } else if ((p.x > 39 && p.x < 83) && (p.y > 24 && p.y < 60)) {
           relojYYYY++;
-          sprintf_P(buffer, STR_fdecimal, relojYYYY);
+          sprintf_P(buffer, PSTR("%d"), relojYYYY);
           tft.setCursor(28, 60);
           tft.print(buffer);
           if (relojMM == 2) {
@@ -833,14 +824,14 @@ void tsMenu() {
                 relojYYYY % 400 == 0) {
               if (relojDD > 29) {
                 relojDD = 29;
-                sprintf_P(buffer, STR_f02decimal, relojDD);
+                sprintf_P(buffer, PSTR("%02d"), relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               }
             } else {
               if (relojDD > 28) {
                 relojDD = 28;
-                sprintf_P(buffer, STR_f02decimal, relojDD);
+                sprintf_P(buffer, PSTR("%02d"), relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               }
@@ -849,19 +840,19 @@ void tsMenu() {
         } else if ((p.x > 39 && p.x < 83) && (p.y > 81 && p.y < 114)) {
           if (relojYYYY > 1970) {
             relojYYYY--;
-            sprintf_P(buffer, STR_fdecimal, relojYYYY);
+            sprintf_P(buffer, PSTR("%d"), relojYYYY);
             tft.setCursor(28, 60);
             tft.print(buffer);
           }
         } else if ((p.x > 114 && p.x < 158) && (p.y > 24 && p.y < 60)) {
           if (relojMM < 12) {
             relojMM++;
-            sprintf_P(buffer, STR_f02decimal, relojMM);
+            sprintf_P(buffer, PSTR("%02d"), relojMM);
             tft.setCursor(28 + 72 + 20, 60);
             tft.print(buffer);
           } else {
             relojMM = 1;
-            sprintf_P(buffer, STR_f02decimal, relojMM);
+            sprintf_P(buffer, PSTR("%02d"), relojMM);
             tft.setCursor(28 + 72 + 20, 60);
             tft.print(buffer);
           }
@@ -872,7 +863,7 @@ void tsMenu() {
             case 11:
               if (relojDD > 30) {
                 relojDD = 30;
-                sprintf_P(buffer, STR_f02decimal, relojDD);
+                sprintf_P(buffer, PSTR("%02d"), relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               }
@@ -882,14 +873,14 @@ void tsMenu() {
                   relojYYYY % 400 == 0) {
                 if (relojDD > 29) {
                   relojDD = 29;
-                  sprintf_P(buffer, STR_f02decimal, relojDD);
+                  sprintf_P(buffer, PSTR("%02d"), relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 }
               } else {
                 if (relojDD > 28) {
                   relojDD = 28;
-                  sprintf_P(buffer, STR_f02decimal, relojDD);
+                  sprintf_P(buffer, PSTR("%02d"), relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 }
@@ -899,12 +890,12 @@ void tsMenu() {
         } else if ((p.x > 114 && p.x < 158) && (p.y > 81 && p.y < 114)) {
           if (relojMM > 1) {
             relojMM--;
-            sprintf_P(buffer, STR_f02decimal, relojMM);
+            sprintf_P(buffer, PSTR("%02d"), relojMM);
             tft.setCursor(28 + 72 + 20, 60);
             tft.print(buffer);
           } else {
             relojMM = 12;
-            sprintf_P(buffer, STR_f02decimal, relojMM);
+            sprintf_P(buffer, PSTR("%02d"), relojMM);
             tft.setCursor(28 + 72 + 20, 60);
             tft.print(buffer);
           }
@@ -915,7 +906,7 @@ void tsMenu() {
             case 11:
               if (relojDD > 30) {
                 relojDD = 30;
-                sprintf_P(buffer, STR_f02decimal, relojDD);
+                sprintf_P(buffer, PSTR("%02d"), relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               }
@@ -925,14 +916,14 @@ void tsMenu() {
                   relojYYYY % 400 == 0) {
                 if (relojDD > 29) {
                   relojDD = 29;
-                  sprintf_P(buffer, STR_f02decimal, relojDD);
+                  sprintf_P(buffer, PSTR("%02d"), relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 }
               } else {
                 if (relojDD > 28) {
                   relojDD = 28;
-                  sprintf_P(buffer, STR_f02decimal, relojDD);
+                  sprintf_P(buffer, PSTR("%02d"), relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 }
@@ -950,12 +941,12 @@ void tsMenu() {
             case 12:
               if (relojDD < 31) {
                 relojDD++;
-                sprintf_P(buffer, STR_f02decimal, relojDD);
+                sprintf_P(buffer, PSTR("%02d"), relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               } else {
                 relojDD = 1;
-                sprintf_P(buffer, STR_f02decimal, relojDD);
+                sprintf_P(buffer, PSTR("%02d"), relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               }
@@ -966,12 +957,12 @@ void tsMenu() {
             case 11:
               if (relojDD < 30) {
                 relojDD++;
-                sprintf_P(buffer, STR_f02decimal, relojDD);
+                sprintf_P(buffer, PSTR("%02d"), relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               } else {
                 relojDD = 1;
-                sprintf_P(buffer, STR_f02decimal, relojDD);
+                sprintf_P(buffer, PSTR("%02d"), relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               }
@@ -981,24 +972,24 @@ void tsMenu() {
                   relojYYYY % 400 == 0) {
                 if (relojDD < 29) {
                   relojDD++;
-                  sprintf_P(buffer, STR_f02decimal, relojDD);
+                  sprintf_P(buffer, PSTR("%02d"), relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 } else {
                   relojDD = 1;
-                  sprintf_P(buffer, STR_f02decimal, relojDD);
+                  sprintf_P(buffer, PSTR("%02d"), relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 }
               } else {
                 if (relojDD < 28) {
                   relojDD++;
-                  sprintf_P(buffer, STR_f02decimal, relojDD);
+                  sprintf_P(buffer, PSTR("%02d"), relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 } else {
                   relojDD = 1;
-                  sprintf_P(buffer, STR_f02decimal, relojDD);
+                  sprintf_P(buffer, PSTR("%02d"), relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 }
@@ -1016,12 +1007,12 @@ void tsMenu() {
             case 12:
               if (relojDD > 1) {
                 relojDD--;
-                sprintf_P(buffer, STR_f02decimal, relojDD);
+                sprintf_P(buffer, PSTR("%02d"), relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               } else {
                 relojDD = 31;
-                sprintf_P(buffer, STR_f02decimal, relojDD);
+                sprintf_P(buffer, PSTR("%02d"), relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               }
@@ -1032,12 +1023,12 @@ void tsMenu() {
             case 11:
               if (relojDD > 1) {
                 relojDD--;
-                sprintf_P(buffer, STR_f02decimal, relojDD);
+                sprintf_P(buffer, PSTR("%02d"), relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               } else {
                 relojDD = 30;
-                sprintf_P(buffer, STR_f02decimal, relojDD);
+                sprintf_P(buffer, PSTR("%02d"), relojDD);
                 tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                 tft.print(buffer);
               }
@@ -1047,24 +1038,24 @@ void tsMenu() {
                   relojYYYY % 400 == 0) {
                 if (relojDD > 1) {
                   relojDD--;
-                  sprintf_P(buffer, STR_f02decimal, relojDD);
+                  sprintf_P(buffer, PSTR("%02d"), relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 } else {
                   relojDD = 29;
-                  sprintf_P(buffer, STR_f02decimal, relojDD);
+                  sprintf_P(buffer, PSTR("%02d"), relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 }
               } else {
                 if (relojDD > 1) {
                   relojDD--;
-                  sprintf_P(buffer, STR_f02decimal, relojDD);
+                  sprintf_P(buffer, PSTR("%02d"), relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 } else {
                   relojDD = 28;
-                  sprintf_P(buffer, STR_f02decimal, relojDD);
+                  sprintf_P(buffer, PSTR("%02d"), relojDD);
                   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
                   tft.print(buffer);
                 }
@@ -1074,48 +1065,48 @@ void tsMenu() {
         } else if ((p.x > 67 && p.x < 111) && (p.y > 116 && p.y < 150)) {
           if (relojhh < 23) {
             relojhh++;
-            sprintf_P(buffer, STR_f02decimal, relojhh);
+            sprintf_P(buffer, PSTR("%02d"), relojhh);
             tft.setCursor(74, 150);
             tft.print(buffer);
           } else {
             relojhh = 0;
-            sprintf_P(buffer, STR_f02decimal, relojhh);
+            sprintf_P(buffer, PSTR("%02d"), relojhh);
             tft.setCursor(74, 150);
             tft.print(buffer);
           }
         } else if ((p.x > 67 && p.x < 111) && (p.y > 171 && p.y < 207)) {
           if (relojhh > 0) {
             relojhh--;
-            sprintf_P(buffer, STR_f02decimal, relojhh);
+            sprintf_P(buffer, PSTR("%02d"), relojhh);
             tft.setCursor(74, 150);
             tft.print(buffer);
           } else {
             relojhh = 23;
-            sprintf_P(buffer, STR_f02decimal, relojhh);
+            sprintf_P(buffer, PSTR("%02d"), relojhh);
             tft.setCursor(74, 150);
             tft.print(buffer);
           }
         } else if ((p.x > 124 && p.x < 168) && (p.y > 116 && p.y < 150)) {
           if (relojmm < 59) {
             relojmm++;
-            sprintf_P(buffer, STR_f02decimal, relojmm);
+            sprintf_P(buffer, PSTR("%02d"), relojmm);
             tft.setCursor(74 + 36 + 20, 150);
             tft.print(buffer);
           } else {
             relojmm = 0;
-            sprintf_P(buffer, STR_f02decimal, relojmm);
+            sprintf_P(buffer, PSTR("%02d"), relojmm);
             tft.setCursor(74 + 36 + 20, 150);
             tft.print(buffer);
           }
         } else if ((p.x > 124 && p.x < 168) && (p.y > 171 && p.y < 207)) {
           if (relojmm > 0) {
             relojmm--;
-            sprintf_P(buffer, STR_f02decimal, relojmm);
+            sprintf_P(buffer, PSTR("%02d"), relojmm);
             tft.setCursor(74 + 36 + 20, 150);
             tft.print(buffer);
           } else {
             relojmm = 59;
-            sprintf_P(buffer, STR_f02decimal, relojmm);
+            sprintf_P(buffer, PSTR("%02d"), relojmm);
             tft.setCursor(74 + 36 + 20, 150);
             tft.print(buffer);
           }
@@ -1781,7 +1772,7 @@ void HomeScreen() {
 void MenuScreen() {
   currentScreen = 1;
   drawMenuScreen();
-  strcpy_P(buffer, STR_hhmm);
+  strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -1793,7 +1784,7 @@ void MenuScreen() {
 void AjustesScreen() {
   currentScreen = 2;
   drawAjustesScreen();
-  strcpy_P(buffer, STR_hhmm);
+  strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -1805,7 +1796,7 @@ void AjustesScreen() {
 void AlarmasScreen() {
   currentScreen = 3;
   drawAlarmasScreen();
-  strcpy_P(buffer, STR_hhmm);
+  strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -1817,7 +1808,7 @@ void AlarmasScreen() {
 void RelojScreen() {
   currentScreen = 4;
   drawRelojScreen();
-  strcpy_P(buffer, STR_hhmm);
+  strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -1829,7 +1820,7 @@ void RelojScreen() {
 void ProgramasScreen() {
   currentScreen = 5;
   drawProgramasScreen();
-  strcpy_P(buffer, STR_hhmm);
+  strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -1841,7 +1832,7 @@ void ProgramasScreen() {
 void Programa1Screen() {
   currentScreen = 7;
   drawPrograma1Screen();
-  strcpy_P(buffer, STR_hhmm);
+  strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -1853,7 +1844,7 @@ void Programa1Screen() {
 void Programa2Screen() {
   currentScreen = 8;
   drawPrograma2Screen();
-  strcpy_P(buffer, STR_hhmm);
+  strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -1865,7 +1856,7 @@ void Programa2Screen() {
 void Programa3Screen() {
   currentScreen = 9;
   drawPrograma3Screen();
-  strcpy_P(buffer, STR_hhmm);
+  strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -1877,7 +1868,7 @@ void Programa3Screen() {
 void Programa4Screen() {
   currentScreen = 10;
   drawPrograma4Screen();
-  strcpy_P(buffer, STR_hhmm);
+  strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -1889,7 +1880,7 @@ void Programa4Screen() {
 void ResetScreen() {
   currentScreen = 6;
   drawResetScreen();
-  strcpy_P(buffer, STR_hhmm);
+  strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -1901,7 +1892,7 @@ void ResetScreen() {
 void Z1Screen() {
   currentScreen = 30;
   drawZ1Screen();
-  strcpy_P(buffer, STR_hhmm);
+  strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -1913,7 +1904,7 @@ void Z1Screen() {
 void Z1ControlScreen() {
   currentScreen = 31;
   drawZ1ControlScreen();
-  strcpy_P(buffer, STR_hhmm);
+  strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -1926,7 +1917,7 @@ void Z1InicioScreen() {
   currentScreen = 32;
   z1fSeleccionada = z1fActiva;
   drawZ1InicioScreen();
-  strcpy_P(buffer, STR_hhmm);
+  strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -1938,7 +1929,7 @@ void Z1InicioScreen() {
 void Z1F1Screen() {
   currentScreen = 33;
   drawZ1F1Screen();
-  strcpy_P(buffer, STR_hhmm);
+  strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -1950,7 +1941,7 @@ void Z1F1Screen() {
 void Z1F2Screen() {
   currentScreen = 34;
   drawZ1F2Screen();
-  strcpy_P(buffer, STR_hhmm);
+  strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -1962,7 +1953,7 @@ void Z1F2Screen() {
 void Z1F3Screen() {
   currentScreen = 35;
   drawZ1F3Screen();
-  strcpy_P(buffer, STR_hhmm);
+  strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -1974,7 +1965,7 @@ void Z1F3Screen() {
 void Z1F4Screen() {
   currentScreen = 36;
   drawZ1F4Screen();
-  strcpy_P(buffer, STR_hhmm);
+  strcpy_P(buffer, PSTR("hh:mm"));
   now.toString(buffer);
   tft.setTextSize(2);
   tft.setTextColor(WHITE, BLACK);
@@ -1992,7 +1983,7 @@ void Z1F4Screen() {
 void NumericKeyboardScreen(uint8_t* intptr, uint16_t eepromdir,
                            uint8_t bufferSize, const char* title) {
   currentScreen = 255;
-  sprintf_P(numKBstr, STR_fdecimal, *intptr);
+  sprintf_P(numKBstr, PSTR("%d"), *intptr);
   numKBvarptr16b = NULL;
   numKBvarptr8b = intptr;
   numKBeeprom = eepromdir;
@@ -2004,7 +1995,7 @@ void NumericKeyboardScreen(uint8_t* intptr, uint16_t eepromdir,
 void NumericKeyboardScreen(uint16_t* intptr, uint16_t eepromdir,
                            uint8_t bufferSize, const char* title) {
   currentScreen = 255;
-  sprintf_P(numKBstr, STR_fdecimal, *intptr);
+  sprintf_P(numKBstr, PSTR("%d"), *intptr);
   numKBvarptr16b = intptr;
   numKBvarptr8b = NULL;
   numKBeeprom = eepromdir;
@@ -2192,22 +2183,22 @@ void drawAjustesScreen() {
   tft.print(F("Ajustes"));
 
   // boton 1 - alarmas
-  ajustesButtons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
-                                 "Alarmas", BUTTON_TEXTSIZE);
-  ajustesButtons[0].drawButton();
+  //ajustesButtons[0].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
+  //                               "Alarmas", BUTTON_TEXTSIZE);
+  //ajustesButtons[0].drawButton();
 
   // boton 2 - reloj
-  ajustesButtons[1].initButtonUL(&tft, 5, 80, 230, 40, WHITE, ORANGE, YELLOW,
+  ajustesButtons[1].initButtonUL(&tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
                                  "Reloj", BUTTON_TEXTSIZE);
   ajustesButtons[1].drawButton();
 
   // boton 3 - programas
-  ajustesButtons[2].initButtonUL(&tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
+  ajustesButtons[2].initButtonUL(&tft, 5, 80, 230, 40, WHITE, ORANGE, YELLOW,
                                  "Programas", BUTTON_TEXTSIZE);
   ajustesButtons[2].drawButton();
 
   // boton 4 - hard reset
-  ajustesButtons[3].initButtonUL(&tft, 5, 170, 230, 40, WHITE, ORANGE, YELLOW,
+  ajustesButtons[3].initButtonUL(&tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
                                  "H. Reset", BUTTON_TEXTSIZE);
   ajustesButtons[3].drawButton();
 
@@ -2254,11 +2245,11 @@ void drawRelojScreen() {
   tft.setCursor(28, 60);
   tft.print(buffer);
 
-  sprintf_P(buffer, STR_f02decimal, relojMM);
+  sprintf_P(buffer, PSTR("%02d"), relojMM);
   tft.setCursor(28 + 72 + 20, 60);
   tft.print(buffer);
 
-  sprintf_P(buffer, STR_f02decimal, relojDD);
+  sprintf_P(buffer, PSTR("%02d"), relojDD);
   tft.setCursor(28 + 72 + 36 + 20 * 2, 60);
   tft.print(buffer);
 
@@ -2269,11 +2260,11 @@ void drawRelojScreen() {
   tft.fillTriangle(89, 124, 77, 140, 101, 140, ORANGE);    // hora++
   tft.fillTriangle(146, 124, 134, 140, 158, 140, ORANGE);  // minuto++
 
-  sprintf_P(buffer, STR_f02decimal, relojhh);
+  sprintf_P(buffer, PSTR("%02d"), relojhh);
   tft.setCursor(74, 150);
   tft.print(buffer);
 
-  sprintf_P(buffer, STR_f02decimal, relojmm);
+  sprintf_P(buffer, PSTR("%02d"), relojmm);
   tft.setCursor(74 + 36 + 20, 150);
   tft.print(buffer);
 
@@ -2563,7 +2554,7 @@ void drawZ1F1Screen() {
   //// hluz
   if (f1.hLuz > 24) f1.hLuz = 24;
   sprintf_P(buffer, PSTR("%d"), f1.hLuz);
-  strcat_P(buffer, STR_hum);
+  strcat_P(buffer, PSTR("H"));
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
@@ -2680,7 +2671,7 @@ void drawZ1F2Screen() {
   //// hluz
   if (f2.hLuz > 24) f2.hLuz = 24;
   sprintf_P(buffer, PSTR("%d"), f2.hLuz);
-  strcat_P(buffer, STR_hum);
+  strcat_P(buffer, PSTR("H"));
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
@@ -2797,7 +2788,7 @@ void drawZ1F3Screen() {
   //// hluz
   if (f3.hLuz > 24) f3.hLuz = 24;
   sprintf_P(buffer, PSTR("%d"), f3.hLuz);
-  strcat_P(buffer, STR_hum);
+  strcat_P(buffer, PSTR("H"));
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
@@ -2914,7 +2905,7 @@ void drawZ1F4Screen() {
   //// hluz
   if (f4.hLuz > 24) f4.hLuz = 24;
   sprintf_P(buffer, PSTR("%d"), f4.hLuz);
-  strcat_P(buffer, STR_hum);
+  strcat_P(buffer, PSTR("H"));
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
