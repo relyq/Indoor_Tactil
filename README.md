@@ -6,8 +6,6 @@ el dia de fin de fase solo se calcula al cambiar de fase, por lo tanto si pasa e
 
 hay que probar si funciona la carga y guardado de todos los programas
 
-debería hacer que el programa cambie las variables cuando se toca el boton que cambia la variable, en vez de ver si la variable cambió - ver: if (z1fActivalast != z1fActiva), switch (z1fActiva)
-
 podría hacer que los colores sean personalizables
 
 habria que probar si la hora de iluminacion se termina bien al cambiarla y si el dia de fin de fase cambia la fase luego de cambiarlo
