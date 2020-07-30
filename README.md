@@ -4,8 +4,6 @@ quizá J1-J4 en mi shield son IM0-IM3 en la breakout board de adafruit? si fuera
 
 el dia de fin de fase solo se calcula al cambiar de fase, por lo tanto si pasa el tiempo mas alla del dia de fin de fase, no continua a la fase que deberia, solo comienza la fase que continuaba a la que termino
 
-al terminar o cambiar de fase deberia llevar al dashboard????
-
 hay que probar si funciona la carga y guardado de todos los programas
 
 debería hacer que el programa cambie las variables cuando se toca el boton que cambia la variable, en vez de ver si la variable cambió - ver: if (z1fActivalast != z1fActiva), switch (z1fActiva)
@@ -14,12 +12,14 @@ podría hacer que los colores sean personalizables
 
 habria que probar si la hora de iluminacion se termina bien al cambiarla y si el dia de fin de fase cambia la fase luego de cambiarlo
 
+ahora la configuración activa cambia ni bien cambias la configuración de la fase que está activa. hay que hacer pruebas relacionadas a esto. hacer esto me hizo escribir cosas que parecen estar de más, en algun momento debería limpìar el código relacionado con esto.
+
 <br><br>
 <h1>todo:</h1>
 
-si se cambia la configuración de una fase o se cambia el programa mientras está el sistema funcionando no cambia la configuración activa. esto pasa porque la configuración activa está en fActivaSP y no lo cambio al cambiar la configuración
-
 configurar los programas default
+
+pantalla de configuración de programas
 
 prender el ventilador por 'x' tiempo por la noche para refrigerar y cambiar el aire
 
