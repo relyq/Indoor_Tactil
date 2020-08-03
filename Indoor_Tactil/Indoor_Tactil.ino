@@ -1,5 +1,5 @@
 /*
-  GROWOS v1.0.0.3
+  GROWOS v1.0.0.4
 */
 
 #include <DHT.h>
@@ -8,11 +8,11 @@
 #include <SPI.h>
 #include <avr/wdt.h>
 
+#include "common_defs.h"
 #include "eepromThings.h"
 #include "src/Adafruit_GFX.h"     // Core graphics library
 #include "src/Adafruit_TFTLCD.h"  // Hardware-specific library
 #include "src/TouchScreen.h"
-#include "common_defs.h"
 
 // The control pins for the LCD can be assigned to any digital or
 // analog pins...but we'll use the analog pins as this allows us to
@@ -452,35 +452,7 @@ void loop() {
     static float lastH = 0xff;
     static uint8_t lasthTierra = 0xff;
 
-    if (now.second() == 0 && now.unixtime() - prevTime >= 2) {
-      prevTime = now.unixtime();
-      Serial.print(now.year(), DEC);
-      Serial.print(F("/"));
-      Serial.print(now.month(), DEC);
-      Serial.print(F("/"));
-      Serial.print(now.day(), DEC);
-      Serial.print(F(" ("));
-      Serial.print(daysOfTheWeek[now.dayOfTheWeek()]);
-      Serial.print(F(") "));
-      Serial.print(now.hour(), DEC);
-      Serial.print(F(":"));
-      Serial.print(now.minute(), DEC);
-      Serial.print(F(":"));
-      Serial.print(now.second(), DEC);
-      Serial.println();
 
-      strcpy_P(buffer, PSTR("hh:mm"));
-      now.toString(buffer);
-      tft.setTextSize(2);
-      tft.setTextColor(WHITE, BLACK);
-      tft.setCursor(170, 165);
-      tft.print(buffer);
-
-      strcpy_P(buffer, PSTR("DD/MM/YY"));
-      now.toString(buffer);
-      tft.setCursor(134, 183);
-      tft.print(buffer);
-    }
 
     if (lastLuz != (PINC & LUZPIN)) {
       lastLuz = (PINC & LUZPIN);
@@ -552,14 +524,27 @@ void loop() {
   }
 
   // aca actualizo la hora en todas las pantallas excepto dashboard y numpad
-  if ((currentScreen != 0 && currentScreen != 255) &&
-      (now.second() == 0 && now.unixtime() - prevTime >= 2)) {
+  if ((currentScreen != 255 &&
+       (now.second() == 0 && now.unixtime() - prevTime >= 2)) ||
+      prevScreen != currentScreen) {
+    prevTime = now.unixtime();
     strcpy_P(buffer, PSTR("hh:mm"));
     now.toString(buffer);
     tft.setTextSize(2);
     tft.setTextColor(WHITE, BLACK);
-    tft.setCursor(170, 10);
-    tft.print(buffer);
+
+    if (currentScreen == 0) {
+      tft.setCursor(170, 165);
+      tft.print(buffer);
+
+      strcpy_P(buffer, PSTR("DD/MM/YY"));
+      now.toString(buffer);
+      tft.setCursor(134, 183);
+      tft.print(buffer);
+    } else {
+      tft.setCursor(170, 10);
+      tft.print(buffer);
+    }
   }
 
   framecount++;
@@ -641,6 +626,8 @@ void tsMenu() {
   // no es necesario refrescar la pantalla si no cambió nada ni está siendo
   // presionada
   if (p.z > MINPRESSURE) {
+    prevScreen = currentScreen;
+
     // scale from 0->1023 to tft.width
     /*
     Serial.print(F("Unmapped p: "));
@@ -654,7 +641,6 @@ void tsMenu() {
     */
     p.x = map(p.x, TS_MINX, TS_MAXX, tft.width(), 0);
     p.y = map(p.y, TS_MINY, TS_MAXY - 60, tft.height(), 0);
-    // if the screen is being touched show cursor position
     /*
     Serial.print(F("Mapped p: "));
     Serial.print(F("("));
@@ -1624,16 +1610,22 @@ void tsMenu() {
         }
         // aca van cada una de las pantallas en las que hay un teclado
         if (numericKeyboardButtons[0].contains(p.x, p.y)) {
-          if (numKBPrevScreen == 33) {
-            Z1F1Screen();
-          } else if (numKBPrevScreen == 34) {
-            Z1F2Screen();
-          } else if (numKBPrevScreen == 35) {
-            Z1F3Screen();
-          } else if (numKBPrevScreen == 36) {
-            Z1F4Screen();
-          } else if (numKBPrevScreen == 31) {
-            Z1ControlScreen();
+          switch (numKBPrevScreen) {
+            case 33:
+              Z1F1Screen();
+              break;
+            case 34:
+              Z1F2Screen();
+              break;
+            case 35:
+              Z1F3Screen();
+              break;
+            case 36:
+              Z1F4Screen();
+              break;
+            case 31:
+              Z1ControlScreen();
+              break;
           }
         } else if (numericKeyboardButtons[13].contains(p.x, p.y)) {
           if (numKBvarptr8b != NULL) {
@@ -1643,16 +1635,22 @@ void tsMenu() {
             *numKBvarptr16b = atoi(numKBstr);
             EEPROM.put(numKBeeprom, atoi(numKBstr));
           }
-          if (numKBPrevScreen == 33) {
-            Z1F1Screen();
-          } else if (numKBPrevScreen == 34) {
-            Z1F2Screen();
-          } else if (numKBPrevScreen == 35) {
-            Z1F3Screen();
-          } else if (numKBPrevScreen == 36) {
-            Z1F4Screen();
-          } else if (numKBPrevScreen == 31) {
-            Z1ControlScreen();
+          switch (numKBPrevScreen) {
+            case 33:
+              Z1F1Screen();
+              break;
+            case 34:
+              Z1F2Screen();
+              break;
+            case 35:
+              Z1F3Screen();
+              break;
+            case 36:
+              Z1F4Screen();
+              break;
+            case 31:
+              Z1ControlScreen();
+              break;
           }
         }
         break;
@@ -1665,212 +1663,92 @@ void tsMenu() {
 void HomeScreen() {
   currentScreen = 0;
   drawHomeScreen();
-  prevScreen = currentScreen;
 }
 
 void MenuScreen() {
   currentScreen = 1;
   drawMenuScreen();
-  strcpy_P(buffer, PSTR("hh:mm"));
-  now.toString(buffer);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(170, 10);
-  tft.print(buffer);
-  prevScreen = currentScreen;
 }
 
 void AjustesScreen() {
   currentScreen = 2;
   drawAjustesScreen();
-  strcpy_P(buffer, PSTR("hh:mm"));
-  now.toString(buffer);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(170, 10);
-  tft.print(buffer);
-  prevScreen = currentScreen;
 }
 
 void AlarmasScreen() {
   currentScreen = 3;
   drawAlarmasScreen();
-  strcpy_P(buffer, PSTR("hh:mm"));
-  now.toString(buffer);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(170, 10);
-  tft.print(buffer);
-  prevScreen = currentScreen;
 }
 
 void RelojScreen() {
   currentScreen = 4;
   drawRelojScreen();
-  strcpy_P(buffer, PSTR("hh:mm"));
-  now.toString(buffer);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(170, 10);
-  tft.print(buffer);
-  prevScreen = currentScreen;
 }
 
 void ProgramasScreen() {
   currentScreen = 5;
   drawProgramasScreen();
-  strcpy_P(buffer, PSTR("hh:mm"));
-  now.toString(buffer);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(170, 10);
-  tft.print(buffer);
-  prevScreen = currentScreen;
 }
 
 void Programa1Screen() {
   currentScreen = 7;
   drawPrograma1Screen();
-  strcpy_P(buffer, PSTR("hh:mm"));
-  now.toString(buffer);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(170, 10);
-  tft.print(buffer);
-  prevScreen = currentScreen;
 }
 
 void Programa2Screen() {
   currentScreen = 8;
   drawPrograma2Screen();
-  strcpy_P(buffer, PSTR("hh:mm"));
-  now.toString(buffer);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(170, 10);
-  tft.print(buffer);
-  prevScreen = currentScreen;
 }
 
 void Programa3Screen() {
   currentScreen = 9;
   drawPrograma3Screen();
-  strcpy_P(buffer, PSTR("hh:mm"));
-  now.toString(buffer);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(170, 10);
-  tft.print(buffer);
-  prevScreen = currentScreen;
 }
 
 void Programa4Screen() {
   currentScreen = 10;
   drawPrograma4Screen();
-  strcpy_P(buffer, PSTR("hh:mm"));
-  now.toString(buffer);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(170, 10);
-  tft.print(buffer);
-  prevScreen = currentScreen;
 }
 
 void ResetScreen() {
   currentScreen = 6;
   drawResetScreen();
-  strcpy_P(buffer, PSTR("hh:mm"));
-  now.toString(buffer);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(170, 10);
-  tft.print(buffer);
-  prevScreen = currentScreen;
 }
 
 void Z1Screen() {
   currentScreen = 30;
   drawZ1Screen();
-  strcpy_P(buffer, PSTR("hh:mm"));
-  now.toString(buffer);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(170, 10);
-  tft.print(buffer);
-  prevScreen = currentScreen;
 }
 
 void Z1ControlScreen() {
   currentScreen = 31;
   drawZ1ControlScreen();
-  strcpy_P(buffer, PSTR("hh:mm"));
-  now.toString(buffer);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(170, 10);
-  tft.print(buffer);
-  prevScreen = currentScreen;
 }
 
 void Z1InicioScreen() {
   currentScreen = 32;
   z1fSeleccionada = z1fActiva;
   drawZ1InicioScreen();
-  strcpy_P(buffer, PSTR("hh:mm"));
-  now.toString(buffer);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(170, 10);
-  tft.print(buffer);
-  prevScreen = currentScreen;
 }
 
 void Z1F1Screen() {
   currentScreen = 33;
   drawZ1F1Screen();
-  strcpy_P(buffer, PSTR("hh:mm"));
-  now.toString(buffer);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(170, 10);
-  tft.print(buffer);
-  prevScreen = currentScreen;
 }
 
 void Z1F2Screen() {
   currentScreen = 34;
   drawZ1F2Screen();
-  strcpy_P(buffer, PSTR("hh:mm"));
-  now.toString(buffer);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(170, 10);
-  tft.print(buffer);
-  prevScreen = currentScreen;
 }
 
 void Z1F3Screen() {
   currentScreen = 35;
   drawZ1F3Screen();
-  strcpy_P(buffer, PSTR("hh:mm"));
-  now.toString(buffer);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(170, 10);
-  tft.print(buffer);
-  prevScreen = currentScreen;
 }
 
 void Z1F4Screen() {
   currentScreen = 36;
   drawZ1F4Screen();
-  strcpy_P(buffer, PSTR("hh:mm"));
-  now.toString(buffer);
-  tft.setTextSize(2);
-  tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(170, 10);
-  tft.print(buffer);
-  prevScreen = currentScreen;
 }
 
 // pantalla de teclado numerico para modificar valores
@@ -1888,7 +1766,6 @@ void NumericKeyboardScreen(uint8_t* intptr, uint16_t eepromdir,
   numKBeeprom = eepromdir;
   numKBbufferSize = bufferSize;
   drawNumericKeyboardScreen(title);
-  prevScreen = currentScreen;
 }
 
 void NumericKeyboardScreen(uint16_t* intptr, uint16_t eepromdir,
@@ -1900,7 +1777,6 @@ void NumericKeyboardScreen(uint16_t* intptr, uint16_t eepromdir,
   numKBeeprom = eepromdir;
   numKBbufferSize = bufferSize;
   drawNumericKeyboardScreen(title);
-  prevScreen = currentScreen;
 }
 
 // SCREENS
