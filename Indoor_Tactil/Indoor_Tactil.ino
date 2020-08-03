@@ -1,5 +1,5 @@
 /*
-  GROWOS v1.0.0
+  GROWOS v1.0.0.1
 */
 
 #include <DHT.h>
@@ -53,6 +53,7 @@
 #define XM A2  // must be an analog pin // LCD RS - COMMAND/DATA
 #define YM 9   // can be a digital pin  // LCD D1
 #define XP 8   // can be a digital pin  // LCD D0
+#define RX 10  // resistance between x+ and x-
 
 // puntos maximos y minimos de la pantalla tactil, contando el espacio
 // no-dibujable
@@ -66,11 +67,7 @@
 
 Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);
 
-// For better pressure precision, we need to know the resistance
-// between X+ and X- Use any multimeter to read it
-// For the one we're using, its 300 ohms across the X plate
-// ???????????????
-TouchScreen ts = TouchScreen(XP, YP, XM, YM, 10);
+TouchScreen ts = TouchScreen(XP, YP, XM, YM, RX);
 
 Adafruit_GFX_Button homeButtons[1];
 Adafruit_GFX_Button menuButtons[3];
@@ -106,8 +103,6 @@ bool z1TerminarConfirmar = 0;
 // 3 - reestablecer
 uint8_t programasConfirmar = 0;
 
-//// valores default
-
 typedef struct Fase {
   uint16_t dias;
   uint8_t hLuz;
@@ -140,18 +135,11 @@ uint8_t hFinLuz;           // hora de fin de iluminacion
 uint8_t mInicioFinLuz;     // minuto de inicio/fin de iluminacion
 uint8_t ciclos;            // cantidad de ciclos - 0 = ciclo continuo
 
-uint16_t dias = 0;           // dias que lleva la fase activa
-uint16_t lastdias = 0xffff;  // esto lo uso para mostrar en la pantalla cuando
-                             // cambia el dia que lleva la fase
+uint16_t dias = 0;  // dias que lleva la fase activa
 
-uint8_t lastLuz = 0;
-
-float t;  // temperatura
-float h;  // humedad
-float lastT = 255;
-float lastH = 255;
+float t;          // temperatura
+float h;          // humedad
 uint8_t hTierra;  // humedad tierra
-uint8_t lasthTierra = 255;
 
 // ins
 const uint8_t SENSORTIERRAPIN PROGMEM = A8;
@@ -172,8 +160,6 @@ const uint8_t RIEGOPIN PROGMEM = 0x01;  // pin 37 // PC0
 // etc...
 */
 
-uint8_t PORTCSTATE;
-
 char numKBstr[10];  // aca guardo la str que estoy modificando en el teclado
                     // numerico
 uint8_t numKBPrevScreen;  // la pantalla a la que tengo que volver
@@ -186,10 +172,6 @@ uint8_t numKBstrLength;    // el largo que puede tener la variable - para evitar
                            // overflow
 uint8_t numKBbufferSize;   // digitos maximos de la variable
 uint16_t numKBeeprom;      // dir eeprom donde guardar
-
-uint32_t time;      // acá guardo el tiempo que lleva el programa
-uint32_t lastTime;  // acá guardo el tiempo de programa en el que
-                    // llamé al dht por última vez
 
 const char daysOfTheWeek[7][10] = {"Domingo", "Lunes",   "Martes", "Miercoles",
                                    "Jueves",  "Viernes", "Sabado"};
@@ -209,14 +191,10 @@ DHT dht(DHTPIN, DHT22);
 RTC_DS3231 rtc;
 
 const uint8_t riegoTiempo PROGMEM = 5;  // tiempo que dura la rafaga de riego
-uint32_t tRiegoBomba;    // cuando deberia terminar la rafaga - unix timestamp
-uint32_t tRiegoEspera;   // cuando deberia terminar la espera - unix timestamp
 uint8_t LASTRIEGOSTATE;  // ultimo estado de riego - esto es para actualizar la
                          // luz del dashboard
 
-uint16_t framecount = 0;  // cuenta cada pasada por loop()
-const uint8_t refreshFrames PROGMEM =
-    100;  // cantidad de frames que tarda el dashboard en refrescar
+const uint8_t refreshFrames PROGMEM = 100;
 
 /*
   screens:
@@ -355,6 +333,8 @@ void setup() {
 // LOOP
 
 void loop() {
+  static uint16_t framecount;
+
   now = rtc.now();
   // readTH();
   // hTierra = map(analogRead(A8), 0, 1023, 100, 0);
@@ -402,9 +382,11 @@ void loop() {
 
   // funcionalidad
   if (z1fActiva != 0) {
-    cargarfActivaSP();
+    uint8_t PORTCSTATE = PINC;
+    static uint32_t tRiegoBomba;
+    static uint32_t tRiegoEspera;
 
-    PORTCSTATE = PINC;
+    cargarfActivaSP();
 
     if (t >= fActivaSP.temph) {
       PORTCSTATE &= ~HEATPIN;
@@ -506,9 +488,11 @@ void loop() {
 
   // aca actualizo el dashboard
   if (currentScreen == 0 && !(framecount % refreshFrames)) {
-    // Serial.print(F("Framecount: "));
-    // Serial.print(framecount);
-    // Serial.print(F("\n"));
+    static uint8_t lastLuz;
+    static uint16_t lastDias = 0xffff;
+    static float lastT = 0xff;
+    static float lastH = 0xff;
+    static uint8_t lasthTierra = 0xff;
 
     if (now.second() == 0 && now.unixtime() - prevTime >= 2) {
       prevTime = now.unixtime();
@@ -549,8 +533,8 @@ void loop() {
       }
     }
 
-    if (lastdias != dias) {
-      lastdias = dias;
+    if (lastDias != dias) {
+      lastDias = dias;
       sprintf_P(buffer, PSTR("%d"), dias);
       tft.setCursor(125 - (strlen(buffer) * 18), 230);
       tft.setTextSize(3);
@@ -608,6 +592,7 @@ void loop() {
       }
     }
   }
+
   // aca actualizo la hora en todas las pantallas excepto dashboard y numpad
   if ((currentScreen != 0 && currentScreen != 255) &&
       (now.second() == 0 && now.unixtime() - prevTime >= 2)) {
@@ -623,10 +608,11 @@ void loop() {
 }
 
 void readTH() {
+  static uint32_t time;
+  static uint32_t lastTime;
+
   time = millis();
   if (time - lastTime >= 2000) {
-    lastT = t;
-    lastH = h;
     t = dht.readTemperature();
     h = dht.readHumidity();
     lastTime = millis();
@@ -3077,30 +3063,31 @@ void drawNumericKeyboardScreen(const char* title) {
 }
 
 void drawStartupScreen() {
+  int16_t x1, y1;
+  uint16_t w, h;
+
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
   tft.setTextSize(3);
 
-  // tft.setCursor(120 - (6 * 3 * 6) / 2, 160 - (7 * 3));
-  int16_t x1, y1;
-  uint16_t w, h;
   tft.getTextBounds(F("Silics"), 120, 139, &x1, &y1, &w, &h);
   tft.setCursor(x1 - w / 2, y1 - h / 2);
   tft.print(F("Silics"));
 
   tft.setCursor(120 - (6 * 3 * 10) / 2, 170);
-  // tft.getTextBounds(F("GrowOS 0.9"), 120, 170, &x1, &y1, &w, &h);
-  // tft.setCursor(x1 - w / 2, y1 - h / 2);
+  // tft.getTextBounds(F("GrowOS 0.9"), 120, 170, &x1, &y1, &w, &h); // no se
+  // por qué no funciona esto tft.setCursor(x1 - w / 2, y1 - h / 2);
   tft.print(F("GrowOS 0.9"));
 }
 
 void drawGoodbyeScreen() {
+  int16_t x1, y1;
+  uint16_t w, h;
+
   tft.fillScreen(BLACK);
   tft.setTextColor(WHITE);
   tft.setTextSize(3);
 
-  int16_t x1, y1;
-  uint16_t w, h;
   tft.getTextBounds(F("^_^"), 120, 160, &x1, &y1, &w, &h);
   tft.setCursor(x1 - w / 2, y1 - h / 2);
   tft.print(F("^_^"));
@@ -3127,6 +3114,14 @@ void cargarFases() {
 
 void eeprom_hardReset() {
   Fase F1DefaultSettings;
+  Fase F2DefaultSettings;
+  Fase F3DefaultSettings;
+  Fase F4DefaultSettings;
+
+  Programa p1;
+  Programa p2;
+  Programa p3;
+  Programa p4;
 
   F1DefaultSettings.dias = 1;
   F1DefaultSettings.hLuz = 1;
@@ -3137,9 +3132,9 @@ void eeprom_hardReset() {
   F1DefaultSettings.huml = 60;
   F1DefaultSettings.humh = 80;
 
-  Fase F2DefaultSettings = F1DefaultSettings;
-  Fase F3DefaultSettings = F1DefaultSettings;
-  Fase F4DefaultSettings = F1DefaultSettings;
+  F2DefaultSettings = F1DefaultSettings;
+  F3DefaultSettings = F1DefaultSettings;
+  F4DefaultSettings = F1DefaultSettings;
 
   F2DefaultSettings.dias = 2;
   F2DefaultSettings.hLuz = 2;
@@ -3148,7 +3143,6 @@ void eeprom_hardReset() {
   F4DefaultSettings.dias = 4;
   F4DefaultSettings.hLuz = 4;
 
-  Programa p1;
   p1.f1.dias = 90;
   p1.f1.hLuz = 16;
   p1.f1.templ = 20;
@@ -3185,9 +3179,9 @@ void eeprom_hardReset() {
   p1.f4.huml = 65;
   p1.f4.humh = 75;
 
-  Programa p2 = p1;
-  Programa p3 = p1;
-  Programa p4 = p1;
+  p2 = p1;
+  p3 = p1;
+  p4 = p1;
 
   p2.f1.dias = 999;
   p2.f2.dias = 999;
