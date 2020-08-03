@@ -1,5 +1,5 @@
 /*
-  GROWOS v1.0.0.2
+  GROWOS v1.0.0.3
 */
 
 #include <DHT.h>
@@ -8,9 +8,11 @@
 #include <SPI.h>
 #include <avr/wdt.h>
 
+#include "eepromThings.h"
 #include "src/Adafruit_GFX.h"     // Core graphics library
 #include "src/Adafruit_TFTLCD.h"  // Hardware-specific library
 #include "src/TouchScreen.h"
+#include "common_defs.h"
 
 // The control pins for the LCD can be assigned to any digital or
 // analog pins...but we'll use the analog pins as this allows us to
@@ -21,32 +23,6 @@
 #define LCD_RD A0  // LCD Read goes to Analog 0
 // optional
 #define LCD_RESET A4  // Can alternately just connect to Arduino's reset pin
-
-// Color Definitions
-#define BLACK 0x0000
-#define LIGHTGREY 0xC618
-#define BLUE 0x001F
-#define RED 0xF800
-#define GREEN 0x07E0
-#define CYAN 0x07FF
-#define MAGENTA 0xF81F
-#define NAVY 0x000F
-#define DARKGREEN 0x03E0
-#define DARKCYAN 0x03EF
-#define MAROON 0x7800
-#define PURPLE 0x780F
-#define OLIVE 0x7BE0
-#define DARKGREY 0x7BEF
-#define ORANGE 0xFD20
-#define GREENYELLOW 0xAFE5
-//#define PINK 0xF81F   // redefinition compiler warning
-#define YELLOW 0xFFE0
-#define WHITE 0xFFFF
-
-#define CHARACTER_WIDTH 6   // including space 1px
-#define CHARACTER_HEIGHT 7  // not including space 1px
-#define BUTTON_TEXTSIZE 3
-#define TITLE_TEXTSIZE 2
 
 // touchscreen
 #define YP A3  // must be an analog pin // LCD CS
@@ -103,47 +79,9 @@ bool z1TerminarConfirmar = 0;
 // 3 - reestablecer
 uint8_t programasConfirmar = 0;
 
-typedef struct Fase {
-  uint16_t dias;
-  uint8_t hLuz;
-  uint8_t templ;
-  uint8_t temph;
-  uint8_t riegol;
-  uint8_t riegoh;
-  uint8_t huml;
-  uint8_t humh;
-} Fase;
+Programa pActivo;
 
-typedef struct Programa {
-  Fase f1;
-  Fase f2;
-  Fase f3;
-  Fase f4;
-} Programa;
-
-Fase f1;
-Fase f2;
-Fase f3;
-Fase f4;
-
-// Fase fActivaSP;
-struct fActivaSP {
-  uint16_t dias;
-  uint8_t hLuz;
-  uint8_t templ;
-  uint8_t temph;
-  uint8_t riegol;
-  uint8_t riegoh;
-  uint8_t huml;
-  uint8_t humh;
-
-  uint32_t diaIniciodefase;  // dia en unixtime del inicio de la fase activa
-  uint32_t diaFindefase;     // dia en unixtime del fin de la fase activa
-  uint8_t hInicioLuz;        // hora de inicio de iluminacion
-  uint8_t hFinLuz;           // hora de fin de iluminacion
-  uint8_t mInicioFinLuz;     // minuto de inicio/fin de iluminacion
-  uint8_t ciclos;            // cantidad de ciclos - 0 = ciclo continuo
-} fActivaSP;
+fActiva fActivaSP;
 
 uint16_t dias;  // dias que lleva la fase activa
 
@@ -332,8 +270,8 @@ void setup() {
   fActivaSP.hInicioLuz = EEPROM.read(19);
   fActivaSP.mInicioFinLuz = EEPROM.read(21);
 
-  cargarPrograma();  // carga la configuracion de las fases desde la EEPROM
-  cargarfActivaSP();
+  eeprom_cargarPrograma(&pActivo);
+  eeprom_cargarfActivaSP(&fActivaSP, z1fActiva);
 
   tft.fillScreen(BLACK);
 
@@ -361,7 +299,7 @@ void loop() {
 
   // aca manejo el cambio de fases
   if (z1fActivalast != z1fActiva) {
-    cargarfActivaSP();
+    eeprom_cargarfActivaSP(&fActivaSP, z1fActiva);
 
     fActivaSP.diaIniciodefase = now.unixtime();
     fActivaSP.diaFindefase = now.unixtime() + fActivaSP.dias * 86400;
@@ -403,7 +341,7 @@ void loop() {
     static uint32_t tRiegoBomba;
     static uint32_t tRiegoEspera;
 
-    cargarfActivaSP();
+    eeprom_cargarfActivaSP(&fActivaSP, z1fActiva);
 
     if (t >= fActivaSP.temph) {
       PORTCSTATE &= ~HEATPIN;
@@ -1121,15 +1059,15 @@ void tsMenu() {
               EEPROM.put(70, p1.f3);
               EEPROM.put(90, p1.f4);
 
-              cargarPrograma();
+              eeprom_cargarPrograma(&pActivo);
 
               Serial.println(F("Programa 1 cargado"));
               break;
             case 2:  // guardar
-              EEPROM.put(110, f1);
-              EEPROM.put(130, f2);
-              EEPROM.put(150, f3);
-              EEPROM.put(170, f4);
+              EEPROM.put(110, pActivo.f1);
+              EEPROM.put(130, pActivo.f2);
+              EEPROM.put(150, pActivo.f3);
+              EEPROM.put(170, pActivo.f4);
 
               Serial.println(F("Programa 1 guardado"));
               break;
@@ -1165,15 +1103,15 @@ void tsMenu() {
               EEPROM.put(70, p2.f3);
               EEPROM.put(90, p2.f4);
 
-              cargarPrograma();
+              eeprom_cargarPrograma(&pActivo);
 
               Serial.println(F("Programa 2 cargado"));
               break;
             case 2:  // guardar
-              EEPROM.put(210, f1);
-              EEPROM.put(230, f2);
-              EEPROM.put(250, f3);
-              EEPROM.put(270, f4);
+              EEPROM.put(210, pActivo.f1);
+              EEPROM.put(230, pActivo.f2);
+              EEPROM.put(250, pActivo.f3);
+              EEPROM.put(270, pActivo.f4);
 
               Serial.println(F("Programa 2 guardado"));
               break;
@@ -1209,15 +1147,15 @@ void tsMenu() {
               EEPROM.put(70, p3.f3);
               EEPROM.put(90, p3.f4);
 
-              cargarPrograma();
+              eeprom_cargarPrograma(&pActivo);
 
               Serial.println(F("Programa 3 cargado"));
               break;
             case 2:  // guardar
-              EEPROM.put(310, f1);
-              EEPROM.put(330, f2);
-              EEPROM.put(350, f3);
-              EEPROM.put(370, f4);
+              EEPROM.put(310, pActivo.f1);
+              EEPROM.put(330, pActivo.f2);
+              EEPROM.put(350, pActivo.f3);
+              EEPROM.put(370, pActivo.f4);
 
               Serial.println(F("Programa 3 guardado"));
               break;
@@ -1253,15 +1191,15 @@ void tsMenu() {
               EEPROM.put(70, p4.f3);
               EEPROM.put(90, p4.f4);
 
-              cargarPrograma();
+              eeprom_cargarPrograma(&pActivo);
 
               Serial.println(F("Programa 4 cargado"));
               break;
             case 2:  // guardar
-              EEPROM.put(410, f1);
-              EEPROM.put(430, f2);
-              EEPROM.put(450, f3);
-              EEPROM.put(470, f4);
+              EEPROM.put(410, pActivo.f1);
+              EEPROM.put(430, pActivo.f2);
+              EEPROM.put(450, pActivo.f3);
+              EEPROM.put(470, pActivo.f4);
 
               Serial.println(F("Programa 4 guardado"));
               break;
@@ -1523,21 +1461,21 @@ void tsMenu() {
         if (z1f1Buttons[4].contains(p.x, p.y)) {
           Z1Screen();
         } else if (z1f1Buttons[0].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f1.dias, 30, 3, "Dias");
+          NumericKeyboardScreen(&pActivo.f1.dias, 30, 3, "Dias");
         } else if (z1f1Buttons[1].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f1.hLuz, 32, 2, "Horas luz");
+          NumericKeyboardScreen(&pActivo.f1.hLuz, 32, 2, "Horas luz");
         } else if (z1f1Buttons[6].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f1.templ, 33, 2, "Temp baja");
+          NumericKeyboardScreen(&pActivo.f1.templ, 33, 2, "Temp baja");
         } else if (z1f1Buttons[5].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f1.temph, 34, 2, "Temp alta");
+          NumericKeyboardScreen(&pActivo.f1.temph, 34, 2, "Temp alta");
         } else if (z1f1Buttons[8].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f1.riegol, 35, 2, "Riego bajo");
+          NumericKeyboardScreen(&pActivo.f1.riegol, 35, 2, "Riego bajo");
         } else if (z1f1Buttons[7].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f1.riegoh, 36, 2, "Riego alto");
+          NumericKeyboardScreen(&pActivo.f1.riegoh, 36, 2, "Riego alto");
         } else if (z1f1Buttons[11].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f1.huml, 37, 2, "Hum baja");
+          NumericKeyboardScreen(&pActivo.f1.huml, 37, 2, "Hum baja");
         } else if (z1f1Buttons[10].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f1.humh, 38, 2, "Hum alta");
+          NumericKeyboardScreen(&pActivo.f1.humh, 38, 2, "Hum alta");
         }
 
         break;
@@ -1545,63 +1483,63 @@ void tsMenu() {
         if (z1f2Buttons[4].contains(p.x, p.y)) {
           Z1Screen();
         } else if (z1f2Buttons[0].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f2.dias, 50, 3, "Dias");
+          NumericKeyboardScreen(&pActivo.f2.dias, 50, 3, "Dias");
         } else if (z1f2Buttons[1].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f2.hLuz, 52, 2, "Horas luz");
+          NumericKeyboardScreen(&pActivo.f2.hLuz, 52, 2, "Horas luz");
         } else if (z1f2Buttons[6].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f2.templ, 53, 2, "Temp baja");
+          NumericKeyboardScreen(&pActivo.f2.templ, 53, 2, "Temp baja");
         } else if (z1f2Buttons[5].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f2.temph, 54, 2, "Temp alta");
+          NumericKeyboardScreen(&pActivo.f2.temph, 54, 2, "Temp alta");
         } else if (z1f2Buttons[8].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f2.riegol, 55, 2, "Riego bajo");
+          NumericKeyboardScreen(&pActivo.f2.riegol, 55, 2, "Riego bajo");
         } else if (z1f2Buttons[7].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f2.riegoh, 56, 2, "Riego alto");
+          NumericKeyboardScreen(&pActivo.f2.riegoh, 56, 2, "Riego alto");
         } else if (z1f2Buttons[11].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f2.huml, 57, 2, "Hum baja");
+          NumericKeyboardScreen(&pActivo.f2.huml, 57, 2, "Hum baja");
         } else if (z1f2Buttons[10].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f2.humh, 58, 2, "Hum alta");
+          NumericKeyboardScreen(&pActivo.f2.humh, 58, 2, "Hum alta");
         }
         break;
       case 35:
         if (z1f3Buttons[4].contains(p.x, p.y)) {
           Z1Screen();
         } else if (z1f3Buttons[0].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f3.dias, 70, 3, "Dias");
+          NumericKeyboardScreen(&pActivo.f3.dias, 70, 3, "Dias");
         } else if (z1f3Buttons[1].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f3.hLuz, 72, 2, "Horas luz");
+          NumericKeyboardScreen(&pActivo.f3.hLuz, 72, 2, "Horas luz");
         } else if (z1f3Buttons[6].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f3.templ, 73, 2, "Temp baja");
+          NumericKeyboardScreen(&pActivo.f3.templ, 73, 2, "Temp baja");
         } else if (z1f3Buttons[5].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f3.temph, 74, 2, "Temp alta");
+          NumericKeyboardScreen(&pActivo.f3.temph, 74, 2, "Temp alta");
         } else if (z1f3Buttons[8].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f3.riegol, 75, 2, "Riego bajo");
+          NumericKeyboardScreen(&pActivo.f3.riegol, 75, 2, "Riego bajo");
         } else if (z1f3Buttons[7].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f3.riegoh, 76, 2, "Riego alto");
+          NumericKeyboardScreen(&pActivo.f3.riegoh, 76, 2, "Riego alto");
         } else if (z1f3Buttons[11].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f3.huml, 77, 2, "Hum baja");
+          NumericKeyboardScreen(&pActivo.f3.huml, 77, 2, "Hum baja");
         } else if (z1f3Buttons[10].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f3.humh, 78, 2, "Hum alta");
+          NumericKeyboardScreen(&pActivo.f3.humh, 78, 2, "Hum alta");
         }
         break;
       case 36:
         if (z1f4Buttons[4].contains(p.x, p.y)) {
           Z1Screen();
         } else if (z1f4Buttons[0].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f4.dias, 90, 3, "Dias");
+          NumericKeyboardScreen(&pActivo.f4.dias, 90, 3, "Dias");
         } else if (z1f4Buttons[1].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f4.hLuz, 92, 2, "Horas luz");
+          NumericKeyboardScreen(&pActivo.f4.hLuz, 92, 2, "Horas luz");
         } else if (z1f4Buttons[6].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f4.templ, 93, 2, "Temp baja");
+          NumericKeyboardScreen(&pActivo.f4.templ, 93, 2, "Temp baja");
         } else if (z1f4Buttons[5].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f4.temph, 94, 2, "Temp alta");
+          NumericKeyboardScreen(&pActivo.f4.temph, 94, 2, "Temp alta");
         } else if (z1f4Buttons[8].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f4.riegol, 95, 2, "Riego bajo");
+          NumericKeyboardScreen(&pActivo.f4.riegol, 95, 2, "Riego bajo");
         } else if (z1f4Buttons[7].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f4.riegoh, 96, 2, "Riego alto");
+          NumericKeyboardScreen(&pActivo.f4.riegoh, 96, 2, "Riego alto");
         } else if (z1f4Buttons[11].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f4.huml, 97, 2, "Hum baja");
+          NumericKeyboardScreen(&pActivo.f4.huml, 97, 2, "Hum baja");
         } else if (z1f4Buttons[10].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&f4.humh, 98, 2, "Hum alta");
+          NumericKeyboardScreen(&pActivo.f4.humh, 98, 2, "Hum alta");
         }
 
         break;
@@ -2033,7 +1971,7 @@ void drawHomeScreen() {
   tft.setCursor(134, 183);
   tft.print(buffer);
 
-  cargarfActivaSP();
+  eeprom_cargarfActivaSP(&fActivaSP, z1fActiva);
 
   sprintf_P(buffer, PSTR("%d"), fActivaSP.dias);
   tft.setCursor(10, 200);
@@ -2509,28 +2447,28 @@ void drawZ1F1Screen() {
   tft.setTextSize(3);
 
   //// dias
-  sprintf_P(buffer, PSTR("%d"), f1.dias);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f1.dias);
 
   tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
   //// hluz
-  if (f1.hLuz > 24) f1.hLuz = 24;
-  sprintf_P(buffer, PSTR("%d"), f1.hLuz);
+  if (pActivo.f1.hLuz > 24) pActivo.f1.hLuz = 24;
+  sprintf_P(buffer, PSTR("%d"), pActivo.f1.hLuz);
   strcat_P(buffer, PSTR("H"));
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
-  if (f1.temph > 80) f1.temph = 80;
-  sprintf_P(buffer, PSTR("%d"), f1.temph);
+  if (pActivo.f1.temph > 80) pActivo.f1.temph = 80;
+  sprintf_P(buffer, PSTR("%d"), pActivo.f1.temph);
   uint8_t z1f1temphSTRlen = strlen(buffer);
   strcat_P(buffer, PSTR("C"));
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
-  if (f1.templ > 80) f1.templ = 80;
-  sprintf_P(buffer, PSTR("%d"), f1.templ);
+  if (pActivo.f1.templ > 80) pActivo.f1.templ = 80;
+  sprintf_P(buffer, PSTR("%d"), pActivo.f1.templ);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f1temphSTRlen * 18), 135);
   tft.print(buffer);
 
@@ -2538,13 +2476,13 @@ void drawZ1F1Screen() {
   tft.print(F("-"));
 
   //// riego
-  sprintf_P(buffer, PSTR("%d"), f1.riegoh);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f1.riegoh);
   uint8_t z1f1riegohSTRlen = strlen(buffer);
   strcat_P(buffer, PSTR("%"));
   tft.setCursor(228 - (strlen(buffer) * 18), 180);
   tft.print(buffer);
 
-  sprintf_P(buffer, PSTR("%d"), f1.riegol);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f1.riegol);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f1riegohSTRlen * 18), 180);
   tft.print(buffer);
 
@@ -2552,13 +2490,13 @@ void drawZ1F1Screen() {
   tft.print(F("-"));
 
   //// humedad
-  sprintf_P(buffer, PSTR("%d"), f1.humh);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f1.humh);
   uint8_t z1f1humhSTRlen = strlen(buffer);
   strcat_P(buffer, PSTR("%"));
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
 
-  sprintf_P(buffer, PSTR("%d"), f1.huml);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f1.huml);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f1humhSTRlen * 18), 225);
   tft.print(buffer);
 
@@ -2626,28 +2564,28 @@ void drawZ1F2Screen() {
   tft.setTextSize(3);
 
   //// dias
-  sprintf_P(buffer, PSTR("%d"), f2.dias);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f2.dias);
 
   tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
   //// hluz
-  if (f2.hLuz > 24) f2.hLuz = 24;
-  sprintf_P(buffer, PSTR("%d"), f2.hLuz);
+  if (pActivo.f2.hLuz > 24) pActivo.f2.hLuz = 24;
+  sprintf_P(buffer, PSTR("%d"), pActivo.f2.hLuz);
   strcat_P(buffer, PSTR("H"));
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
-  if (f2.temph > 80) f2.temph = 80;
-  sprintf_P(buffer, PSTR("%d"), f2.temph);
+  if (pActivo.f2.temph > 80) pActivo.f2.temph = 80;
+  sprintf_P(buffer, PSTR("%d"), pActivo.f2.temph);
   uint8_t z1f2temphSTRlen = strlen(buffer);
   strcat_P(buffer, PSTR("C"));
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
-  if (f2.templ > 80) f2.templ = 80;
-  sprintf_P(buffer, PSTR("%d"), f2.templ);
+  if (pActivo.f2.templ > 80) pActivo.f2.templ = 80;
+  sprintf_P(buffer, PSTR("%d"), pActivo.f2.templ);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f2temphSTRlen * 18), 135);
   tft.print(buffer);
 
@@ -2655,13 +2593,13 @@ void drawZ1F2Screen() {
   tft.print(F("-"));
 
   //// riego
-  sprintf_P(buffer, PSTR("%d"), f2.riegoh);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f2.riegoh);
   uint8_t z1f2riegohSTRlen = strlen(buffer);
   strcat_P(buffer, PSTR("%"));
   tft.setCursor(228 - (strlen(buffer) * 18), 180);
   tft.print(buffer);
 
-  sprintf_P(buffer, PSTR("%d"), f2.riegol);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f2.riegol);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f2riegohSTRlen * 18), 180);
   tft.print(buffer);
 
@@ -2669,13 +2607,13 @@ void drawZ1F2Screen() {
   tft.print(F("-"));
 
   //// humedad
-  sprintf_P(buffer, PSTR("%d"), f2.humh);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f2.humh);
   uint8_t z1f2humhSTRlen = strlen(buffer);
   strcat_P(buffer, PSTR("%"));
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
 
-  sprintf_P(buffer, PSTR("%d"), f2.huml);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f2.huml);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f2humhSTRlen * 18), 225);
   tft.print(buffer);
 
@@ -2743,28 +2681,28 @@ void drawZ1F3Screen() {
   tft.setTextSize(3);
 
   //// dias
-  sprintf_P(buffer, PSTR("%d"), f3.dias);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f3.dias);
 
   tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
   //// hluz
-  if (f3.hLuz > 24) f3.hLuz = 24;
-  sprintf_P(buffer, PSTR("%d"), f3.hLuz);
+  if (pActivo.f3.hLuz > 24) pActivo.f3.hLuz = 24;
+  sprintf_P(buffer, PSTR("%d"), pActivo.f3.hLuz);
   strcat_P(buffer, PSTR("H"));
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
-  if (f3.temph > 80) f3.temph = 80;
-  sprintf_P(buffer, PSTR("%d"), f3.temph);
+  if (pActivo.f3.temph > 80) pActivo.f3.temph = 80;
+  sprintf_P(buffer, PSTR("%d"), pActivo.f3.temph);
   uint8_t z1f3temphSTRlen = strlen(buffer);
   strcat_P(buffer, PSTR("C"));
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
-  if (f3.templ > 80) f3.templ = 80;
-  sprintf_P(buffer, PSTR("%d"), f3.templ);
+  if (pActivo.f3.templ > 80) pActivo.f3.templ = 80;
+  sprintf_P(buffer, PSTR("%d"), pActivo.f3.templ);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f3temphSTRlen * 18), 135);
   tft.print(buffer);
 
@@ -2772,13 +2710,13 @@ void drawZ1F3Screen() {
   tft.print(F("-"));
 
   //// riego
-  sprintf_P(buffer, PSTR("%d"), f3.riegoh);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f3.riegoh);
   uint8_t z1f3riegohSTRlen = strlen(buffer);
   strcat_P(buffer, PSTR("%"));
   tft.setCursor(228 - (strlen(buffer) * 18), 180);
   tft.print(buffer);
 
-  sprintf_P(buffer, PSTR("%d"), f3.riegol);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f3.riegol);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f3riegohSTRlen * 18), 180);
   tft.print(buffer);
 
@@ -2786,13 +2724,13 @@ void drawZ1F3Screen() {
   tft.print(F("-"));
 
   //// humedad
-  sprintf_P(buffer, PSTR("%d"), f3.humh);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f3.humh);
   uint8_t z1f3humhSTRlen = strlen(buffer);
   strcat_P(buffer, PSTR("%"));
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
 
-  sprintf_P(buffer, PSTR("%d"), f3.huml);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f3.huml);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f3humhSTRlen * 18), 225);
   tft.print(buffer);
 
@@ -2860,28 +2798,28 @@ void drawZ1F4Screen() {
   tft.setTextSize(3);
 
   //// dias
-  sprintf_P(buffer, PSTR("%d"), f4.dias);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f4.dias);
 
   tft.setCursor(228 - (strlen(buffer) * 18), 45);
   tft.print(buffer);
 
   //// hluz
-  if (f4.hLuz > 24) f4.hLuz = 24;
-  sprintf_P(buffer, PSTR("%d"), f4.hLuz);
+  if (pActivo.f4.hLuz > 24) pActivo.f4.hLuz = 24;
+  sprintf_P(buffer, PSTR("%d"), pActivo.f4.hLuz);
   strcat_P(buffer, PSTR("H"));
   tft.setCursor(228 - (strlen(buffer) * 18), 90);
   tft.print(buffer);
 
   //// temp
-  if (f4.temph > 80) f4.temph = 80;
-  sprintf_P(buffer, PSTR("%d"), f4.temph);
+  if (pActivo.f4.temph > 80) pActivo.f4.temph = 80;
+  sprintf_P(buffer, PSTR("%d"), pActivo.f4.temph);
   uint8_t z1f4temphSTRlen = strlen(buffer);
   strcat_P(buffer, PSTR("C"));
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
-  if (f4.templ > 80) f4.templ = 80;
-  sprintf_P(buffer, PSTR("%d"), f4.templ);
+  if (pActivo.f4.templ > 80) pActivo.f4.templ = 80;
+  sprintf_P(buffer, PSTR("%d"), pActivo.f4.templ);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f4temphSTRlen * 18), 135);
   tft.print(buffer);
 
@@ -2889,13 +2827,13 @@ void drawZ1F4Screen() {
   tft.print(F("-"));
 
   //// riego
-  sprintf_P(buffer, PSTR("%d"), f4.riegoh);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f4.riegoh);
   uint8_t z1f4riegohSTRlen = strlen(buffer);
   strcat_P(buffer, PSTR("%"));
   tft.setCursor(228 - (strlen(buffer) * 18), 180);
   tft.print(buffer);
 
-  sprintf_P(buffer, PSTR("%d"), f4.riegol);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f4.riegol);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f4riegohSTRlen * 18), 180);
   tft.print(buffer);
 
@@ -2903,13 +2841,13 @@ void drawZ1F4Screen() {
   tft.print(F("-"));
 
   //// humedad
-  sprintf_P(buffer, PSTR("%d"), f4.humh);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f4.humh);
   uint8_t z1f4humhSTRlen = strlen(buffer);
   strcat_P(buffer, PSTR("%"));
   tft.setCursor(228 - (strlen(buffer) * 18), 225);
   tft.print(buffer);
 
-  sprintf_P(buffer, PSTR("%d"), f4.huml);
+  sprintf_P(buffer, PSTR("%d"), pActivo.f4.huml);
   tft.setCursor(192 - (strlen(buffer) * 18) - (z1f4humhSTRlen * 18), 225);
   tft.print(buffer);
 
@@ -3111,310 +3049,4 @@ void drawGoodbyeScreen() {
   tft.getTextBounds(F("^_^"), 120, 160, &x1, &y1, &w, &h);
   tft.setCursor(x1 - w / 2, y1 - h / 2);
   tft.print(F("^_^"));
-}
-
-// EEPROM
-
-void cargarfActivaSP() {
-  uint16_t eepromfActiva = eeprom_dirFase(z1fActiva);
-
-  EEPROM.get(eepromfActiva, fActivaSP.dias);
-  fActivaSP.hLuz = EEPROM.read(eepromfActiva + 2);
-  fActivaSP.templ = EEPROM.read(eepromfActiva + 3);
-  fActivaSP.temph = EEPROM.read(eepromfActiva + 4);
-  fActivaSP.riegol = EEPROM.read(eepromfActiva + 5);
-  fActivaSP.riegoh = EEPROM.read(eepromfActiva + 6);
-  fActivaSP.huml = EEPROM.read(eepromfActiva + 7);
-  fActivaSP.humh = EEPROM.read(eepromfActiva + 8);
-  fActivaSP.ciclos = EEPROM.read(22);
-}
-
-void cargarPrograma() {
-  EEPROM.get(30, f1);
-  EEPROM.get(50, f2);
-  EEPROM.get(70, f3);
-  EEPROM.get(90, f4);
-}
-
-void eeprom_hardReset() {
-  Fase F1DefaultSettings;
-  Fase F2DefaultSettings;
-  Fase F3DefaultSettings;
-  Fase F4DefaultSettings;
-
-  Programa p1;
-  Programa p2;
-  Programa p3;
-  Programa p4;
-
-  F1DefaultSettings.dias = 1;
-  F1DefaultSettings.hLuz = 1;
-  F1DefaultSettings.templ = 20;
-  F1DefaultSettings.temph = 30;
-  F1DefaultSettings.riegol = 20;
-  F1DefaultSettings.riegoh = 60;
-  F1DefaultSettings.huml = 60;
-  F1DefaultSettings.humh = 80;
-
-  F2DefaultSettings = F1DefaultSettings;
-  F3DefaultSettings = F1DefaultSettings;
-  F4DefaultSettings = F1DefaultSettings;
-
-  F2DefaultSettings.dias = 2;
-  F2DefaultSettings.hLuz = 2;
-  F3DefaultSettings.dias = 3;
-  F3DefaultSettings.hLuz = 3;
-  F4DefaultSettings.dias = 4;
-  F4DefaultSettings.hLuz = 4;
-
-  p1.f1.dias = 90;
-  p1.f1.hLuz = 16;
-  p1.f1.templ = 20;
-  p1.f1.temph = 30;
-  p1.f1.riegol = 30;
-  p1.f1.riegoh = 60;
-  p1.f1.huml = 60;
-  p1.f1.humh = 70;
-
-  p1.f2.dias = 90;
-  p1.f2.hLuz = 14;
-  p1.f2.templ = 10;
-  p1.f2.temph = 20;
-  p1.f2.riegol = 20;
-  p1.f2.riegoh = 60;
-  p1.f2.huml = 65;
-  p1.f2.humh = 75;
-
-  p1.f3.dias = 90;
-  p1.f3.hLuz = 12;
-  p1.f3.templ = 5;
-  p1.f3.temph = 15;
-  p1.f3.riegol = 10;
-  p1.f3.riegoh = 40;
-  p1.f3.huml = 70;
-  p1.f3.humh = 80;
-
-  p1.f4.dias = 90;
-  p1.f4.hLuz = 14;
-  p1.f4.templ = 10;
-  p1.f4.temph = 20;
-  p1.f4.riegol = 10;
-  p1.f4.riegoh = 60;
-  p1.f4.huml = 65;
-  p1.f4.humh = 75;
-
-  p2 = p1;
-  p3 = p1;
-  p4 = p1;
-
-  p2.f1.dias = 999;
-  p2.f2.dias = 999;
-  p2.f3.dias = 999;
-  p2.f4.dias = 999;
-
-  p3.f1.dias = 888;
-  p3.f2.dias = 888;
-  p3.f3.dias = 888;
-  p3.f4.dias = 888;
-
-  p4.f1.dias = 666;
-  p4.f2.dias = 666;
-  p4.f3.dias = 666;
-  p4.f4.dias = 666;
-
-  EEPROM.update(0, 88);
-  Serial.println(F("device information restored"));
-  for (uint8_t i = 10; i < 30; i++) {
-    EEPROM.update(i, 0x00);
-  }
-  EEPROM.update(22, 1);
-  Serial.println(F("phase information restored"));
-  EEPROM.put(30, F1DefaultSettings);
-  Serial.println(F("F1 settings restored"));
-  EEPROM.put(50, F2DefaultSettings);
-  Serial.println(F("F2 settings restored"));
-  EEPROM.put(70, F3DefaultSettings);
-  Serial.println(F("F3 settings restored"));
-  EEPROM.put(90, F4DefaultSettings);
-  Serial.println(F("F4 settings restored"));
-
-  EEPROM.put(110, p1.f1);
-  Serial.println(F("P1F1 settings restored"));
-  EEPROM.put(130, p1.f2);
-  Serial.println(F("P1F2 settings restored"));
-  EEPROM.put(150, p1.f3);
-  Serial.println(F("P1F3 settings restored"));
-  EEPROM.put(170, p1.f4);
-  Serial.println(F("P1F4 settings restored"));
-
-  EEPROM.put(210, p2.f1);
-  Serial.println(F("P2F1 settings restored"));
-  EEPROM.put(230, p2.f2);
-  Serial.println(F("P2F2 settings restored"));
-  EEPROM.put(250, p2.f3);
-  Serial.println(F("P2F3 settings restored"));
-  EEPROM.put(270, p2.f4);
-  Serial.println(F("P2F4 settings restored"));
-
-  EEPROM.put(310, p3.f1);
-  Serial.println(F("P3F1 settings restored"));
-  EEPROM.put(330, p3.f2);
-  Serial.println(F("P3F2 settings restored"));
-  EEPROM.put(350, p3.f3);
-  Serial.println(F("P3F3 settings restored"));
-  EEPROM.put(370, p3.f4);
-  Serial.println(F("P3F4 settings restored"));
-
-  EEPROM.put(410, p4.f1);
-  Serial.println(F("P4F1 settings restored"));
-  EEPROM.put(430, p4.f2);
-  Serial.println(F("P4F2 settings restored"));
-  EEPROM.put(450, p4.f3);
-  Serial.println(F("P4F3 settings restored"));
-  EEPROM.put(470, p4.f4);
-  Serial.println(F("P4F4 settings restored"));
-
-  for (uint16_t i = 4000; i < 4020; i++) {
-    EEPROM.update(i, 0x00);
-  }
-  Serial.println(F("F0 restored"));
-
-  drawGoodbyeScreen();
-
-  delay(250);
-
-  wdt_enable(WDTO_15MS);
-  while (1)
-    ;
-}
-
-void eeprom_clear() {
-  for (uint16_t i = 0; i < EEPROM.length(); i++) {
-    EEPROM.update(i, 0xFF);
-    if (!(i % 512)) {
-      Serial.print(F("cleared "));
-      Serial.print(i);
-      Serial.println(F(" EEPROM bytes"));
-    }
-  }
-  Serial.println(F("eeprom cleared to 0xFF"));
-}
-
-void eeprom_read() {
-  Serial.println(F("Reading EEPROM: "));
-  for (uint16_t i = 0; i < 500; i++) {
-    switch (i) {
-      case 0:
-        Serial.print(F("\n\ndevice info"));
-        break;
-      case 10:
-        Serial.print(F("\n\nphase info"));
-        break;
-      case 30:
-        Serial.print(F("\n\nF1 settings"));
-        break;
-      case 50:
-        Serial.print(F("\n\nF2 settings"));
-        break;
-      case 70:
-        Serial.print(F("\n\nF3 settings"));
-        break;
-      case 90:
-        Serial.print(F("\n\nF4 settings"));
-        break;
-      case 110:
-        Serial.print(F("\n\nP1F1 settings"));
-        break;
-      case 130:
-        Serial.print(F("\n\nP1F2 settings"));
-        break;
-      case 150:
-        Serial.print(F("\n\nP1F3 settings"));
-        break;
-      case 170:
-        Serial.print(F("\n\nP1F4 settings"));
-        break;
-      case 190:
-        Serial.print(F("\n\n..."));
-        break;
-      case 210:
-        Serial.print(F("\n\nP2F1 settings"));
-        break;
-      case 230:
-        Serial.print(F("\n\nP2F2 settings"));
-        break;
-      case 250:
-        Serial.print(F("\n\nP2F3 settings"));
-        break;
-      case 270:
-        Serial.print(F("\n\nP2F4 settings"));
-        break;
-      case 290:
-        Serial.print(F("\n\n..."));
-        break;
-      case 310:
-        Serial.print(F("\n\nP3F1 settings"));
-        break;
-      case 330:
-        Serial.print(F("\n\nP3F2 settings"));
-        break;
-      case 350:
-        Serial.print(F("\n\nP3F3 settings"));
-        break;
-      case 370:
-        Serial.print(F("\n\nP3F4 settings"));
-        break;
-      case 390:
-        Serial.print(F("\n\n..."));
-        break;
-      case 410:
-        Serial.print(F("\n\nP4F1 settings"));
-        break;
-      case 430:
-        Serial.print(F("\n\nP4F2 settings"));
-        break;
-      case 450:
-        Serial.print(F("\n\nP4F3 settings"));
-        break;
-      case 470:
-        Serial.print(F("\n\nP4F4 settings"));
-        break;
-      case 490:
-        Serial.print(F("\n\n..."));
-        break;
-    }
-    if (!(i % 5)) {
-      Serial.print(F("\n"));
-      Serial.print(i);
-      Serial.print(F("\t\t"));
-    }
-    Serial.print(EEPROM.read(i));
-    Serial.print(F("\t"));
-  }
-  Serial.print(F("\n"));
-}
-
-uint16_t eeprom_dirFase(uint8_t fase) {
-  switch (fase) {
-    case 0:
-      Serial.print(F("no hay fase activa\n"));
-      return 4000;
-      break;
-    case 1:
-      return 30;
-      break;
-    case 2:
-      return 50;
-      break;
-    case 3:
-      return 70;
-      break;
-    case 4:
-      return 90;
-      break;
-    default:
-      Serial.print("fase inexistente\n");
-      return 4000;
-      break;
-  }
 }

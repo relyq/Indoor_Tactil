@@ -32,6 +32,8 @@ sistema de fertilizante
 <br><br>
 <h1>LIMPIEZA:</h1>
 
+tengo que cambiar el nombre del typedef struct fActiva, de la struct fActiva fActivaSP, y del parametro de void eeprom_cargarfActivaSP(fActiva* fActivaSP, uint8_t f) fActiva* fActivaSP
+
 eliminar botones (los que no tienen texto o no lo tienen centrado) y variables que no necesite para ahorrar memoria
 
 quizá debería comentar todos los serial.print de la version final - podría hacer que solo se compile con serial.print si una variable DEBUG esta activa
