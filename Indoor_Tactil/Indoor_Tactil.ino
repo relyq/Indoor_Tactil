@@ -1,5 +1,5 @@
 /*
-  GROWOS v1.0.0.1
+  GROWOS v1.0.0.2
 */
 
 #include <DHT.h>
@@ -126,16 +126,26 @@ Fase f2;
 Fase f3;
 Fase f4;
 
-Fase fActivaSP;
+// Fase fActivaSP;
+struct fActivaSP {
+  uint16_t dias;
+  uint8_t hLuz;
+  uint8_t templ;
+  uint8_t temph;
+  uint8_t riegol;
+  uint8_t riegoh;
+  uint8_t huml;
+  uint8_t humh;
 
-uint32_t diaIniciodefase;  // dia en unixtime del inicio de la fase activa
-uint32_t diaFindefase;     // dia en unixtime del fin de la fase activa
-uint8_t hInicioLuz;        // hora de inicio de iluminacion
-uint8_t hFinLuz;           // hora de fin de iluminacion
-uint8_t mInicioFinLuz;     // minuto de inicio/fin de iluminacion
-uint8_t ciclos;            // cantidad de ciclos - 0 = ciclo continuo
+  uint32_t diaIniciodefase;  // dia en unixtime del inicio de la fase activa
+  uint32_t diaFindefase;     // dia en unixtime del fin de la fase activa
+  uint8_t hInicioLuz;        // hora de inicio de iluminacion
+  uint8_t hFinLuz;           // hora de fin de iluminacion
+  uint8_t mInicioFinLuz;     // minuto de inicio/fin de iluminacion
+  uint8_t ciclos;            // cantidad de ciclos - 0 = ciclo continuo
+} fActivaSP;
 
-uint16_t dias = 0;  // dias que lleva la fase activa
+uint16_t dias;  // dias que lleva la fase activa
 
 float t;          // temperatura
 float h;          // humedad
@@ -315,8 +325,14 @@ void setup() {
 
   if (EEPROM.read(0) != 88) eeprom_hardReset();
 
-  cargarEstado();  // carga el ultimo estado del dispositivo desde la EEPROM
-  cargarFases();   // carga la configuracion de las fases desde la EEPROM
+  z1fActiva = EEPROM.read(10);
+  z1fActivalast = z1fActiva;
+  z1fSeleccionada = z1fActiva;
+  EEPROM.get(11, fActivaSP.diaIniciodefase);
+  fActivaSP.hInicioLuz = EEPROM.read(19);
+  fActivaSP.mInicioFinLuz = EEPROM.read(21);
+
+  cargarPrograma();  // carga la configuracion de las fases desde la EEPROM
   cargarfActivaSP();
 
   tft.fillScreen(BLACK);
@@ -347,29 +363,30 @@ void loop() {
   if (z1fActivalast != z1fActiva) {
     cargarfActivaSP();
 
-    diaIniciodefase = now.unixtime();
-    diaFindefase = now.unixtime() + fActivaSP.dias * 86400;
+    fActivaSP.diaIniciodefase = now.unixtime();
+    fActivaSP.diaFindefase = now.unixtime() + fActivaSP.dias * 86400;
 
-    hInicioLuz = now.hour();
-    mInicioFinLuz = now.minute();
-    hFinLuz = ((now.unixtime() + (fActivaSP.hLuz * 60 * 60)) / 3600) % 24;
+    fActivaSP.hInicioLuz = now.hour();
+    fActivaSP.mInicioFinLuz = now.minute();
+    fActivaSP.hFinLuz =
+        ((now.unixtime() + (fActivaSP.hLuz * 60 * 60)) / 3600) % 24;
 
     EEPROM.update(10, z1fActiva);
-    EEPROM.put(11, diaIniciodefase);
-    EEPROM.update(19, hInicioLuz);
-    EEPROM.update(21, mInicioFinLuz);
+    EEPROM.put(11, fActivaSP.diaIniciodefase);
+    EEPROM.update(19, fActivaSP.hInicioLuz);
+    EEPROM.update(21, fActivaSP.mInicioFinLuz);
 
-    Serial.print(F("diaFindefase: "));
-    Serial.println(diaFindefase);
+    Serial.print(F("fActivaSP.diaFindefase: "));
+    Serial.println(fActivaSP.diaFindefase);
     Serial.print(F("unixtime: "));
     Serial.println(now.unixtime());
 
     Serial.print(F("horas luz: "));
     Serial.println(fActivaSP.hLuz);
     Serial.print(F("hora fin de luz: "));
-    Serial.print(hFinLuz);
+    Serial.print(fActivaSP.hFinLuz);
     Serial.print(F(":"));
-    Serial.println(mInicioFinLuz);
+    Serial.println(fActivaSP.mInicioFinLuz);
 
     z1fActivalast = z1fActiva;
 
@@ -443,16 +460,19 @@ void loop() {
 
     // si la hora esta entre la hora de inicio de luz y la hora de fin de luz, y
     // la luz no esta prendida
-    hFinLuz = ((now.unixtime() + (fActivaSP.hLuz * 60 * 60)) / 3600) % 24;
+    fActivaSP.hFinLuz =
+        ((now.unixtime() + (fActivaSP.hLuz * 60 * 60)) / 3600) % 24;
 
-    if (now.hour() > hInicioLuz ||
-        (now.hour() == hInicioLuz && now.minute() >= mInicioFinLuz)) {
+    if (now.hour() > fActivaSP.hInicioLuz ||
+        (now.hour() == fActivaSP.hInicioLuz &&
+         now.minute() >= fActivaSP.mInicioFinLuz)) {
       if (!(PINC & LUZPIN)) {
         Serial.println(F("luz encendida"));
         PORTC |= LUZPIN;
       }
-    } else if (now.hour() < hFinLuz ||
-               (now.hour() == hFinLuz && now.minute() < mInicioFinLuz)) {
+    } else if (now.hour() < fActivaSP.hFinLuz ||
+               (now.hour() == fActivaSP.hFinLuz &&
+                now.minute() < fActivaSP.mInicioFinLuz)) {
       if (!(PINC & LUZPIN)) {
         Serial.println(F("luz encendida"));
         PORTC |= LUZPIN;
@@ -464,16 +484,16 @@ void loop() {
       }
     }
 
-    diaFindefase = now.unixtime() + fActivaSP.dias * 86400;
+    fActivaSP.diaFindefase = now.unixtime() + fActivaSP.dias * 86400;
 
-    if (now.unixtime() >= diaFindefase) {
+    if (now.unixtime() >= fActivaSP.diaFindefase) {
       if (z1fActiva == 4) {
-        if (ciclos == 0) {
+        if (fActivaSP.ciclos == 0) {
           z1fActiva = 1;
-        } else if (ciclos == 1) {
+        } else if (fActivaSP.ciclos == 1) {
           z1fActiva = 0;
         } else {
-          ciclos--;
+          fActivaSP.ciclos--;
           z1fActiva = 1;
         }
       } else {
@@ -481,7 +501,7 @@ void loop() {
       }
     }
 
-    dias = (now.unixtime() - diaIniciodefase) / 86400;
+    dias = (now.unixtime() - fActivaSP.diaIniciodefase) / 86400;
   } else if (z1fActiva == 0) {
     PORTC &= ~(FANPIN | HEATPIN | VAPPIN | RIEGOPIN);
   }
@@ -1101,7 +1121,7 @@ void tsMenu() {
               EEPROM.put(70, p1.f3);
               EEPROM.put(90, p1.f4);
 
-              cargarFases();
+              cargarPrograma();
 
               Serial.println(F("Programa 1 cargado"));
               break;
@@ -1145,7 +1165,7 @@ void tsMenu() {
               EEPROM.put(70, p2.f3);
               EEPROM.put(90, p2.f4);
 
-              cargarFases();
+              cargarPrograma();
 
               Serial.println(F("Programa 2 cargado"));
               break;
@@ -1189,7 +1209,7 @@ void tsMenu() {
               EEPROM.put(70, p3.f3);
               EEPROM.put(90, p3.f4);
 
-              cargarFases();
+              cargarPrograma();
 
               Serial.println(F("Programa 3 cargado"));
               break;
@@ -1233,7 +1253,7 @@ void tsMenu() {
               EEPROM.put(70, p4.f3);
               EEPROM.put(90, p4.f4);
 
-              cargarFases();
+              cargarPrograma();
 
               Serial.println(F("Programa 4 cargado"));
               break;
@@ -1278,13 +1298,13 @@ void tsMenu() {
           z1TerminarConfirmar = 1;
         } else if ((p.x > 170 && p.x < 235) && (p.y > 125 && p.y < 165)) {
           z1TerminarConfirmar = 0;
-          NumericKeyboardScreen(&ciclos, 22, 2, "Ciclos");
+          NumericKeyboardScreen(&fActivaSP.ciclos, 22, 2, "Ciclos");
         } else if (z1TerminarConfirmar == 1 &&
                    z1ControlButtons[3].contains(p.x, p.y)) {
           for (uint8_t i = 10; i < 29; i++) {
             EEPROM.update(i, 0x00);
           }
-          EEPROM.update(22, ciclos);
+          EEPROM.update(22, fActivaSP.ciclos);
           Serial.println(F("EEPROM 10 to 29 cleared to 0x00\n"));
 
           z1fActiva = 0;
@@ -2925,9 +2945,9 @@ void drawZ1ControlScreen() {
   tft.setCursor(15, 135);
   tft.print(F("Ciclos"));
 
-  ciclos = EEPROM.read(22);
+  fActivaSP.ciclos = EEPROM.read(22);
 
-  sprintf_P(buffer, PSTR("%d"), ciclos);
+  sprintf_P(buffer, PSTR("%d"), fActivaSP.ciclos);
   tft.setCursor(228 - (strlen(buffer) * 18), 135);
   tft.print(buffer);
 
@@ -3077,7 +3097,7 @@ void drawStartupScreen() {
   tft.setCursor(120 - (6 * 3 * 10) / 2, 170);
   // tft.getTextBounds(F("GrowOS 0.9"), 120, 170, &x1, &y1, &w, &h); // no se
   // por qué no funciona esto tft.setCursor(x1 - w / 2, y1 - h / 2);
-  tft.print(F("GrowOS 0.9"));
+  tft.print(F("GrowOS 1.0"));
 }
 
 void drawGoodbyeScreen() {
@@ -3095,17 +3115,21 @@ void drawGoodbyeScreen() {
 
 // EEPROM
 
-void cargarEstado() {
-  z1fActiva = EEPROM.read(10);
-  z1fActivalast = z1fActiva;
-  z1fSeleccionada = z1fActiva;
-  EEPROM.get(11, diaIniciodefase);
-  hInicioLuz = EEPROM.read(19);
-  mInicioFinLuz = EEPROM.read(21);
-  ciclos = EEPROM.read(22);
+void cargarfActivaSP() {
+  uint16_t eepromfActiva = eeprom_dirFase(z1fActiva);
+
+  EEPROM.get(eepromfActiva, fActivaSP.dias);
+  fActivaSP.hLuz = EEPROM.read(eepromfActiva + 2);
+  fActivaSP.templ = EEPROM.read(eepromfActiva + 3);
+  fActivaSP.temph = EEPROM.read(eepromfActiva + 4);
+  fActivaSP.riegol = EEPROM.read(eepromfActiva + 5);
+  fActivaSP.riegoh = EEPROM.read(eepromfActiva + 6);
+  fActivaSP.huml = EEPROM.read(eepromfActiva + 7);
+  fActivaSP.humh = EEPROM.read(eepromfActiva + 8);
+  fActivaSP.ciclos = EEPROM.read(22);
 }
 
-void cargarFases() {
+void cargarPrograma() {
   EEPROM.get(30, f1);
   EEPROM.get(50, f2);
   EEPROM.get(70, f3);
@@ -3393,18 +3417,4 @@ uint16_t eeprom_dirFase(uint8_t fase) {
       return 4000;
       break;
   }
-}
-
-void cargarfActivaSP() {
-  uint16_t eepromfActiva = eeprom_dirFase(z1fActiva);
-
-  EEPROM.get(eepromfActiva, fActivaSP.dias);
-  fActivaSP.hLuz = EEPROM.read(eepromfActiva + 2);
-  fActivaSP.templ = EEPROM.read(eepromfActiva + 3);
-  fActivaSP.temph = EEPROM.read(eepromfActiva + 4);
-  fActivaSP.riegol = EEPROM.read(eepromfActiva + 5);
-  fActivaSP.riegoh = EEPROM.read(eepromfActiva + 6);
-  fActivaSP.huml = EEPROM.read(eepromfActiva + 7);
-  fActivaSP.humh = EEPROM.read(eepromfActiva + 8);
-  ciclos = EEPROM.read(22);
 }
