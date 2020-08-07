@@ -1,5 +1,5 @@
-#ifndef TYPEDEFS_H
-#define TYPEDEFS_H
+#ifndef COMMON_DEFS_H
+#define COMMON_DEFS_H
 
 // Color Definitions
 #define BLACK 0x0000

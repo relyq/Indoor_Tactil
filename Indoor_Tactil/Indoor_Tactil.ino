@@ -1,5 +1,5 @@
 /*
-  GROWOS v1.0.0.4
+  GrowOS v1.0.0.5
 */
 
 #include <DHT.h>
@@ -134,7 +134,7 @@ uint8_t relojmm;
 
 char buffer[50];  // buffer para mostrar cosas en pantalla
 
-DHT dht(DHTPIN, DHT22);
+DHT dht(31, DHT22);  // pin hardcoded
 
 RTC_DS3231 rtc;
 
@@ -302,22 +302,23 @@ void loop() {
     eeprom_cargarfActivaSP(&fActivaSP, z1fActiva);
 
     fActivaSP.diaIniciodefase = now.unixtime();
-    fActivaSP.diaFindefase = now.unixtime() + fActivaSP.dias * 86400;
+    fActivaSP.diaFindefase = fActivaSP.diaIniciodefase + fActivaSP.dias * 86400;
 
     fActivaSP.hInicioLuz = now.hour();
     fActivaSP.mInicioFinLuz = now.minute();
-    fActivaSP.hFinLuz =
-        ((now.unixtime() + (fActivaSP.hLuz * 60 * 60)) / 3600) % 24;
+    fActivaSP.hFinLuz = fActivaSP.hInicioLuz + fActivaSP.hLuz;
 
     EEPROM.update(10, z1fActiva);
     EEPROM.put(11, fActivaSP.diaIniciodefase);
     EEPROM.update(19, fActivaSP.hInicioLuz);
     EEPROM.update(21, fActivaSP.mInicioFinLuz);
 
-    Serial.print(F("fActivaSP.diaFindefase: "));
-    Serial.println(fActivaSP.diaFindefase);
     Serial.print(F("unixtime: "));
     Serial.println(now.unixtime());
+    Serial.print(F("fActivaSP.diaIniciodefase: "));
+    Serial.println(fActivaSP.diaIniciodefase);
+    Serial.print(F("fActivaSP.diaFindefase: "));
+    Serial.println(fActivaSP.diaFindefase);
 
     Serial.print(F("horas luz: "));
     Serial.println(fActivaSP.hLuz);
@@ -340,6 +341,8 @@ void loop() {
     uint8_t PORTCSTATE = PINC;
     static uint32_t tRiegoBomba;
     static uint32_t tRiegoEspera;
+    uint8_t tempAvg = (fActivaSP.temph + fActivaSP.templ) / 2;
+    uint8_t humAvg = (fActivaSP.humh + fActivaSP.huml) / 2;
 
     eeprom_cargarfActivaSP(&fActivaSP, z1fActiva);
 
@@ -349,21 +352,21 @@ void loop() {
     } else if (t <= fActivaSP.templ) {
       PORTCSTATE &= ~FANPIN;
       PORTCSTATE |= HEATPIN;
-    } else if (t <= ((float)fActivaSP.temph + (float)fActivaSP.templ) / 2) {
+    } else if (t <= tempAvg) {
       PORTCSTATE &= ~FANPIN;
-    } else if (t >= ((float)fActivaSP.temph + (float)fActivaSP.templ) / 2) {
+    } else if (t >= tempAvg) {
       PORTCSTATE &= ~HEATPIN;
     }
 
     if (h >= fActivaSP.humh) {
       PORTCSTATE &= ~VAPPIN;
-      PORTCSTATE |= FANPIN;
+      // PORTCSTATE |= FANPIN;
     } else if (h <= fActivaSP.huml) {
       // PORTCSTATE &= ~FANPIN;
       PORTCSTATE |= VAPPIN;
-    } else if (h <= ((float)fActivaSP.humh + (float)fActivaSP.huml) / 2) {
+    } else if (h <= humAvg) {
       // PORTCSTATE &= ~FANPIN;
-    } else if (h >= ((float)fActivaSP.humh + (float)fActivaSP.huml) / 2) {
+    } else if (h >= humAvg) {
       PORTCSTATE &= ~VAPPIN;
     }
 
@@ -398,19 +401,16 @@ void loop() {
 
     // si la hora esta entre la hora de inicio de luz y la hora de fin de luz, y
     // la luz no esta prendida
-    fActivaSP.hFinLuz =
-        ((now.unixtime() + (fActivaSP.hLuz * 60 * 60)) / 3600) % 24;
+    fActivaSP.hFinLuz = fActivaSP.hInicioLuz + fActivaSP.hLuz;
 
     if (now.hour() > fActivaSP.hInicioLuz ||
-        (now.hour() == fActivaSP.hInicioLuz &&
-         now.minute() >= fActivaSP.mInicioFinLuz)) {
+        (now.hour() == fActivaSP.hInicioLuz && now.minute() >= fActivaSP.mInicioFinLuz)) {
       if (!(PINC & LUZPIN)) {
         Serial.println(F("luz encendida"));
         PORTC |= LUZPIN;
       }
     } else if (now.hour() < fActivaSP.hFinLuz ||
-               (now.hour() == fActivaSP.hFinLuz &&
-                now.minute() < fActivaSP.mInicioFinLuz)) {
+               (now.hour() == fActivaSP.hFinLuz && now.minute() < fActivaSP.mInicioFinLuz)) {
       if (!(PINC & LUZPIN)) {
         Serial.println(F("luz encendida"));
         PORTC |= LUZPIN;
@@ -422,7 +422,7 @@ void loop() {
       }
     }
 
-    fActivaSP.diaFindefase = now.unixtime() + fActivaSP.dias * 86400;
+    fActivaSP.diaFindefase = fActivaSP.diaIniciodefase + fActivaSP.dias * 86400;
 
     if (now.unixtime() >= fActivaSP.diaFindefase) {
       if (z1fActiva == 4) {
@@ -441,7 +441,8 @@ void loop() {
 
     dias = (now.unixtime() - fActivaSP.diaIniciodefase) / 86400;
   } else if (z1fActiva == 0) {
-    PORTC &= ~(FANPIN | HEATPIN | VAPPIN | RIEGOPIN);
+    PORTC &= ~(FANPIN | HEATPIN | VAPPIN | RIEGOPIN | LUZPIN);
+    dias = 0;
   }
 
   // aca actualizo el dashboard
@@ -451,8 +452,6 @@ void loop() {
     static float lastT = 0xff;
     static float lastH = 0xff;
     static uint8_t lasthTierra = 0xff;
-
-
 
     if (lastLuz != (PINC & LUZPIN)) {
       lastLuz = (PINC & LUZPIN);
@@ -478,7 +477,7 @@ void loop() {
       strcat_P(buffer, PSTR("%"));
       tft.setCursor(230 - (strlen(buffer) * 18), 230);
       tft.setTextSize(3);
-      tft.setTextColor(WHITE);
+      tft.setTextColor(WHITE, BLACK);
       tft.print(buffer);
       LASTRIEGOSTATE = (PINC & RIEGOPIN);
 
@@ -523,7 +522,7 @@ void loop() {
     }
   }
 
-  // aca actualizo la hora en todas las pantallas excepto dashboard y numpad
+  // aca actualizo la hora en todas las pantallas excepto numpad
   if ((currentScreen != 255 &&
        (now.second() == 0 && now.unixtime() - prevTime >= 2)) ||
       prevScreen != currentScreen) {
@@ -595,16 +594,55 @@ void DEBUG() {
       case 'E':  // eeprom
         if (!strcmp_P(msg, PSTR("ERDD"))) {
           eeprom_read();
+        } else if (!strcmp_P(msg, PSTR("ERSH"))) {
+          eeprom_read(1);
         } else if (!strcmp_P(msg, PSTR("ECLR"))) {
           eeprom_clear();
         } else if (!strcmp_P(msg, PSTR("ERST"))) {
           eeprom_hardReset();
         }
         break;
+      case 'V':
+        switch (atoi(msg + 1)) {
+          case 0:
+            Serial.print(F("now.unixtime(): \t\t"));
+            Serial.println(now.unixtime());
+            Serial.print(F("now.hour(): \t\t"));
+            Serial.println(now.hour());
+            Serial.print(F("now.minute(): \t\t"));
+            Serial.println(now.minute());
+            Serial.print(F("fActivaSP.diaIniciodefase: \t"));
+            Serial.println(fActivaSP.diaIniciodefase);
+            Serial.print(F("fActivaSP.diaFindefase: \t"));
+            Serial.println(fActivaSP.diaFindefase);
+            Serial.print(F("fActivaSP.hInicioLuz: \t\t"));
+            Serial.println(fActivaSP.hInicioLuz);
+            Serial.print(F("fActivaSP.hFinLuz: \t\t"));
+            Serial.println(fActivaSP.hFinLuz);
+            Serial.print(F("fActivaSP.mInicioFinLuz: \t"));
+            Serial.println(fActivaSP.mInicioFinLuz);
+            break;
+          case 1:
+            Serial.print(F("fActivaSP.dias: \t"));
+            Serial.println(fActivaSP.dias);
+            Serial.print(F("fActivaSP.hLuz: \t"));
+            Serial.println(fActivaSP.hLuz);
+            Serial.print(F("fActivaSP.templ: \t"));
+            Serial.println(fActivaSP.templ);
+            Serial.print(F("fActivaSP.temph: \t"));
+            Serial.println(fActivaSP.temph);
+            Serial.print(F("fActivaSP.riegoh: \t"));
+            Serial.println(fActivaSP.riegol);
+            Serial.print(F("fActivaSP.riegoh: \t"));
+            Serial.println(fActivaSP.riegoh);
+            Serial.print(F("fActivaSP.huml: \t"));
+            Serial.println(fActivaSP.huml);
+            Serial.print(F("fActivaSP.humh: \t"));
+            Serial.println(fActivaSP.humh);
+            break;
+        }
+        break;
     }
-
-    Serial.print(msg[0]);
-    Serial.println(val);
 
     strcpy(lastmsg, msg);
   }
