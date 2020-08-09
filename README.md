@@ -15,8 +15,6 @@ ahora la configuración activa cambia ni bien cambias la configuración de la fa
 <br><br>
 <h1>todo:</h1>
 
-debería cambiar PORTCSTATE por PORTC
-
 134: pin de dht hardcodeado
 
 configurar los programas default
