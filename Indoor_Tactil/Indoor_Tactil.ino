@@ -1,4 +1,5 @@
-#define VERSION "1.0.0.7"
+#define VERSION "1.0.0.8"
+#define DEBUG_ENABLED 1
 
 #include <DHT.h>
 #include <EEPROM.h>
@@ -139,7 +140,7 @@ RTC_DS3231 rtc;
 // tiempo que dura la rafaga de riego
 const uint8_t riegoTiempo PROGMEM = 5;
 // tiempo que dura la espera para que la tierra se humedezca
-const uint8_t riegoTiempoEspera PROGMEM = riegoTiempo * 6;
+const uint8_t riegoTiempoEspera PROGMEM = 30;
 uint8_t LASTRIEGOSTATE;  // ultimo estado de riego - esto es para actualizar la
                          // luz del dashboard
 
@@ -220,6 +221,10 @@ const uint8_t refreshFrames PROGMEM = 100;
 void setup() {
   Serial.begin(9600);
 
+#if DEBUG_ENABLED
+  Serial.print(F("DEBUG "));
+#endif
+
   Serial.print(F("v"));
   Serial.println(F(VERSION));
 
@@ -258,7 +263,6 @@ void setup() {
   if (rtc.lostPower()) {
     Serial.println(F("RTC lost power, lets set the time!"));
     rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-    // rtc.adjust(DateTime(1974, 1, 2, 0, 0, 0));
   }
 
   dht.begin();
@@ -294,10 +298,13 @@ void loop() {
   static uint16_t framecount;
 
   now = rtc.now();
-  // readTH();
-  // hTierra = map(analogRead(A8), 0, 1023, 100, 0);
 
+#if DEBUG_ENABLED
   DEBUG();
+#else
+  readTH();
+  hTierra = map(analogRead(A8), 0, 1023, 100, 0);
+#endif
 
   tsMenu();
 
@@ -389,15 +396,9 @@ void loop() {
     if (fActivaSP.sLuz < fActivaSP.sFinLuz) {
       if ((now.unixtime() % 86400) >= fActivaSP.sLuz &&
           (now.unixtime() % 86400) <= fActivaSP.sFinLuz) {
-        if (!(PINC & LUZPIN)) {
-          Serial.println(F("luz encendida 0"));
-          PORTC |= LUZPIN;
-        }
+        PORTC |= LUZPIN;
       } else {
-        if (PINC & LUZPIN) {
-          Serial.println(F("luz apagada"));
-          PORTC &= ~LUZPIN;
-        }
+        PORTC &= ~LUZPIN;
       }
     }
     // si la hora de inicio es mayor, o sea, si termina despues de las 24h
@@ -405,23 +406,14 @@ void loop() {
       // si todavia no paso la medianoche
       if ((now.unixtime() % 86400) >= fActivaSP.sLuz &&
           (now.unixtime() % 86400) <= 86400) {
-        if (!(PINC & LUZPIN)) {
-          Serial.println(F("luz encendida 1"));
-          PORTC |= LUZPIN;
-        }
+        PORTC |= LUZPIN;
       }
       // si ya paso la medianoche
       else if ((now.unixtime() % 86400) >= 0 &&
                (now.unixtime() % 86400) <= fActivaSP.sFinLuz) {
-        if (!(PINC & LUZPIN)) {
-          Serial.println(F("luz encendida 2"));
-          PORTC |= LUZPIN;
-        }
+        PORTC |= LUZPIN;
       } else {
-        if (PINC & LUZPIN) {
-          Serial.println(F("luz apagada"));
-          PORTC &= ~LUZPIN;
-        }
+        PORTC &= ~LUZPIN;
       }
     }
 
@@ -447,10 +439,10 @@ void loop() {
 
   // aca actualizo el dashboard
   if (currentScreen == 0 && !(framecount % refreshFrames)) {
-    static uint8_t lastLuz;
     static uint16_t lastDias = 0xffff;
     static float lastT = 0xff;
     static float lastH = 0xff;
+    static uint8_t lastLuz;
     static uint8_t lasthTierra = 0xff;
 
     if (lastLuz != (PINC & LUZPIN)) {
@@ -561,6 +553,7 @@ void readTH() {
   }
 }
 
+#if DEBUG_ENABLED
 void DEBUG() {
   char msg[5] = {0, 0, 0, 0, '\0'};
   char lastmsg[5] = {0, 0, 0, 0, '\0'};
@@ -609,10 +602,6 @@ void DEBUG() {
             Serial.println(now.unixtime());
             Serial.print(F("now.unixtime() % 86400: \t"));
             Serial.println(now.unixtime() % 86400);
-            Serial.print(F("now.hour(): \t\t\t"));
-            Serial.println(now.hour());
-            Serial.print(F("now.minute(): \t\t\t"));
-            Serial.println(now.minute());
             Serial.print(F("fActivaSP.diaIniciodefase: \t"));
             Serial.println(fActivaSP.diaIniciodefase);
             Serial.print(F("fActivaSP.diaFindefase: \t"));
@@ -661,6 +650,7 @@ void DEBUG() {
     strcpy(lastmsg, msg);
   }
 }
+#endif
 
 // TSMENU
 
