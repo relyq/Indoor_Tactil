@@ -55,11 +55,26 @@ typedef struct fActiva {
   uint8_t huml;
   uint8_t humh;
 
-  uint32_t diaIniciodefase; // dia en unixtime del inicio de la fase activa
-  uint32_t diaFindefase;    // dia en unixtime del fin de la fase activa
-  uint32_t sLuz;            // segundo del dia en el que prende la luz
-  uint32_t sFinLuz;         // segundo del dia en el que apaga la luz
-  uint8_t ciclos;           // cantidad de ciclos - 0 = ciclo continuo
+  uint32_t diaIniciodefase;  // dia en unixtime del inicio de la fase activa
+  uint32_t diaFindefase;     // dia en unixtime del fin de la fase activa
+  uint32_t sLuz;             // segundo del dia en el que prende la luz
+  uint32_t sFinLuz;          // segundo del dia en el que apaga la luz
+  uint8_t ciclos;            // cantidad de ciclos - 0 = ciclo continuo
 } fActiva;
+
+typedef struct Reloj {
+  uint16_t YYYY;
+  uint8_t MM;
+  uint8_t DD;
+  uint8_t hh;
+  uint8_t mm;
+} Reloj;
+
+typedef struct Estado {
+  float t;
+  uint16_t dias;
+  uint8_t hTierra;
+  uint8_t h;
+} Estado;
 
 #endif
