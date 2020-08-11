@@ -1,4 +1,4 @@
-#define VERSION "1.0.0.9"
+#define VERSION "1.0.0.10"
 #define DEBUG_ENABLED 1
 
 #include <DHT.h>
@@ -141,6 +141,7 @@ const uint8_t riegoTiempoEspera PROGMEM = 30;
 uint8_t LASTRIEGOSTATE;  // ultimo estado de riego - esto es para actualizar la
                          // luz del dashboard
 
+volatile static uint16_t framecount;
 const uint8_t refreshFrames PROGMEM = 100;
 
 /*
@@ -292,8 +293,6 @@ void setup() {
 // LOOP
 
 void loop() {
-  static uint16_t framecount;
-
   now = rtc.now();
 
 #if DEBUG_ENABLED
@@ -535,15 +534,15 @@ void loop() {
     }
   }
 
+  prevScreen = currentScreen;
+
   framecount++;
 }
 
 void readTH() {
-  static uint32_t time;
   static uint32_t lastTime;
 
-  time = millis();
-  if (time - lastTime >= 2000) {
+  if (millis() - lastTime >= 2000) {
     t = dht.readTemperature();
     h = dht.readHumidity();
     lastTime = millis();
@@ -552,14 +551,9 @@ void readTH() {
 
 #if DEBUG_ENABLED
 void DEBUG() {
-  char msg[5] = {0, 0, 0, 0, '\0'};
-  char lastmsg[5] = {0, 0, 0, 0, '\0'};
-
   if (Serial.available() > 0) {
-    (Serial.readString()).toCharArray(msg, 5);
-  }
-
-  if (!(strcmp(msg, lastmsg) == 0)) {
+    char msg[5] = {0, 0, 0, 0, '\0'};
+    Serial.readString().toCharArray(msg, 5);
     char msgval[4];
     uint8_t val = 0;
 
@@ -651,8 +645,6 @@ void DEBUG() {
         }
         break;
     }
-
-    strcpy(lastmsg, msg);
   }
 }
 #endif
@@ -673,8 +665,6 @@ void tsMenu() {
   // no es necesario refrescar la pantalla si no cambió nada ni está siendo
   // presionada
   if (p.z > MINPRESSURE) {
-    prevScreen = currentScreen;
-
     // scale from 0->1023 to tft.width
     /*
     Serial.print(F("Unmapped p: "));

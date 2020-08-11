@@ -19,8 +19,6 @@ me gustaría encontrar un mejor sistema que los Adafruit_GFX_Button
 
 tengo que cambiar relojYYYY, relojMM, etc... a un objeto DateTime
 
-cada tanto se freezea el dashboard y no actualiza hasta que lo tocas: cada 100 loops no se actualiza el dashboard, si no que se comparan los valores para ver si cambiaron, y solo si cambiaron se dibujan, si los valores cambian en un frame en el que no se actualiza la pantalla, y no cambian más, no se van a actualizar
-
 problemas con la activación del ventilador-calefactor: calefactor prendido al minimo, se apaga a 26 - ventilador prendido al maximo, se apaga a 25
 
 134: pin de dht hardcodeado

@@ -14,7 +14,7 @@
 
 void drawHomeScreen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* homeButtons,
                     const uint8_t z1fActiva, const fActiva fActivaSP,
-                    const Estado mediciones, const DateTime now) {
+                    const Estado mediciones, DateTime now) {
   char buffer[15];
 
   tft->fillScreen(BLACK);
