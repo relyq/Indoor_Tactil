@@ -5,6 +5,8 @@
 #include <EEPROM.h>
 #include <avr/wdt.h>
 
+void drawGoodbyeScreen(Adafruit_TFTLCD* tft);
+
 void eeprom_cargarfActivaSP(fActiva* fActivaSP, uint8_t f) {
   uint16_t fDir = eeprom_dirFase(f);
 
@@ -26,7 +28,7 @@ void eeprom_cargarPrograma(Programa* p) {
   EEPROM.get(90, p->f4);
 }
 
-void eeprom_hardReset() {
+void eeprom_hardReset(Adafruit_TFTLCD* tft) {
   Fase F1DefaultSettings;
   Fase F2DefaultSettings;
   Fase F3DefaultSettings;
@@ -169,7 +171,7 @@ void eeprom_hardReset() {
   }
   Serial.println(F("F0 restored"));
 
-  drawGoodbyeScreen();
+  drawGoodbyeScreen(tft);
 
   delay(250);
 
