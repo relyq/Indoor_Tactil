@@ -309,10 +309,10 @@ void loop() {
     eeprom_cargarfActivaSP(&fActivaSP, z1fActiva);
 
     fActivaSP.diaIniciodefase = now.unixtime();
-    fActivaSP.diaFindefase = fActivaSP.diaIniciodefase + fActivaSP.dias * 86400;
+    fActivaSP.diaFindefase = fActivaSP.diaIniciodefase + (uint32_t)fActivaSP.dias * 86400;
 
     fActivaSP.sLuz = now.unixtime() % 86400;
-    fActivaSP.sFinLuz = (fActivaSP.sLuz + fActivaSP.hLuz * 3600) % 86400;
+    fActivaSP.sFinLuz = (fActivaSP.sLuz + (uint32_t)fActivaSP.hLuz * 3600) % 86400;
 
     EEPROM.update(10, z1fActiva);
     EEPROM.put(11, fActivaSP.diaIniciodefase);
@@ -329,14 +329,15 @@ void loop() {
 
   // funcionalidad
   if (z1fActiva != 0) {
+    eeprom_cargarfActivaSP(&fActivaSP, z1fActiva);
+
     static uint32_t tRiegoBomba;
     static uint32_t tRiegoEspera;
+
     uint8_t tempAvg = (fActivaSP.temph + fActivaSP.templ) / 2;
     uint8_t humAvg = (fActivaSP.humh + fActivaSP.huml) / 2;
-    fActivaSP.sFinLuz = (fActivaSP.sLuz + fActivaSP.hLuz * 3600) % 86400;
-    fActivaSP.diaFindefase = fActivaSP.diaIniciodefase + fActivaSP.dias * 86400;
-
-    eeprom_cargarfActivaSP(&fActivaSP, z1fActiva);
+    fActivaSP.sFinLuz = (fActivaSP.sLuz + (uint32_t)fActivaSP.hLuz * 3600) % 86400;
+    fActivaSP.diaFindefase = fActivaSP.diaIniciodefase + (uint32_t)fActivaSP.dias * 86400;
 
     if (t >= fActivaSP.temph) {
       PORTC &= ~HEATPIN;
