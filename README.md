@@ -17,6 +17,8 @@ me gustaría encontrar un mejor sistema que los Adafruit_GFX_Button
 <br><br>
 <h1>todo:</h1>
 
+las pantallas deberían ser un enum
+
 tengo que cambiar relojYYYY, relojMM, etc... a un objeto DateTime
 
 problemas con la activación del ventilador-calefactor: calefactor prendido al minimo, se apaga a 26 - ventilador prendido al maximo, se apaga a 25
