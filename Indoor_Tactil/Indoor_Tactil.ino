@@ -1,7 +1,6 @@
 #define VERSION "1.0.0.10"
-#define DEBUG_ENABLED 1
+#define DEBUG_ENABLED 0
 
-#include <DHT.h>
 #include <EEPROM.h>
 #include <RTClib.h>
 #include <SPI.h>
@@ -12,7 +11,20 @@
 #include "eepromThings.h"
 #include "src/Adafruit_GFX.h"     // Core graphics library
 #include "src/Adafruit_TFTLCD.h"  // Hardware-specific library
+#include "src/DHT.h"
 #include "src/TouchScreen.h"
+
+#ifdef DEBUG_ENABLED
+#define DEBUG_BEGIN(x) Serial.begin(x)
+#define DEBUG_PRINT(x) Serial.print(x)
+#define DEBUG_PRINTDEC(x) Serial.print(x, DEC)
+#define DEBUG_PRINTLN(x) Serial.println(x)
+#else
+#define DEBUG_BEGIN(x)
+#define DEBUG_PRINT(x)
+#define DEBUG_PRINTDEC(x)
+#define DEBUG_PRINTLN(x)
+#endif
 
 // The control pins for the LCD can be assigned to any digital or
 // analog pins...but we'll use the analog pins as this allows us to
@@ -217,19 +229,19 @@ const uint8_t refreshFrames PROGMEM = 100;
 // SETUP
 
 void setup() {
-  Serial.begin(9600);
+  DEBUG_BEGIN(9600);
 
 #if DEBUG_ENABLED
-  Serial.print(F("DEBUG "));
+  DEBUG_PRINT(F("DEBUG "));
 #endif
 
-  Serial.print(F("v"));
-  Serial.println(F(VERSION));
+  DEBUG_PRINT(F("v"));
+  DEBUG_PRINTLN(F(VERSION));
 
-  Serial.print(F("TFT size is "));
-  Serial.print(tft.width());
-  Serial.print(F("x"));
-  Serial.println(tft.height());
+  DEBUG_PRINT(F("TFT size is "));
+  DEBUG_PRINT(tft.width());
+  DEBUG_PRINT(F("x"));
+  DEBUG_PRINTLN(tft.height());
 
   pinMode(13, OUTPUT);
 
@@ -253,13 +265,13 @@ void setup() {
   MCUSR = 0;  // clear out any flags of prior resets.
 
   if (!rtc.begin()) {
-    Serial.println(F("Couldn't find RTC"));
+    DEBUG_PRINTLN(F("Couldn't find RTC"));
     while (1)
       ;
   }
 
   if (rtc.lostPower()) {
-    Serial.println(F("RTC lost power, lets set the time!"));
+    DEBUG_PRINTLN(F("RTC lost power, lets set the time!"));
     rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
   }
 
@@ -287,7 +299,7 @@ void setup() {
   delay(1500);
   HomeScreen();
 
-  Serial.println(F("Starting Loop"));
+  DEBUG_PRINTLN(F("Starting Loop"));
 }
 
 // LOOP
@@ -309,10 +321,12 @@ void loop() {
     eeprom_cargarfActivaSP(&fActivaSP, z1fActiva);
 
     fActivaSP.diaIniciodefase = now.unixtime();
-    fActivaSP.diaFindefase = fActivaSP.diaIniciodefase + (uint32_t)fActivaSP.dias * 86400;
+    fActivaSP.diaFindefase =
+        fActivaSP.diaIniciodefase + (uint32_t)fActivaSP.dias * 86400;
 
     fActivaSP.sLuz = now.unixtime() % 86400;
-    fActivaSP.sFinLuz = (fActivaSP.sLuz + (uint32_t)fActivaSP.hLuz * 3600) % 86400;
+    fActivaSP.sFinLuz =
+        (fActivaSP.sLuz + (uint32_t)fActivaSP.hLuz * 3600) % 86400;
 
     EEPROM.update(10, z1fActiva);
     EEPROM.put(11, fActivaSP.diaIniciodefase);
@@ -336,8 +350,10 @@ void loop() {
 
     uint8_t tempAvg = (fActivaSP.temph + fActivaSP.templ) / 2;
     uint8_t humAvg = (fActivaSP.humh + fActivaSP.huml) / 2;
-    fActivaSP.sFinLuz = (fActivaSP.sLuz + (uint32_t)fActivaSP.hLuz * 3600) % 86400;
-    fActivaSP.diaFindefase = fActivaSP.diaIniciodefase + (uint32_t)fActivaSP.dias * 86400;
+    fActivaSP.sFinLuz =
+        (fActivaSP.sLuz + (uint32_t)fActivaSP.hLuz * 3600) % 86400;
+    fActivaSP.diaFindefase =
+        fActivaSP.diaIniciodefase + (uint32_t)fActivaSP.dias * 86400;
 
     if (t >= fActivaSP.temph) {
       PORTC &= ~HEATPIN;
@@ -668,26 +684,26 @@ void tsMenu() {
   if (p.z > MINPRESSURE) {
     // scale from 0->1023 to tft.width
     /*
-    Serial.print(F("Unmapped p: "));
-    Serial.print(F("("));
-    Serial.print(p.x);
-    Serial.print(F(", "));
-    Serial.print(p.y);
-    Serial.print(F(", "));
-    Serial.print(p.z);
-    Serial.print(F(") "));
+    DEBUG_PRINT(F("Unmapped p: "));
+    DEBUG_PRINT(F("("));
+    DEBUG_PRINT(p.x);
+    DEBUG_PRINT(F(", "));
+    DEBUG_PRINT(p.y);
+    DEBUG_PRINT(F(", "));
+    DEBUG_PRINT(p.z);
+    DEBUG_PRINT(F(") "));
     */
     p.x = map(p.x, TS_MINX, TS_MAXX, tft.width(), 0);
     p.y = map(p.y, TS_MINY, TS_MAXY - 60, tft.height(), 0);
     /*
-    Serial.print(F("Mapped p: "));
-    Serial.print(F("("));
-    Serial.print(p.x);
-    Serial.print(F(", "));
-    Serial.print(p.y);
-    Serial.print(F(", "));
-    Serial.print(p.z);
-    Serial.println(F(") "));
+    DEBUG_PRINT(F("Mapped p: "));
+    DEBUG_PRINT(F("("));
+    DEBUG_PRINT(p.x);
+    DEBUG_PRINT(F(", "));
+    DEBUG_PRINT(p.y);
+    DEBUG_PRINT(F(", "));
+    DEBUG_PRINT(p.z);
+    DEBUG_PRINTLN(F(") "));
     */
 
     if (currentScreen != 0 && (p.y < -1)) {
@@ -1080,7 +1096,7 @@ void tsMenu() {
 
               eeprom_cargarPrograma(&pActivo);
 
-              Serial.println(F("Programa 1 cargado"));
+              DEBUG_PRINTLN(F("Programa 1 cargado"));
               break;
             case 2:  // guardar
               EEPROM.put(110, pActivo.f1);
@@ -1088,7 +1104,7 @@ void tsMenu() {
               EEPROM.put(150, pActivo.f3);
               EEPROM.put(170, pActivo.f4);
 
-              Serial.println(F("Programa 1 guardado"));
+              DEBUG_PRINTLN(F("Programa 1 guardado"));
               break;
           }
           programasConfirmar = 0;
@@ -1124,7 +1140,7 @@ void tsMenu() {
 
               eeprom_cargarPrograma(&pActivo);
 
-              Serial.println(F("Programa 2 cargado"));
+              DEBUG_PRINTLN(F("Programa 2 cargado"));
               break;
             case 2:  // guardar
               EEPROM.put(210, pActivo.f1);
@@ -1132,7 +1148,7 @@ void tsMenu() {
               EEPROM.put(250, pActivo.f3);
               EEPROM.put(270, pActivo.f4);
 
-              Serial.println(F("Programa 2 guardado"));
+              DEBUG_PRINTLN(F("Programa 2 guardado"));
               break;
           }
           programasConfirmar = 0;
@@ -1168,7 +1184,7 @@ void tsMenu() {
 
               eeprom_cargarPrograma(&pActivo);
 
-              Serial.println(F("Programa 3 cargado"));
+              DEBUG_PRINTLN(F("Programa 3 cargado"));
               break;
             case 2:  // guardar
               EEPROM.put(310, pActivo.f1);
@@ -1176,7 +1192,7 @@ void tsMenu() {
               EEPROM.put(350, pActivo.f3);
               EEPROM.put(370, pActivo.f4);
 
-              Serial.println(F("Programa 3 guardado"));
+              DEBUG_PRINTLN(F("Programa 3 guardado"));
               break;
           }
           programasConfirmar = 0;
@@ -1212,7 +1228,7 @@ void tsMenu() {
 
               eeprom_cargarPrograma(&pActivo);
 
-              Serial.println(F("Programa 4 cargado"));
+              DEBUG_PRINTLN(F("Programa 4 cargado"));
               break;
             case 2:  // guardar
               EEPROM.put(410, pActivo.f1);
@@ -1220,7 +1236,7 @@ void tsMenu() {
               EEPROM.put(450, pActivo.f3);
               EEPROM.put(470, pActivo.f4);
 
-              Serial.println(F("Programa 4 guardado"));
+              DEBUG_PRINTLN(F("Programa 4 guardado"));
               break;
           }
           programasConfirmar = 0;
@@ -1262,7 +1278,7 @@ void tsMenu() {
             EEPROM.update(i, 0x00);
           }
           EEPROM.update(22, fActivaSP.ciclos);
-          Serial.println(F("EEPROM 10 to 29 cleared to 0x00\n"));
+          DEBUG_PRINTLN(F("EEPROM 10 to 29 cleared to 0x00\n"));
 
           z1fActiva = 0;
 
