@@ -16,6 +16,8 @@ me gustaría encontrar un mejor sistema que los Adafruit_GFX_Button
 <br><br>
 <h1>todo:</h1>
 
+tengo que separar el funcionamiento del sistema de la GUI, esto implica que todo lo que no sea dibujar en la pantalla o moverse en el arbol de pantallas esté fuera de la función que maneja el cambio de pantallas
+
 debería hacer una mejor data struct para las pantallas
 
 las pantallas deberían ser un enum
