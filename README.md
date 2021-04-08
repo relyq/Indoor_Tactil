@@ -1,6 +1,5 @@
 # Indoor_Tactil
 las librerias actualizadas no funcionaban por pin_magic.h // el shield tiene D0-D7 en los pines 2-9, pin_magic.h usa esos pines en arduino uno, y 22-29 en el mega2560
-quizá J1-J4 en mi shield son IM0-IM3 en la breakout board de adafruit? si fuera así podría conectar J2, J3, J4 a 3.3v para usar el modo SPI
 
 el dia de fin de fase solo se calcula al cambiar de fase, por lo tanto si pasa el tiempo mas alla del dia de fin de fase, no continua a la fase que deberia, solo comienza la fase que continuaba a la que termino
 
@@ -16,6 +15,8 @@ me gustaría encontrar un mejor sistema que los Adafruit_GFX_Button
 
 <br><br>
 <h1>todo:</h1>
+
+debería hacer una mejor data struct para las pantallas
 
 las pantallas deberían ser un enum
 
