@@ -29,7 +29,7 @@ void drawHomeScreen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* homeButtons,
   tft->setTextColor(WHITE, BLACK);
   tft->print(F("Iluminacion"));
 
-  if (PINC & LUZPIN) {
+  if (!(PINC & LUZPIN)) {
     tft->fillCircle(180, 69, 10, GREEN);
   } else {
     tft->fillCircle(180, 69, 10, LIGHTGREY);
@@ -38,18 +38,18 @@ void drawHomeScreen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* homeButtons,
   tft->setCursor(10, 90);
   tft->print(F("Ventilacion"));
 
-  if (PINC & FANPIN && !(PINC & HEATPIN)) {
+  if (!(PINC & FANPIN) && (PINC & HEATPIN)) {
     tft->fillCircle(180, 94, 10, YELLOW);
-  } else if (PINC & HEATPIN && !(PINC & FANPIN)) {
+  } else if (!(PINC & HEATPIN) && (PINC & FANPIN)) {
     tft->fillCircle(180, 94, 10, BLUE);
-  } else if (!(PINC & HEATPIN) && !(PINC & FANPIN)) {
+  } else if ((PINC & HEATPIN) && (PINC & FANPIN)) {
     tft->fillCircle(180, 94, 10, LIGHTGREY);
   }
 
   tft->setCursor(10, 115);
   tft->print(F("Vaporizacion"));
 
-  if (PINC & VAPPIN) {
+  if (!(PINC & VAPPIN)) {
     tft->fillCircle(180, 119, 10, GREEN);
   } else {
     tft->fillCircle(180, 119, 10, LIGHTGREY);
@@ -58,7 +58,7 @@ void drawHomeScreen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* homeButtons,
   tft->setCursor(10, 140);
   tft->print(F("Riego"));
 
-  if (PINC & RIEGOPIN) {
+  if (!(PINC & RIEGOPIN)) {
     tft->fillCircle(180, 144, 10, GREEN);
   } else {
     tft->fillCircle(180, 144, 10, LIGHTGREY);

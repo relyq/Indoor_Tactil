@@ -16,6 +16,8 @@ me gustaría encontrar un mejor sistema que los Adafruit_GFX_Button
 <br><br>
 <h1>todo:</h1>
 
+tengo que hacer un sistema más robusto para activar y desactivar salidas. ie: un struct que guarde el estado en el que deberían estar las salidas, y en base al estado de ese struct controlar pines, de forma que se separe el método de decidir en que estado deberían estar las salidas y el sistema que realmente las controla. (esto hace más fácil el cambio de lógica negativa a positiva en la placa de relays)
+
 tengo que separar el funcionamiento del sistema de la GUI, esto implica que todo lo que no sea dibujar en la pantalla o moverse en el arbol de pantallas esté fuera de la función que maneja el cambio de pantallas
 
 debería hacer una mejor data struct para las pantallas

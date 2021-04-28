@@ -26,6 +26,96 @@
 #define DEBUG_PRINTLN(x)
 #endif
 
+#define POSITIVE_LOGIC 0
+#define FAN_ON()          \
+  {                       \
+    if (POSITIVE_LOGIC) { \
+      PORTC |= FANPIN;    \
+    } else {              \
+      PORTC &= ~FANPIN;   \
+    }                     \
+  }
+#define FAN_OFF()         \
+  {                       \
+    if (POSITIVE_LOGIC) { \
+      PORTC &= ~FANPIN;   \
+    } else {              \
+      PORTC |= FANPIN;    \
+    }                     \
+  }
+#define HEAT_ON()         \
+  {                       \
+    if (POSITIVE_LOGIC) { \
+      PORTC |= HEATPIN;   \
+    } else {              \
+      PORTC &= ~HEATPIN;  \
+    }                     \
+  }
+#define HEAT_OFF()        \
+  {                       \
+    if (POSITIVE_LOGIC) { \
+      PORTC &= ~HEATPIN;  \
+    } else {              \
+      PORTC |= HEATPIN;   \
+    }                     \
+  }
+#define VAP_ON()          \
+  {                       \
+    if (POSITIVE_LOGIC) { \
+      PORTC |= VAPPIN;    \
+    } else {              \
+      PORTC &= ~VAPPIN;   \
+    }                     \
+  }
+#define VAP_OFF()         \
+  {                       \
+    if (POSITIVE_LOGIC) { \
+      PORTC &= ~VAPPIN;   \
+    } else {              \
+      PORTC |= VAPPIN;    \
+    }                     \
+  }
+#define RIEGO_ON()        \
+  {                       \
+    if (POSITIVE_LOGIC) { \
+      PORTC |= RIEGOPIN;  \
+    } else {              \
+      PORTC &= ~RIEGOPIN; \
+    }                     \
+  }
+#define RIEGO_OFF()       \
+  {                       \
+    if (POSITIVE_LOGIC) { \
+      PORTC &= ~RIEGOPIN; \
+    } else {              \
+      PORTC |= RIEGOPIN;  \
+    }                     \
+  }
+#define LUZ_ON()          \
+  {                       \
+    if (POSITIVE_LOGIC) { \
+      PORTC |= LUZPIN;    \
+    } else {              \
+      PORTC &= ~LUZPIN;   \
+    }                     \
+  }
+#define LUZ_OFF()         \
+  {                       \
+    if (POSITIVE_LOGIC) { \
+      PORTC &= ~LUZPIN;   \
+    } else {              \
+      PORTC |= LUZPIN;    \
+    }                     \
+  }
+#define SYSTEM_OFF()                                             \
+  {                                                              \
+    if (POSITIVE_LOGIC) {                                        \
+      PORTC &= ~(FANPIN | HEATPIN | VAPPIN | RIEGOPIN | LUZPIN); \
+    } else {                                                     \
+      PORTC |= (FANPIN | HEATPIN | VAPPIN | RIEGOPIN | LUZPIN);  \
+    }                                                            \
+  }
+
 // The control pins for the LCD can be assigned to any digital or
 // analog pins...but we'll use the analog pins as this allows us to
 // double up the pins with the touch screen (see the TFT paint example).
@@ -107,8 +197,8 @@ const uint8_t DHTPIN PROGMEM = 0x40;  // pin 31 // PC6
 // outs
 const uint8_t HEATPIN PROGMEM = 0x20;   // pin 32 // PC5
 const uint8_t FANPIN PROGMEM = 0x10;    // pin 33 // PC4
-const uint8_t LUZPIN PROGMEM = 0x08;    // pin 34 // PC3
-const uint8_t VAPPIN PROGMEM = 0x04;    // pin 35 // PC2
+const uint8_t LUZPIN PROGMEM = 0x04;    // pin 35 // PC3
+const uint8_t VAPPIN PROGMEM = 0x08;    // pin 34 // PC2
 const uint8_t RIEGOPIN PROGMEM = 0x01;  // pin 37 // PC0
 
 /*
@@ -260,7 +350,7 @@ void setup() {
   PORTC |= (1 << PC6);
   */
 
-  pinMode(SENSORTIERRAPIN, INPUT);
+  pinMode(SENSORTIERRAPIN, INPUT_PULLUP);
 
   MCUSR = 0;  // clear out any flags of prior resets.
 
@@ -314,9 +404,10 @@ void loop() {
   hTierra = map(analogRead(A8), 0, 1023, 100, 0);
 #endif
 
+  // acá manejo la pantalla tactil
   tsMenu();
 
-  // aca manejo el cambio de fases
+  // acá manejo el cambio de fases
   if (z1fActivalast != z1fActiva) {
     eeprom_cargarfActivaSP(&fActivaSP, z1fActiva);
 
@@ -355,44 +446,42 @@ void loop() {
     fActivaSP.diaFindefase =
         fActivaSP.diaIniciodefase + (uint32_t)fActivaSP.dias * 86400;
 
+    // placa de relays con logica negativa
     if (t >= fActivaSP.temph) {
-      PORTC &= ~HEATPIN;
-      PORTC |= FANPIN;
+      FAN_ON();
+      HEAT_OFF();
     } else if (t <= fActivaSP.templ) {
-      PORTC &= ~FANPIN;
-      PORTC |= HEATPIN;
+      FAN_OFF();
+      HEAT_ON();
     } else if (t <= tempAvg) {
-      PORTC &= ~FANPIN;
+      FAN_OFF();
     } else if (t >= tempAvg) {
-      PORTC &= ~HEATPIN;
+      HEAT_OFF();
     }
 
     if (h >= fActivaSP.humh) {
-      PORTC &= ~VAPPIN;
-      // PORTC |= FANPIN;
+      VAP_OFF();
     } else if (h <= fActivaSP.huml) {
-      // PORTC &= ~FANPIN;
-      PORTC |= VAPPIN;
+      VAP_ON();
     } else if (h <= humAvg) {
-      // PORTC &= ~FANPIN;
     } else if (h >= humAvg) {
-      PORTC &= ~VAPPIN;
+      VAP_OFF();
     }
 
     if (hTierra <= fActivaSP.riegol && (tRiegoEspera + tRiegoBomba) == 0) {
       tRiegoBomba = now.unixtime() + riegoTiempo;  // tiempo encendido
-      PORTC |= RIEGOPIN;
+      RIEGO_ON();
     } else if (hTierra >= fActivaSP.riegoh) {
       tRiegoEspera = 0;
       tRiegoBomba = 0;
-      PORTC &= ~RIEGOPIN;
+      RIEGO_OFF();
     }
 
     if (tRiegoBomba && !tRiegoEspera) {
       if (now.unixtime() >= tRiegoBomba) {
         tRiegoBomba = 0;
         tRiegoEspera = now.unixtime() + riegoTiempoEspera;  // tiempo apagado
-        PORTC &= ~RIEGOPIN;
+        RIEGO_OFF();
       }
     }
 
@@ -400,7 +489,7 @@ void loop() {
       if (now.unixtime() >= tRiegoEspera) {
         tRiegoEspera = 0;
         tRiegoBomba = now.unixtime() + riegoTiempo;  // tiempo encendido
-        PORTC |= RIEGOPIN;
+        RIEGO_ON();
       }
     }
 
@@ -409,9 +498,9 @@ void loop() {
     if (fActivaSP.sLuz < fActivaSP.sFinLuz) {
       if ((now.unixtime() % 86400) >= fActivaSP.sLuz &&
           (now.unixtime() % 86400) <= fActivaSP.sFinLuz) {
-        PORTC |= LUZPIN;
+        LUZ_ON();
       } else {
-        PORTC &= ~LUZPIN;
+        LUZ_OFF();
       }
     }
     // si la hora de inicio es mayor, o sea, si termina despues de las 24h
@@ -419,14 +508,14 @@ void loop() {
       // si todavia no paso la medianoche
       if ((now.unixtime() % 86400) >= fActivaSP.sLuz &&
           (now.unixtime() % 86400) <= 86400) {
-        PORTC |= LUZPIN;
+        LUZ_ON();
       }
       // si ya paso la medianoche
       else if ((now.unixtime() % 86400) >= 0 &&
                (now.unixtime() % 86400) <= fActivaSP.sFinLuz) {
-        PORTC |= LUZPIN;
+        LUZ_ON();
       } else {
-        PORTC &= ~LUZPIN;
+        LUZ_OFF();
       }
     }
 
@@ -447,7 +536,7 @@ void loop() {
 
     dias = (now.unixtime() - fActivaSP.diaIniciodefase) / 86400;
   } else if (z1fActiva == 0) {
-    PORTC &= ~(FANPIN | HEATPIN | VAPPIN | RIEGOPIN | LUZPIN);
+    SYSTEM_OFF();
   }
 
   // aca actualizo el dashboard
@@ -460,7 +549,7 @@ void loop() {
 
     if (lastLuz != (PINC & LUZPIN)) {
       lastLuz = (PINC & LUZPIN);
-      if (PINC & LUZPIN) {
+      if (!(PINC & LUZPIN)) {
         tft.fillCircle(180, 69, 10, GREEN);
       } else {
         tft.fillCircle(180, 69, 10, LIGHTGREY);
@@ -486,7 +575,7 @@ void loop() {
       tft.print(buffer);
       LASTRIEGOSTATE = (PINC & RIEGOPIN);
 
-      if (PINC & RIEGOPIN) {
+      if (!(PINC & RIEGOPIN)) {
         tft.fillCircle(180, 144, 10, GREEN);
       } else {
         tft.fillCircle(180, 144, 10, LIGHTGREY);
@@ -502,11 +591,11 @@ void loop() {
       tft.setTextColor(WHITE, BLACK);
       tft.print(buffer);  // temperatura leida por el DHT
 
-      if (PINC & FANPIN && !(PINC & HEATPIN)) {
+      if (!(PINC & FANPIN) && (PINC & HEATPIN)) {
         tft.fillCircle(180, 94, 10, YELLOW);
-      } else if (PINC & HEATPIN && !(PINC & FANPIN)) {
+      } else if (!(PINC & HEATPIN) && (PINC & FANPIN)) {
         tft.fillCircle(180, 94, 10, BLUE);
-      } else if (!(PINC & HEATPIN) && !(PINC & FANPIN)) {
+      } else if ((PINC & HEATPIN) && (PINC & FANPIN)) {
         tft.fillCircle(180, 94, 10, LIGHTGREY);
       }
     }
@@ -519,7 +608,7 @@ void loop() {
       tft.setTextSize(3);
       tft.setTextColor(WHITE, BLACK);
       tft.print(buffer);  // humedad leida por el DHT
-      if (PINC & VAPPIN) {
+      if (!(PINC & VAPPIN)) {
         tft.fillCircle(180, 119, 10, GREEN);
       } else {
         tft.fillCircle(180, 119, 10, LIGHTGREY);
