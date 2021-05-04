@@ -4,3 +4,9 @@
 .vscode/launch.json
 .vscode/ipch
 .vscode
+include/
+lib/
+test/
+.gitattributes
+.travis.yml
+platformio.ini

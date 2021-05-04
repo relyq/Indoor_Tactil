@@ -1,5 +1,5 @@
-#define VERSION "1.0.0.10"
-#define DEBUG_ENABLED 0
+#define VERSION "1.0.0.11"
+#define DEBUG_ENABLED 1
 
 #include <EEPROM.h>
 #include <RTClib.h>
@@ -14,7 +14,7 @@
 #include "src/DHT.h"
 #include "src/TouchScreen.h"
 
-#ifdef DEBUG_ENABLED
+#if DEBUG_ENABLED
 #define DEBUG_BEGIN(x) Serial.begin(x)
 #define DEBUG_PRINT(x) Serial.print(x)
 #define DEBUG_PRINTDEC(x) Serial.print(x, DEC)
@@ -350,7 +350,7 @@ void setup() {
   PORTC |= (1 << PC6);
   */
 
-  pinMode(SENSORTIERRAPIN, INPUT_PULLUP);
+  pinMode(SENSORTIERRAPIN, INPUT);
 
   MCUSR = 0;  // clear out any flags of prior resets.
 
@@ -398,10 +398,10 @@ void loop() {
   now = rtc.now();
 
 #if DEBUG_ENABLED
-  DEBUG();
-#else
   readTH();
-  hTierra = map(analogRead(A8), 0, 1023, 100, 0);
+  readSoil();
+#else
+  DEBUG();
 #endif
 
   // acá manejo la pantalla tactil
@@ -567,7 +567,7 @@ void loop() {
 
     if (lasthTierra != hTierra || LASTRIEGOSTATE != (PINC & RIEGOPIN)) {
       lasthTierra = hTierra;
-      sprintf_P(buffer, PSTR("%d"), hTierra);
+      sprintf_P(buffer, PSTR("%2d"), hTierra);
       strcat_P(buffer, PSTR("%"));
       tft.setCursor(230 - (strlen(buffer) * 18), 230);
       tft.setTextSize(3);
@@ -602,7 +602,7 @@ void loop() {
 
     if (lastH != h) {
       lastH = h;
-      sprintf_P(buffer, PSTR("%d"), (uint8_t)h);
+      sprintf_P(buffer, PSTR("%2d"), (uint8_t)h);
       strcat_P(buffer, PSTR("%"));
       tft.setCursor(230 - (strlen(buffer) * 18), 285);
       tft.setTextSize(3);
@@ -651,6 +651,22 @@ void readTH() {
   if (millis() - lastTime >= 2000) {
     t = dht.readTemperature();
     h = dht.readHumidity();
+    lastTime = millis();
+  }
+}
+
+void readSoil() {
+  static uint32_t lastTime;
+
+  if (millis() - lastTime >= 500) {
+    int16_t soil = analogRead(SENSORTIERRAPIN);
+    if (soil < 335) {
+      hTierra = 99;
+    } else if (soil > 780) {
+      hTierra = 0;
+    } else {
+      hTierra = map(soil, 335, 780, 99, 0);
+    }
     lastTime = millis();
   }
 }
