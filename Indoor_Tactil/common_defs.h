@@ -77,4 +77,26 @@ typedef struct Estado {
   uint8_t h;
 } Estado;
 
+enum class Screens {
+  Home,
+  Menu,
+  Ajustes,
+  Calibracion,
+  Reloj,
+  Programas,
+  Reset,
+  Programa_1,
+  Programa_2,
+  Programa_3,
+  Programa_4,
+  Zona_1_Menu = 30,
+  Zona_1_Control,
+  Zona_1_Inicio,
+  Zona_1_F1,
+  Zona_1_F2,
+  Zona_1_F3,
+  Zona_1_F4,
+  numKB = 255
+};
+
 #endif

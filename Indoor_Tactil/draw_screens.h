@@ -62,8 +62,8 @@ void drawZ1InicioScreen(Adafruit_TFTLCD* tft,
 
 void drawNumericKeyboardScreen(Adafruit_TFTLCD* tft,
                                Adafruit_GFX_Button* numericKeyboardButtons,
-                               const char* title, uint8_t prevScreen,
-                               uint8_t* numKBPrevScreen, char* numKBstr);
+                               const char* title, Screens prevScreen,
+                               enum Screens* numKBPrevScreen, char* numKBstr);
 
 void drawStartupScreen(Adafruit_TFTLCD* tft);
 

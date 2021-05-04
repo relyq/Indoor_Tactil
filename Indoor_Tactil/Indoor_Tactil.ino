@@ -1,5 +1,5 @@
-#define VERSION "1.0.0.11"
-#define DEBUG_ENABLED 1
+#define VERSION "1.0.0.12"
+#define DEBUG_ENABLED 0
 
 #include <EEPROM.h>
 #include <RTClib.h>
@@ -166,8 +166,8 @@ Adafruit_GFX_Button programa4Buttons[5];
 Adafruit_GFX_Button resetButtons[2];
 Adafruit_GFX_Button numericKeyboardButtons[16];
 
-uint8_t currentScreen;  // acá guardo la pantalla activa
-uint8_t prevScreen;     // acá guardo la pantalla anterior
+enum Screens currentScreen;  // acá guardo la pantalla activa
+enum Screens prevScreen;     // acá guardo la pantalla anterior
 
 uint8_t z1fActiva;
 uint8_t z1fActivalast;
@@ -211,7 +211,7 @@ const uint8_t RIEGOPIN PROGMEM = 0x01;  // pin 37 // PC0
 
 char numKBstr[10];  // aca guardo la str que estoy modificando en el teclado
                     // numerico
-uint8_t numKBPrevScreen;  // la pantalla a la que tengo que volver
+enum Screens numKBPrevScreen;  // la pantalla a la que tengo que volver
 
 // puntero a la variable que quiero modificar si es un byte
 uint8_t* numKBvarptr8b;
@@ -251,7 +251,7 @@ const uint8_t refreshFrames PROGMEM = 100;
   0 - dashboard/home screen
   1 - menu
   2 - ajustes
-  3 -
+  3 - calibracion
   4 - reloj
   5 - programas
   6 - reset
@@ -398,10 +398,10 @@ void loop() {
   now = rtc.now();
 
 #if DEBUG_ENABLED
+  DEBUG();
+#else
   readTH();
   readSoil();
-#else
-  DEBUG();
 #endif
 
   // acá manejo la pantalla tactil
@@ -427,7 +427,7 @@ void loop() {
 
     z1fActivalast = z1fActiva;
 
-    if (currentScreen == 0) {
+    if (currentScreen == Screens::Home) {
       HomeScreen();
     }
   }
@@ -446,7 +446,6 @@ void loop() {
     fActivaSP.diaFindefase =
         fActivaSP.diaIniciodefase + (uint32_t)fActivaSP.dias * 86400;
 
-    // placa de relays con logica negativa
     if (t >= fActivaSP.temph) {
       FAN_ON();
       HEAT_OFF();
@@ -540,7 +539,7 @@ void loop() {
   }
 
   // aca actualizo el dashboard
-  if (currentScreen == 0 && !(framecount % refreshFrames)) {
+  if (currentScreen == Screens::Home && !(framecount % refreshFrames)) {
     static uint16_t lastDias = 0xffff;
     static float lastT = 0xff;
     static float lastH = 0xff;
@@ -576,9 +575,9 @@ void loop() {
       LASTRIEGOSTATE = (PINC & RIEGOPIN);
 
       if (!(PINC & RIEGOPIN)) {
-        tft.fillCircle(180, 144, 10, GREEN);
+        tft.fillCircle(180, 119, 10, GREEN);
       } else {
-        tft.fillCircle(180, 144, 10, LIGHTGREY);
+        tft.fillCircle(180, 119, 10, LIGHTGREY);
       }
     }
 
@@ -591,15 +590,12 @@ void loop() {
       tft.setTextColor(WHITE, BLACK);
       tft.print(buffer);  // temperatura leida por el DHT
 
-      if (!(PINC & FANPIN) && (PINC & HEATPIN)) {
-        tft.fillCircle(180, 94, 10, YELLOW);
-      } else if (!(PINC & HEATPIN) && (PINC & FANPIN)) {
-        tft.fillCircle(180, 94, 10, BLUE);
-      } else if ((PINC & HEATPIN) && (PINC & FANPIN)) {
+      if (!(PINC & FANPIN)) {
+        tft.fillCircle(180, 94, 10, GREEN);
+      } else {
         tft.fillCircle(180, 94, 10, LIGHTGREY);
       }
     }
-
     if (lastH != h) {
       lastH = h;
       sprintf_P(buffer, PSTR("%2d"), (uint8_t)h);
@@ -608,16 +604,18 @@ void loop() {
       tft.setTextSize(3);
       tft.setTextColor(WHITE, BLACK);
       tft.print(buffer);  // humedad leida por el DHT
-      if (!(PINC & VAPPIN)) {
-        tft.fillCircle(180, 119, 10, GREEN);
-      } else {
-        tft.fillCircle(180, 119, 10, LIGHTGREY);
-      }
+      /*
+        if (!(PINC & VAPPIN)) {
+          tft.fillCircle(180, 119, 10, GREEN);
+        } else {
+          tft.fillCircle(180, 119, 10, LIGHTGREY);
+        }
+      */
     }
   }
 
   // aca actualizo la hora en todas las pantallas excepto numpad
-  if (currentScreen != 255 &&
+  if (currentScreen != Screens::numKB &&
       ((now.second() == 0 && now.unixtime() - prevTime >= 2) ||
        prevScreen != currentScreen)) {
     prevTime = now.unixtime();
@@ -626,7 +624,7 @@ void loop() {
     tft.setTextSize(2);
     tft.setTextColor(WHITE, BLACK);
 
-    if (currentScreen == 0) {
+    if (currentScreen == Screens::Home) {
       tft.setCursor(170, 165);
       tft.print(buffer);
 
@@ -811,17 +809,18 @@ void tsMenu() {
     DEBUG_PRINTLN(F(") "));
     */
 
-    if (currentScreen != 0 && (p.y < -1)) {
+    if (currentScreen != Screens::Home && (p.y < -1)) {
       HomeScreen();
     }
 
     switch (currentScreen) {
-      case 0:
+      case Screens::Home: {
         if (homeButtons[0].contains(p.x, p.y)) {
           MenuScreen();
         }
         break;
-      case 1:
+      }
+      case Screens::Menu: {
         if (menuButtons[0].contains(p.x, p.y)) {
           Z1Screen();
         } else if (menuButtons[1].contains(p.x, p.y)) {
@@ -830,7 +829,8 @@ void tsMenu() {
           HomeScreen();
         }
         break;
-      case 2:
+      }
+      case Screens::Ajustes: {
         if (ajustesButtons[4].contains(p.x, p.y)) {
           MenuScreen();
         } else if (ajustesButtons[1].contains(p.x, p.y)) {
@@ -841,9 +841,11 @@ void tsMenu() {
           ResetScreen();
         }
         break;
-      case 3:
+      }
+      case Screens::Calibracion: {
         break;
-      case 4:
+      }
+      case Screens::Reloj: {
         tft.setTextSize(3);
         tft.setTextColor(WHITE, BLACK);
         if (relojButtons[0].contains(p.x, p.y)) {
@@ -1152,7 +1154,8 @@ void tsMenu() {
         }
         delay(150);
         break;
-      case 5:
+      }
+      case Screens::Programas: {
         if (programasButtons[0].contains(p.x, p.y)) {
           AjustesScreen();
         } else if (programasButtons[1].contains(p.x, p.y)) {
@@ -1165,14 +1168,16 @@ void tsMenu() {
           Programa4Screen();
         }
         break;
-      case 6:
+      }
+      case Screens::Reset: {
         if (resetButtons[0].contains(p.x, p.y)) {
           AjustesScreen();
         } else if (resetButtons[1].contains(p.x, p.y)) {
           eeprom_hardReset(&tft);
         }
         break;
-      case 7:
+      }
+      case Screens::Programa_1: {
         if (programa1Buttons[0].contains(p.x, p.y)) {
           programasConfirmar = 0;
           ProgramasScreen();
@@ -1216,7 +1221,8 @@ void tsMenu() {
           tft.fillRect(5, 170, 230, 40, BLACK);
         }
         break;
-      case 8:
+      }
+      case Screens::Programa_2: {
         if (programa2Buttons[0].contains(p.x, p.y)) {
           programasConfirmar = 0;
           ProgramasScreen();
@@ -1260,7 +1266,8 @@ void tsMenu() {
           tft.fillRect(5, 170, 230, 40, BLACK);
         }
         break;
-      case 9:
+      }
+      case Screens::Programa_3: {
         if (programa3Buttons[0].contains(p.x, p.y)) {
           programasConfirmar = 0;
           ProgramasScreen();
@@ -1304,7 +1311,8 @@ void tsMenu() {
           tft.fillRect(5, 170, 230, 40, BLACK);
         }
         break;
-      case 10:
+      }
+      case Screens::Programa_4: {
         if (programa4Buttons[0].contains(p.x, p.y)) {
           programasConfirmar = 0;
           ProgramasScreen();
@@ -1348,7 +1356,8 @@ void tsMenu() {
           tft.fillRect(5, 170, 230, 40, BLACK);
         }
         break;
-      case 30:
+      }
+      case Screens::Zona_1_Menu: {
         if (z1Buttons[5].contains(p.x, p.y)) {
           MenuScreen();
         } else if (z1Buttons[0].contains(p.x, p.y)) {
@@ -1363,7 +1372,8 @@ void tsMenu() {
           Z1ControlScreen();
         }
         break;
-      case 31:
+      }
+      case Screens::Zona_1_Control: {
         if (z1ControlButtons[2].contains(p.x, p.y)) {
           z1TerminarConfirmar = 0;
           Z1Screen();
@@ -1391,7 +1401,8 @@ void tsMenu() {
           tft.fillRect(5, 170, 230, 40, BLACK);
         }
         break;
-      case 32:
+      }
+      case Screens::Zona_1_Inicio: {
         if (z1InicioButtons[5].contains(p.x, p.y)) {
           Z1ControlScreen();
         } else if (z1InicioButtons[0].contains(p.x, p.y) &&
@@ -1597,7 +1608,8 @@ void tsMenu() {
           Z1ControlScreen();
         }
         break;
-      case 33:
+      }
+      case Screens::Zona_1_F1: {
         if (z1f1Buttons[4].contains(p.x, p.y)) {
           Z1Screen();
         } else if (z1f1Buttons[0].contains(p.x, p.y)) {
@@ -1612,14 +1624,15 @@ void tsMenu() {
           NumericKeyboardScreen(&pActivo.f1.riegol, 35, 2, "Riego bajo");
         } else if (z1f1Buttons[7].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f1.riegoh, 36, 2, "Riego alto");
-        } else if (z1f1Buttons[11].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&pActivo.f1.huml, 37, 2, "Hum baja");
-        } else if (z1f1Buttons[10].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&pActivo.f1.humh, 38, 2, "Hum alta");
-        }
+        } /* else if (z1f1Buttons[11].contains(p.x, p.y)) {
+           NumericKeyboardScreen(&pActivo.f1.huml, 37, 2, "Hum baja");
+         } else if (z1f1Buttons[10].contains(p.x, p.y)) {
+           NumericKeyboardScreen(&pActivo.f1.humh, 38, 2, "Hum alta");
+         }*/
 
         break;
-      case 34:
+      }
+      case Screens::Zona_1_F2: {
         if (z1f2Buttons[4].contains(p.x, p.y)) {
           Z1Screen();
         } else if (z1f2Buttons[0].contains(p.x, p.y)) {
@@ -1634,13 +1647,14 @@ void tsMenu() {
           NumericKeyboardScreen(&pActivo.f2.riegol, 55, 2, "Riego bajo");
         } else if (z1f2Buttons[7].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f2.riegoh, 56, 2, "Riego alto");
-        } else if (z1f2Buttons[11].contains(p.x, p.y)) {
+        } /*else if (z1f2Buttons[11].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f2.huml, 57, 2, "Hum baja");
         } else if (z1f2Buttons[10].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f2.humh, 58, 2, "Hum alta");
-        }
+        }*/
         break;
-      case 35:
+      }
+      case Screens::Zona_1_F3: {
         if (z1f3Buttons[4].contains(p.x, p.y)) {
           Z1Screen();
         } else if (z1f3Buttons[0].contains(p.x, p.y)) {
@@ -1655,13 +1669,14 @@ void tsMenu() {
           NumericKeyboardScreen(&pActivo.f3.riegol, 75, 2, "Riego bajo");
         } else if (z1f3Buttons[7].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f3.riegoh, 76, 2, "Riego alto");
-        } else if (z1f3Buttons[11].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&pActivo.f3.huml, 77, 2, "Hum baja");
-        } else if (z1f3Buttons[10].contains(p.x, p.y)) {
-          NumericKeyboardScreen(&pActivo.f3.humh, 78, 2, "Hum alta");
-        }
+        } /* else if (z1f3Buttons[11].contains(p.x, p.y)) {
+           NumericKeyboardScreen(&pActivo.f3.huml, 77, 2, "Hum baja");
+         } else if (z1f3Buttons[10].contains(p.x, p.y)) {
+           NumericKeyboardScreen(&pActivo.f3.humh, 78, 2, "Hum alta");
+         }*/
         break;
-      case 36:
+      }
+      case Screens::Zona_1_F4: {
         if (z1f4Buttons[4].contains(p.x, p.y)) {
           Z1Screen();
         } else if (z1f4Buttons[0].contains(p.x, p.y)) {
@@ -1676,14 +1691,15 @@ void tsMenu() {
           NumericKeyboardScreen(&pActivo.f4.riegol, 95, 2, "Riego bajo");
         } else if (z1f4Buttons[7].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f4.riegoh, 96, 2, "Riego alto");
-        } else if (z1f4Buttons[11].contains(p.x, p.y)) {
+        } /*else if (z1f4Buttons[11].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f4.huml, 97, 2, "Hum baja");
         } else if (z1f4Buttons[10].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f4.humh, 98, 2, "Hum alta");
-        }
+        }*/
 
         break;
-      case 255:
+      }
+      case Screens::numKB: {
         numKBstrLength = strlen(numKBstr);
 
         tft.setTextSize(BUTTON_TEXTSIZE);
@@ -1765,21 +1781,26 @@ void tsMenu() {
         // aca van cada una de las pantallas en las que hay un teclado
         if (numericKeyboardButtons[0].contains(p.x, p.y)) {
           switch (numKBPrevScreen) {
-            case 33:
+            case Screens::Zona_1_F1: {
               Z1F1Screen();
               break;
-            case 34:
+            }
+            case Screens::Zona_1_F2: {
               Z1F2Screen();
               break;
-            case 35:
+            }
+            case Screens::Zona_1_F3: {
               Z1F3Screen();
               break;
-            case 36:
+            }
+            case Screens::Zona_1_F4: {
               Z1F4Screen();
               break;
-            case 31:
+            }
+            case Screens::Zona_1_Control: {
               Z1ControlScreen();
               break;
+            }
           }
         } else if (numericKeyboardButtons[13].contains(p.x, p.y)) {
           if (numKBvarptr8b != NULL) {
@@ -1790,24 +1811,30 @@ void tsMenu() {
             EEPROM.put(numKBeeprom, atoi(numKBstr));
           }
           switch (numKBPrevScreen) {
-            case 33:
+            case Screens::Zona_1_F1: {
               Z1F1Screen();
               break;
-            case 34:
+            }
+            case Screens::Zona_1_F2: {
               Z1F2Screen();
               break;
-            case 35:
+            }
+            case Screens::Zona_1_F3: {
               Z1F3Screen();
               break;
-            case 36:
+            }
+            case Screens::Zona_1_F4: {
               Z1F4Screen();
               break;
-            case 31:
+            }
+            case Screens::Zona_1_Control: {
               Z1ControlScreen();
               break;
+            }
           }
         }
         break;
+      }
     }
   }
 }
@@ -1815,7 +1842,7 @@ void tsMenu() {
 // MENUS
 
 void HomeScreen() {
-  currentScreen = 0;
+  currentScreen = Screens::Home;
   Estado mediciones;
   mediciones.t = t;
   mediciones.dias = dias;
@@ -1826,83 +1853,83 @@ void HomeScreen() {
 }
 
 void MenuScreen() {
-  currentScreen = 1;
+  currentScreen = Screens::Menu;
   drawMenuScreen(&tft, menuButtons);
 }
 
 void AjustesScreen() {
-  currentScreen = 2;
+  currentScreen = Screens::Ajustes;
   drawAjustesScreen(&tft, ajustesButtons);
 }
 
 void RelojScreen() {
-  currentScreen = 4;
+  currentScreen = Screens::Reloj;
   drawRelojScreen(&tft, relojButtons, now, &reloj);
 }
 
 void ProgramasScreen() {
-  currentScreen = 5;
+  currentScreen = Screens::Programas;
   drawProgramasScreen(&tft, programasButtons);
 }
 
 void Programa1Screen() {
-  currentScreen = 7;
+  currentScreen = Screens::Programa_1;
   drawPrograma1Screen(&tft, programa1Buttons);
 }
 
 void Programa2Screen() {
-  currentScreen = 8;
+  currentScreen = Screens::Programa_2;
   drawPrograma2Screen(&tft, programa2Buttons);
 }
 
 void Programa3Screen() {
-  currentScreen = 9;
+  currentScreen = Screens::Programa_3;
   drawPrograma3Screen(&tft, programa3Buttons);
 }
 
 void Programa4Screen() {
-  currentScreen = 10;
+  currentScreen = Screens::Programa_4;
   drawPrograma4Screen(&tft, programa4Buttons);
 }
 
 void ResetScreen() {
-  currentScreen = 6;
+  currentScreen = Screens::Reset;
   drawResetScreen(&tft, resetButtons);
 }
 
 void Z1Screen() {
-  currentScreen = 30;
+  currentScreen = Screens::Zona_1_Menu;
   drawZ1Screen(&tft, z1Buttons);
 }
 
 void Z1ControlScreen() {
-  currentScreen = 31;
+  currentScreen = Screens::Zona_1_Control;
   drawZ1ControlScreen(&tft, z1ControlButtons, &fActivaSP);
 }
 
 void Z1InicioScreen() {
-  currentScreen = 32;
+  currentScreen = Screens::Zona_1_Inicio;
   z1fSeleccionada = z1fActiva;
   drawZ1InicioScreen(&tft, z1InicioButtons, z1fActiva);
 }
 
 void Z1F1Screen() {
-  currentScreen = 33;
+  currentScreen = Screens::Zona_1_F1;
   drawZ1F1Screen(&tft, z1f1Buttons, &pActivo);
 }
 
 void Z1F2Screen() {
-  currentScreen = 34;
+  currentScreen = Screens::Zona_1_F2;
   drawZ1F2Screen(&tft, z1f2Buttons, &pActivo);
 }
 
 void Z1F3Screen() {
-  currentScreen = 35;
+  currentScreen = Screens::Zona_1_F3;
   drawZ1F3Screen(&tft, z1f3Buttons, &pActivo);
 }
 
 void Z1F4Screen() {
-  currentScreen = 36;
+  currentScreen = Screens::Zona_1_F4;
   drawZ1F4Screen(&tft, z1f4Buttons, &pActivo);
 }
 
@@ -1914,7 +1941,7 @@ void Z1F4Screen() {
 // title        titulo de la pantalla de teclado
 void NumericKeyboardScreen(uint8_t* intptr, uint16_t eepromdir,
                            uint8_t bufferSize, const char* title) {
-  currentScreen = 255;
+  currentScreen = Screens::numKB;
   sprintf_P(numKBstr, PSTR("%d"), *intptr);
   numKBvarptr16b = NULL;
   numKBvarptr8b = intptr;
@@ -1926,7 +1953,7 @@ void NumericKeyboardScreen(uint8_t* intptr, uint16_t eepromdir,
 
 void NumericKeyboardScreen(uint16_t* intptr, uint16_t eepromdir,
                            uint8_t bufferSize, const char* title) {
-  currentScreen = 255;
+  currentScreen = Screens::numKB;
   sprintf_P(numKBstr, PSTR("%d"), *intptr);
   numKBvarptr16b = intptr;
   numKBvarptr8b = NULL;

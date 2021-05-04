@@ -38,14 +38,12 @@ void drawHomeScreen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* homeButtons,
   tft->setCursor(10, 90);
   tft->print(F("Ventilacion"));
 
-  if (!(PINC & FANPIN) && (PINC & HEATPIN)) {
-    tft->fillCircle(180, 94, 10, YELLOW);
-  } else if (!(PINC & HEATPIN) && (PINC & FANPIN)) {
-    tft->fillCircle(180, 94, 10, BLUE);
-  } else if ((PINC & HEATPIN) && (PINC & FANPIN)) {
+  if (!(PINC & FANPIN)) {
+    tft->fillCircle(180, 94, 10, GREEN);
+  } else {
     tft->fillCircle(180, 94, 10, LIGHTGREY);
   }
-
+  /*
   tft->setCursor(10, 115);
   tft->print(F("Vaporizacion"));
 
@@ -54,14 +52,17 @@ void drawHomeScreen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* homeButtons,
   } else {
     tft->fillCircle(180, 119, 10, LIGHTGREY);
   }
-
   tft->setCursor(10, 140);
+  */
+  tft->setCursor(10, 115);
   tft->print(F("Riego"));
 
   if (!(PINC & RIEGOPIN)) {
-    tft->fillCircle(180, 144, 10, GREEN);
+    // tft->fillCircle(180, 144, 10, GREEN);
+    tft->fillCircle(180, 119, 10, GREEN);
   } else {
-    tft->fillCircle(180, 144, 10, LIGHTGREY);
+    // tft->fillCircle(180, 144, 10, LIGHTGREY);
+    tft->fillCircle(180, 119, 10, LIGHTGREY);
   }
 
   tft->setCursor(10, 165);
@@ -126,6 +127,7 @@ void drawHomeScreen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* homeButtons,
   tft->setTextColor(WHITE, BLACK);
   tft->print(F("Humedad "));
 
+  /*
   sprintf_P(buffer, PSTR("%d"), fActivaSP.humh);
   strcat_P(buffer, PSTR("%"));
   tft->setCursor(130, 280);
@@ -137,6 +139,7 @@ void drawHomeScreen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* homeButtons,
   tft->setCursor(130, 300);
   tft->setTextColor(BLUE);
   tft->print(buffer);  // humedad sp l
+  */
 
   sprintf_P(buffer, PSTR("%d"), mediciones.dias);
   tft->setCursor(125 - (strlen(buffer) * 18), 230);
@@ -322,9 +325,11 @@ void drawPrograma1Screen(Adafruit_TFTLCD* tft,
                                    "Guardar", BUTTON_TEXTSIZE);
   programa1Buttons[2].drawButton();
 
+  /*
   programa1Buttons[3].initButtonUL(tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
                                    "Reestablecer", BUTTON_TEXTSIZE);
   programa1Buttons[3].drawButton();
+  */
 
   programa1Buttons[4].initButtonUL(tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
                                    "Confirmar", BUTTON_TEXTSIZE);
@@ -353,10 +358,10 @@ void drawPrograma2Screen(Adafruit_TFTLCD* tft,
                                    "Guardar", BUTTON_TEXTSIZE);
   programa2Buttons[2].drawButton();
 
-  programa2Buttons[3].initButtonUL(tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
-                                   "Reestablecer", BUTTON_TEXTSIZE);
-  programa2Buttons[3].drawButton();
-
+  /*
+    programa2Buttons[3].initButtonUL(tft, 5, 125, 230, 40, WHITE, ORANGE,
+    YELLOW, "Reestablecer", BUTTON_TEXTSIZE); programa2Buttons[3].drawButton();
+  */
   programa2Buttons[4].initButtonUL(tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
                                    "Confirmar", BUTTON_TEXTSIZE);
 
@@ -383,11 +388,10 @@ void drawPrograma3Screen(Adafruit_TFTLCD* tft,
   programa3Buttons[2].initButtonUL(tft, 5, 80, 230, 40, WHITE, ORANGE, YELLOW,
                                    "Guardar", BUTTON_TEXTSIZE);
   programa3Buttons[2].drawButton();
-
-  programa3Buttons[3].initButtonUL(tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
-                                   "Reestablecer", BUTTON_TEXTSIZE);
-  programa3Buttons[3].drawButton();
-
+  /*
+    programa3Buttons[3].initButtonUL(tft, 5, 125, 230, 40, WHITE, ORANGE,
+    YELLOW, "Reestablecer", BUTTON_TEXTSIZE); programa3Buttons[3].drawButton();
+  */
   programa3Buttons[4].initButtonUL(tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
                                    "Confirmar", BUTTON_TEXTSIZE);
 
@@ -414,11 +418,10 @@ void drawPrograma4Screen(Adafruit_TFTLCD* tft,
   programa4Buttons[2].initButtonUL(tft, 5, 80, 230, 40, WHITE, ORANGE, YELLOW,
                                    "Guardar", BUTTON_TEXTSIZE);
   programa4Buttons[2].drawButton();
-
-  programa4Buttons[3].initButtonUL(tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
-                                   "Reestablecer", BUTTON_TEXTSIZE);
-  programa4Buttons[3].drawButton();
-
+  /*
+    programa4Buttons[3].initButtonUL(tft, 5, 125, 230, 40, WHITE, ORANGE,
+    YELLOW, "Reestablecer", BUTTON_TEXTSIZE); programa4Buttons[3].drawButton();
+  */
   programa4Buttons[4].initButtonUL(tft, 20, 170, 200, 40, WHITE, GREEN, WHITE,
                                    "Confirmar", BUTTON_TEXTSIZE);
 
@@ -521,17 +524,18 @@ void drawZ1F1Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f1Buttons,
   z1f1Buttons[3].drawRectButton();
   tft->setCursor(15, 175);
   tft->print(F("Riego"));
-
-  z1f1Buttons[11].initButtonUL(tft, 100, 215, 60, 40, BLACK, BLACK, BLACK, "",
-                               2);
-  z1f1Buttons[11].drawRectButton();
-  z1f1Buttons[10].initButtonUL(tft, 175, 215, 60, 40, BLACK, BLACK, BLACK, "",
-                               2);
-  z1f1Buttons[10].drawRectButton();
+  /*
+    z1f1Buttons[11].initButtonUL(tft, 100, 215, 60, 40, BLACK, BLACK, BLACK, "",
+                                 2);
+    z1f1Buttons[11].drawRectButton();
+    z1f1Buttons[10].initButtonUL(tft, 175, 215, 60, 40, BLACK, BLACK, BLACK, "",
+                                 2);
+    z1f1Buttons[10].drawRectButton();
   z1f1Buttons[9].initButtonUL(tft, 5, 215, 230, 40, WHITE, BLACK, WHITE, "", 2);
   z1f1Buttons[9].drawRectButton();
   tft->setCursor(15, 220);
   tft->print(F("Humedad"));
+  */
 
   tft->setTextSize(3);
 
@@ -577,21 +581,21 @@ void drawZ1F1Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f1Buttons,
 
   tft->setCursor(192 - (z1f1riegohSTRlen * 18), 180);
   tft->print(F("-"));
+  /*
+    //// humedad
+    sprintf_P(buffer, PSTR("%d"), pActivo->f1.humh);
+    uint8_t z1f1humhSTRlen = strlen(buffer);
+    strcat_P(buffer, PSTR("%"));
+    tft->setCursor(228 - (strlen(buffer) * 18), 225);
+    tft->print(buffer);
 
-  //// humedad
-  sprintf_P(buffer, PSTR("%d"), pActivo->f1.humh);
-  uint8_t z1f1humhSTRlen = strlen(buffer);
-  strcat_P(buffer, PSTR("%"));
-  tft->setCursor(228 - (strlen(buffer) * 18), 225);
-  tft->print(buffer);
+    sprintf_P(buffer, PSTR("%d"), pActivo->f1.huml);
+    tft->setCursor(192 - (strlen(buffer) * 18) - (z1f1humhSTRlen * 18), 225);
+    tft->print(buffer);
 
-  sprintf_P(buffer, PSTR("%d"), pActivo->f1.huml);
-  tft->setCursor(192 - (strlen(buffer) * 18) - (z1f1humhSTRlen * 18), 225);
-  tft->print(buffer);
-
-  tft->setCursor(192 - (z1f1humhSTRlen * 18), 225);
-  tft->print(F("-"));
-
+    tft->setCursor(192 - (z1f1humhSTRlen * 18), 225);
+    tft->print(F("-"));
+  */
   z1f1Buttons[4].initButtonUL(tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                               "Volver", BUTTON_TEXTSIZE);
   z1f1Buttons[4].drawButton();
@@ -638,18 +642,17 @@ void drawZ1F2Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f2Buttons,
   z1f2Buttons[3].drawRectButton();
   tft->setCursor(15, 175);
   tft->print(F("Riego"));
-
-  z1f2Buttons[11].initButtonUL(tft, 100, 215, 60, 40, BLACK, BLACK, BLACK, "",
-                               2);
-  z1f2Buttons[11].drawRectButton();
-  z1f2Buttons[10].initButtonUL(tft, 175, 215, 60, 40, BLACK, BLACK, BLACK, "",
-                               2);
-  z1f2Buttons[10].drawRectButton();
-  z1f2Buttons[9].initButtonUL(tft, 5, 215, 230, 40, WHITE, BLACK, WHITE, "", 2);
-  z1f2Buttons[9].drawRectButton();
-  tft->setCursor(15, 220);
-  tft->print(F("Humedad"));
-
+  /*
+    z1f2Buttons[11].initButtonUL(tft, 100, 215, 60, 40, BLACK, BLACK, BLACK, "",
+                                 2);
+    z1f2Buttons[11].drawRectButton();
+    z1f2Buttons[10].initButtonUL(tft, 175, 215, 60, 40, BLACK, BLACK, BLACK, "",
+                                 2);
+    z1f2Buttons[10].drawRectButton();
+    z1f2Buttons[9].initButtonUL(tft, 5, 215, 230, 40, WHITE, BLACK, WHITE, "",
+    2); z1f2Buttons[9].drawRectButton(); tft->setCursor(15, 220);
+    tft->print(F("Humedad"));
+  */
   tft->setTextSize(3);
 
   //// dias
@@ -694,21 +697,21 @@ void drawZ1F2Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f2Buttons,
 
   tft->setCursor(192 - (z1f2riegohSTRlen * 18), 180);
   tft->print(F("-"));
+  /*
+    //// humedad
+    sprintf_P(buffer, PSTR("%d"), pActivo->f2.humh);
+    uint8_t z1f2humhSTRlen = strlen(buffer);
+    strcat_P(buffer, PSTR("%"));
+    tft->setCursor(228 - (strlen(buffer) * 18), 225);
+    tft->print(buffer);
 
-  //// humedad
-  sprintf_P(buffer, PSTR("%d"), pActivo->f2.humh);
-  uint8_t z1f2humhSTRlen = strlen(buffer);
-  strcat_P(buffer, PSTR("%"));
-  tft->setCursor(228 - (strlen(buffer) * 18), 225);
-  tft->print(buffer);
+    sprintf_P(buffer, PSTR("%d"), pActivo->f2.huml);
+    tft->setCursor(192 - (strlen(buffer) * 18) - (z1f2humhSTRlen * 18), 225);
+    tft->print(buffer);
 
-  sprintf_P(buffer, PSTR("%d"), pActivo->f2.huml);
-  tft->setCursor(192 - (strlen(buffer) * 18) - (z1f2humhSTRlen * 18), 225);
-  tft->print(buffer);
-
-  tft->setCursor(192 - (z1f2humhSTRlen * 18), 225);
-  tft->print(F("-"));
-
+    tft->setCursor(192 - (z1f2humhSTRlen * 18), 225);
+    tft->print(F("-"));
+  */
   z1f2Buttons[4].initButtonUL(tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                               "Volver", BUTTON_TEXTSIZE);
   z1f2Buttons[4].drawButton();
@@ -755,18 +758,17 @@ void drawZ1F3Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f3Buttons,
   z1f3Buttons[3].drawRectButton();
   tft->setCursor(15, 175);
   tft->print(F("Riego"));
-
-  z1f3Buttons[11].initButtonUL(tft, 100, 215, 60, 40, BLACK, BLACK, BLACK, "",
-                               2);
-  z1f3Buttons[11].drawRectButton();
-  z1f3Buttons[10].initButtonUL(tft, 175, 215, 60, 40, BLACK, BLACK, BLACK, "",
-                               2);
-  z1f3Buttons[10].drawRectButton();
-  z1f3Buttons[9].initButtonUL(tft, 5, 215, 230, 40, WHITE, BLACK, WHITE, "", 2);
-  z1f3Buttons[9].drawRectButton();
-  tft->setCursor(15, 220);
-  tft->print(F("Humedad"));
-
+  /*
+    z1f3Buttons[11].initButtonUL(tft, 100, 215, 60, 40, BLACK, BLACK, BLACK, "",
+                                 2);
+    z1f3Buttons[11].drawRectButton();
+    z1f3Buttons[10].initButtonUL(tft, 175, 215, 60, 40, BLACK, BLACK, BLACK, "",
+                                 2);
+    z1f3Buttons[10].drawRectButton();
+    z1f3Buttons[9].initButtonUL(tft, 5, 215, 230, 40, WHITE, BLACK, WHITE, "",
+    2); z1f3Buttons[9].drawRectButton(); tft->setCursor(15, 220);
+    tft->print(F("Humedad"));
+  */
   tft->setTextSize(3);
 
   //// dias
@@ -811,21 +813,21 @@ void drawZ1F3Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f3Buttons,
 
   tft->setCursor(192 - (z1f3riegohSTRlen * 18), 180);
   tft->print(F("-"));
+  /*
+    //// humedad
+    sprintf_P(buffer, PSTR("%d"), pActivo->f3.humh);
+    uint8_t z1f3humhSTRlen = strlen(buffer);
+    strcat_P(buffer, PSTR("%"));
+    tft->setCursor(228 - (strlen(buffer) * 18), 225);
+    tft->print(buffer);
 
-  //// humedad
-  sprintf_P(buffer, PSTR("%d"), pActivo->f3.humh);
-  uint8_t z1f3humhSTRlen = strlen(buffer);
-  strcat_P(buffer, PSTR("%"));
-  tft->setCursor(228 - (strlen(buffer) * 18), 225);
-  tft->print(buffer);
+    sprintf_P(buffer, PSTR("%d"), pActivo->f3.huml);
+    tft->setCursor(192 - (strlen(buffer) * 18) - (z1f3humhSTRlen * 18), 225);
+    tft->print(buffer);
 
-  sprintf_P(buffer, PSTR("%d"), pActivo->f3.huml);
-  tft->setCursor(192 - (strlen(buffer) * 18) - (z1f3humhSTRlen * 18), 225);
-  tft->print(buffer);
-
-  tft->setCursor(192 - (z1f3humhSTRlen * 18), 225);
-  tft->print(F("-"));
-
+    tft->setCursor(192 - (z1f3humhSTRlen * 18), 225);
+    tft->print(F("-"));
+  */
   z1f3Buttons[4].initButtonUL(tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                               "Volver", BUTTON_TEXTSIZE);
   z1f3Buttons[4].drawButton();
@@ -872,18 +874,17 @@ void drawZ1F4Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f4Buttons,
   z1f4Buttons[3].drawRectButton();
   tft->setCursor(15, 175);
   tft->print(F("Riego"));
-
-  z1f4Buttons[11].initButtonUL(tft, 100, 215, 60, 40, BLACK, BLACK, BLACK, "",
-                               2);
-  z1f4Buttons[11].drawRectButton();
-  z1f4Buttons[10].initButtonUL(tft, 175, 215, 60, 40, BLACK, BLACK, BLACK, "",
-                               2);
-  z1f4Buttons[10].drawRectButton();
-  z1f4Buttons[9].initButtonUL(tft, 5, 215, 230, 40, WHITE, BLACK, WHITE, "", 2);
-  z1f4Buttons[9].drawRectButton();
-  tft->setCursor(15, 220);
-  tft->print(F("Humedad"));
-
+  /*
+    z1f4Buttons[11].initButtonUL(tft, 100, 215, 60, 40, BLACK, BLACK, BLACK, "",
+                                 2);
+    z1f4Buttons[11].drawRectButton();
+    z1f4Buttons[10].initButtonUL(tft, 175, 215, 60, 40, BLACK, BLACK, BLACK, "",
+                                 2);
+    z1f4Buttons[10].drawRectButton();
+    z1f4Buttons[9].initButtonUL(tft, 5, 215, 230, 40, WHITE, BLACK, WHITE, "",
+    2); z1f4Buttons[9].drawRectButton(); tft->setCursor(15, 220);
+    tft->print(F("Humedad"));
+  */
   tft->setTextSize(3);
 
   //// dias
@@ -928,21 +929,21 @@ void drawZ1F4Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f4Buttons,
 
   tft->setCursor(192 - (z1f4riegohSTRlen * 18), 180);
   tft->print(F("-"));
+  /*
+    //// humedad
+    sprintf_P(buffer, PSTR("%d"), pActivo->f4.humh);
+    uint8_t z1f4humhSTRlen = strlen(buffer);
+    strcat_P(buffer, PSTR("%"));
+    tft->setCursor(228 - (strlen(buffer) * 18), 225);
+    tft->print(buffer);
 
-  //// humedad
-  sprintf_P(buffer, PSTR("%d"), pActivo->f4.humh);
-  uint8_t z1f4humhSTRlen = strlen(buffer);
-  strcat_P(buffer, PSTR("%"));
-  tft->setCursor(228 - (strlen(buffer) * 18), 225);
-  tft->print(buffer);
+    sprintf_P(buffer, PSTR("%d"), pActivo->f4.huml);
+    tft->setCursor(192 - (strlen(buffer) * 18) - (z1f4humhSTRlen * 18), 225);
+    tft->print(buffer);
 
-  sprintf_P(buffer, PSTR("%d"), pActivo->f4.huml);
-  tft->setCursor(192 - (strlen(buffer) * 18) - (z1f4humhSTRlen * 18), 225);
-  tft->print(buffer);
-
-  tft->setCursor(192 - (z1f4humhSTRlen * 18), 225);
-  tft->print(F("-"));
-
+    tft->setCursor(192 - (z1f4humhSTRlen * 18), 225);
+    tft->print(F("-"));
+  */
   z1f4Buttons[4].initButtonUL(tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                               "Volver", BUTTON_TEXTSIZE);
   z1f4Buttons[4].drawButton();
@@ -1048,8 +1049,8 @@ void drawZ1InicioScreen(Adafruit_TFTLCD* tft,
 
 void drawNumericKeyboardScreen(Adafruit_TFTLCD* tft,
                                Adafruit_GFX_Button* numericKeyboardButtons,
-                               const char* title, uint8_t prevScreen,
-                               uint8_t* numKBPrevScreen, char* numKBstr) {
+                               const char* title, enum Screens prevScreen,
+                               enum Screens* numKBPrevScreen, char* numKBstr) {
   *numKBPrevScreen = prevScreen;
 
   tft->fillScreen(BLACK);
