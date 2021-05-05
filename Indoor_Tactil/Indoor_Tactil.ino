@@ -157,6 +157,8 @@ Adafruit_GFX_Button z1f4Buttons[12];
 Adafruit_GFX_Button z1ControlButtons[4];
 Adafruit_GFX_Button z1InicioButtons[6];
 Adafruit_GFX_Button ajustesButtons[5];
+Adafruit_GFX_Button calibracionButtons[2];
+Adafruit_GFX_Button calibTierraButtons[3];
 Adafruit_GFX_Button relojButtons[2];
 Adafruit_GFX_Button programasButtons[5];
 Adafruit_GFX_Button programa1Buttons[5];
@@ -189,6 +191,9 @@ uint16_t dias;  // dias que lleva la fase activa
 float t;          // temperatura
 float h;          // humedad
 uint8_t hTierra;  // humedad tierra
+int16_t soil;     // valor del sensor de humedad
+uint16_t tMin;
+uint16_t tMax;
 
 // ins
 const uint8_t SENSORTIERRAPIN PROGMEM = A8;
@@ -202,7 +207,7 @@ const uint8_t VAPPIN PROGMEM = 0x08;    // pin 34 // PC2
 const uint8_t RIEGOPIN PROGMEM = 0x01;  // pin 37 // PC0
 
 /*
-// supongo que asi se hace convencionalmente
+// supongo que asi se hace convencionalmente // y debería hacerlo así
 
 #define HEATPIN PC5
 #define FANPIN PC4
@@ -247,30 +252,6 @@ volatile static uint16_t framecount;
 const uint8_t refreshFrames PROGMEM = 100;
 
 /*
-  screens:
-  0 - dashboard/home screen
-  1 - menu
-  2 - ajustes
-  3 - calibracion
-  4 - reloj
-  5 - programas
-  6 - reset
-  7 - programa 1
-  8 - programa 2
-  9 - programa 3
-  10 - programa 4
-
-  30 - zona 1 menu
-  31 - zona 1 control
-  32 - zona 1 inicio
-  33 - zona 1 fase 1
-  34 - zona 1 fase 2
-  35 - zona 1 fase 3
-  36 - zona 1 fase 4
-
-  255 - numKB
-
-
   EEPROM:
   [0-9] = id, device info, etc
   [10-29] = fase activa, info fase activa, ciclos
@@ -279,7 +260,9 @@ const uint8_t refreshFrames PROGMEM = 100;
     15-18 = UNIX timestamp % 86400 segundo del dia de inicio de luz
     19 = hora de inicio de iluminacion
     21 = minuto de inicio/fin de iluminacion
-    22 = cantidad de ciclo
+    22 = cantidad de ciclos
+    26-27 = calibracion tierra seca / tMax
+    28-29 = calibracion tierra mojada / tMin
   [30-109] = programa activo
     [30-49] = configuracion fase 1
       30-31 = dias
@@ -370,13 +353,16 @@ void setup() {
   tft.begin(0x9341);
   tft.setRotation(0);
 
-  if (EEPROM.read(0) != 88) eeprom_hardReset(&tft);
+  if (EEPROM.read(0) != 89) eeprom_hardReset(&tft);
 
   z1fActiva = EEPROM.read(10);
   z1fActivalast = z1fActiva;
   z1fSeleccionada = z1fActiva;
   EEPROM.get(11, fActivaSP.diaIniciodefase);
   EEPROM.get(15, fActivaSP.sLuz);
+
+  EEPROM.get(26, tMin);
+  EEPROM.get(28, tMax);
 
   eeprom_cargarPrograma(&pActivo);
   eeprom_cargarfActivaSP(&fActivaSP, z1fActiva);
@@ -538,6 +524,18 @@ void loop() {
     SYSTEM_OFF();
   }
 
+  // aca actualizo la pantalla de calibración
+  static int16_t lastSoil = 0xffff;
+  if (currentScreen == Screens::CalibTierra && !(framecount % refreshFrames) &&
+      lastSoil != soil) {
+    lastSoil = soil;
+    tft.setTextSize(BUTTON_TEXTSIZE);
+    sprintf_P(buffer, PSTR("%4d"), soil);
+    tft.setCursor(230 - (strlen(buffer) * CHARACTER_WIDTH * 3),
+                  ((100 - 10 + (CHARACTER_HEIGHT * TITLE_TEXTSIZE)) / 2));
+    tft.setTextColor(WHITE, BLACK);
+    tft.print(buffer);
+  }
   // aca actualizo el dashboard
   if (currentScreen == Screens::Home && !(framecount % refreshFrames)) {
     static uint16_t lastDias = 0xffff;
@@ -657,13 +655,13 @@ void readSoil() {
   static uint32_t lastTime;
 
   if (millis() - lastTime >= 500) {
-    int16_t soil = analogRead(SENSORTIERRAPIN);
-    if (soil < 335) {
+    soil = analogRead(SENSORTIERRAPIN);
+    if (soil < tMin) {
       hTierra = 99;
-    } else if (soil > 780) {
+    } else if (soil > tMax) {
       hTierra = 0;
     } else {
-      hTierra = map(soil, 335, 780, 99, 0);
+      hTierra = map(soil, tMin, tMax, 99, 0);
     }
     lastTime = millis();
   }
@@ -721,6 +719,10 @@ void DEBUG() {
             Serial.println(fActivaSP.sLuz);
             Serial.print(F("fActivaSP.sFinLuz: \t\t"));
             Serial.println(fActivaSP.sFinLuz);
+            Serial.print(F("tMax: \t\t"));
+            Serial.println(tMax);
+            Serial.print(F("tMin: \t\t"));
+            Serial.println(tMin);
             break;
           case 1:
             Serial.print(F("fActivaSP.dias: \t"));
@@ -839,10 +841,39 @@ void tsMenu() {
           ProgramasScreen();
         } else if (ajustesButtons[3].contains(p.x, p.y)) {
           ResetScreen();
+        } else if (ajustesButtons[0].contains(p.x, p.y)) {
+          CalibracionScreen();
         }
         break;
       }
       case Screens::Calibracion: {
+        if (calibracionButtons[0].contains(p.x, p.y)) {
+          AjustesScreen();
+        } else if (calibracionButtons[1].contains(p.x, p.y)) {
+          CalibTierraScreen();
+        }
+        break;
+      }
+      case Screens::CalibTierra: {
+        if (calibTierraButtons[0].contains(p.x, p.y)) {
+          CalibracionScreen();
+        } else if (calibTierraButtons[1].contains(p.x, p.y)) {
+          tMax = soil;
+          EEPROM.put(26, tMax);
+          tft.setTextSize(BUTTON_TEXTSIZE);
+          tft.setTextColor(WHITE, BLACK);
+          sprintf_P(buffer, PSTR("%d"), tMax);
+          tft.setCursor(230 - (strlen(buffer) * CHARACTER_WIDTH * 3), 100);
+          tft.print(buffer);
+        } else if (calibTierraButtons[2].contains(p.x, p.y)) {
+          tMin = soil;
+          tft.setTextSize(BUTTON_TEXTSIZE);
+          tft.setTextColor(WHITE, BLACK);
+          EEPROM.put(28, tMin);
+          sprintf_P(buffer, PSTR("%d"), tMin);
+          tft.setCursor(230 - (strlen(buffer) * CHARACTER_WIDTH * 3), 190);
+          tft.print(buffer);
+        }
         break;
       }
       case Screens::Reloj: {
@@ -1860,6 +1891,16 @@ void MenuScreen() {
 void AjustesScreen() {
   currentScreen = Screens::Ajustes;
   drawAjustesScreen(&tft, ajustesButtons);
+}
+
+void CalibracionScreen() {
+  currentScreen = Screens::Calibracion;
+  drawCalibracionScreen(&tft, calibracionButtons);
+}
+
+void CalibTierraScreen() {
+  currentScreen = Screens::CalibTierra;
+  drawCalibTierraScreen(&tft, calibTierraButtons, soil, tMin, tMax);
 }
 
 void RelojScreen() {

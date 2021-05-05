@@ -204,13 +204,85 @@ void drawAjustesScreen(Adafruit_TFTLCD* tft,
                                  "Programas", BUTTON_TEXTSIZE);
   ajustesButtons[2].drawButton();
 
-  ajustesButtons[3].initButtonUL(tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
+  ajustesButtons[0].initButtonUL(tft, 5, 125, 230, 40, WHITE, ORANGE, YELLOW,
+                                 "Calib.", BUTTON_TEXTSIZE);
+  ajustesButtons[0].drawButton();
+
+  ajustesButtons[3].initButtonUL(tft, 5, 170, 230, 40, WHITE, ORANGE, YELLOW,
                                  "H. Reset", BUTTON_TEXTSIZE);
   ajustesButtons[3].drawButton();
 
   ajustesButtons[4].initButtonUL(tft, 5, 280, 230, 40, WHITE, LIGHTGREY, WHITE,
                                  "Volver", BUTTON_TEXTSIZE);
   ajustesButtons[4].drawButton();
+}
+
+void drawCalibracionScreen(Adafruit_TFTLCD* tft,
+                           Adafruit_GFX_Button* calibracionButtons) {
+  tft->fillScreen(BLACK);
+
+  tft->setTextColor(WHITE);
+  tft->setTextSize(TITLE_TEXTSIZE);
+  tft->setCursor(
+      120 - (((CHARACTER_WIDTH * TITLE_TEXTSIZE * 11) - 3) / 2) - 14 * 3, 10);
+  tft->print(F("Calibracion"));
+
+  calibracionButtons[1].initButtonUL(tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
+                                     "Tierra", BUTTON_TEXTSIZE);
+  calibracionButtons[1].drawButton();
+
+  calibracionButtons[0].initButtonUL(tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
+                                     WHITE, "Volver", BUTTON_TEXTSIZE);
+  calibracionButtons[0].drawButton();
+}
+
+void drawCalibTierraScreen(Adafruit_TFTLCD* tft,
+                           Adafruit_GFX_Button* calibTierraButtons,
+                           int16_t soil, uint16_t tMin, uint16_t tMax) {
+  tft->fillScreen(BLACK);
+
+  tft->setTextColor(WHITE);
+  tft->setTextSize(TITLE_TEXTSIZE);
+  tft->setCursor(
+      120 - (((CHARACTER_WIDTH * TITLE_TEXTSIZE * 11) - 3) / 2) - 15 * 3, 10);
+  tft->print(F("Calib. Tierra"));
+
+  tft->setCursor(5, ((100 - 10 + (CHARACTER_HEIGHT * TITLE_TEXTSIZE)) / 2));
+  tft->print(F("Sensor"));
+
+  tft->setTextSize(TITLE_TEXTSIZE);
+  tft->setCursor(5, 100);
+  tft->print(F("Tierra seca"));
+
+  tft->setCursor(5, 190);
+  tft->print(F("Tierra mojada"));
+
+  char buffer[10];
+  tft->setTextSize(BUTTON_TEXTSIZE);
+  sprintf_P(buffer, PSTR("%d"), soil);
+  tft->setCursor(230 - (strlen(buffer) * CHARACTER_WIDTH * 3),
+                 ((100 - 10 + (CHARACTER_HEIGHT * TITLE_TEXTSIZE)) / 2));
+  tft->print(buffer);
+
+  sprintf_P(buffer, PSTR("%d"), tMax);
+  tft->setCursor(230 - (strlen(buffer) * CHARACTER_WIDTH * 3), 100);
+  tft->print(buffer);
+
+  sprintf_P(buffer, PSTR("%d"), tMin);
+  tft->setCursor(230 - (strlen(buffer) * CHARACTER_WIDTH * 3), 190);
+  tft->print(buffer);
+
+  calibTierraButtons[1].initButtonUL(tft, 5, 125, 115, 40, WHITE, ORANGE,
+                                     YELLOW, "Set", BUTTON_TEXTSIZE);
+  calibTierraButtons[1].drawButton();
+
+  calibTierraButtons[2].initButtonUL(tft, 5, 215, 115, 40, WHITE, ORANGE,
+                                     YELLOW, "Set", BUTTON_TEXTSIZE);
+  calibTierraButtons[2].drawButton();
+
+  calibTierraButtons[0].initButtonUL(tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
+                                     WHITE, "Volver", BUTTON_TEXTSIZE);
+  calibTierraButtons[0].drawButton();
 }
 
 void drawRelojScreen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* relojButtons,

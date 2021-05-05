@@ -18,6 +18,13 @@ void drawMenuScreen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* menuButtons);
 void drawAjustesScreen(Adafruit_TFTLCD* tft,
                        Adafruit_GFX_Button* ajustesButtons);
 
+void drawCalibracionScreen(Adafruit_TFTLCD* tft,
+                           Adafruit_GFX_Button* calibracionButtons);
+
+void drawCalibTierraScreen(Adafruit_TFTLCD* tft,
+                           Adafruit_GFX_Button* calibTierraButtons,
+                           int16_t soil, uint16_t tMin, uint16_t tMax);
+
 void drawRelojScreen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* relojButtons,
                      const DateTime now, Reloj* reloj);
 

@@ -89,6 +89,7 @@ enum class Screens {
   Programa_2,
   Programa_3,
   Programa_4,
+  CalibTierra,
   Zona_1_Menu = 30,
   Zona_1_Control,
   Zona_1_Inicio,

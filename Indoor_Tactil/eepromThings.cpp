@@ -29,6 +29,9 @@ void eeprom_cargarPrograma(Programa* p) {
 }
 
 void eeprom_hardReset(Adafruit_TFTLCD* tft) {
+  uint16_t tMin = 780;
+  uint16_t tMax = 335;
+
   Fase F1DefaultSettings;
   Fase F2DefaultSettings;
   Fase F3DefaultSettings;
@@ -114,12 +117,14 @@ void eeprom_hardReset(Adafruit_TFTLCD* tft) {
   p4.f3.dias = 666;
   p4.f4.dias = 666;
 
-  EEPROM.update(0, 88);
+  EEPROM.update(0, 89);
   Serial.println(F("device information restored"));
-  for (uint8_t i = 10; i < 30; i++) {
+  for (uint8_t i = 10; i < 26; i++) {
     EEPROM.update(i, 0x00);
   }
   EEPROM.update(22, 1);
+  EEPROM.put(26, tMax);
+  EEPROM.put(28, tMin);
   Serial.println(F("phase information restored"));
   EEPROM.put(30, F1DefaultSettings);
   Serial.println(F("F1 settings restored"));
@@ -197,7 +202,7 @@ void eeprom_read(uint8_t length) {
 
   switch (length) {
     case 0:
-    Serial.println(F("full: "));
+      Serial.println(F("full: "));
       for (uint16_t i = 0; i < 500; i++) {
         switch (i) {
           case 0:
@@ -288,7 +293,7 @@ void eeprom_read(uint8_t length) {
         Serial.print(F("\t"));
       }
       break;
-      case 1:
+    case 1:
       Serial.println(F("short: "));
       for (uint16_t i = 0; i < 30; i++) {
         switch (i) {

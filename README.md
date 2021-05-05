@@ -16,6 +16,8 @@ me gustaría encontrar un mejor sistema que los Adafruit_GFX_Button
 <br><br>
 <h1>todo:</h1>
 
+eeprom_things.cpp: las direcciones de eeprom deberían ser un enum
+
 tengo eliminar por completo el vaporizador y calentador
 
 tengo que hacer un sistema más robusto para activar y desactivar salidas. ie: un struct que guarde el estado en el que deberían estar las salidas, y en base al estado de ese struct controlar pines, de forma que se separe el método de decidir en que estado deberían estar las salidas y el sistema que realmente las controla. (esto hace más fácil el cambio de lógica negativa a positiva en la placa de relays)
@@ -26,9 +28,7 @@ tengo que cambiar relojYYYY, relojMM, etc... a un objeto DateTime
 
 problemas con la activación del ventilador-calefactor: calefactor prendido al minimo, se apaga a 26 - ventilador prendido al maximo, se apaga a 25
 
-134: pin de dht hardcodeado
-
-configurar los programas default
+pin de dht hardcodeado
 
 pantalla de configuración de programas
 
