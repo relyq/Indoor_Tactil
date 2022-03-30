@@ -16,6 +16,8 @@ me gustaría encontrar un mejor sistema que los Adafruit_GFX_Button
 <br><br>
 <h1>todo:</h1>
 
+al activar debug debería DateTime now tomar la hora de millis() para poder usar el firmware sin rtc
+
 eeprom_things.cpp: las direcciones de eeprom deberían ser un enum
 
 tengo eliminar por completo el vaporizador y calentador
