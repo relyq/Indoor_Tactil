@@ -36,6 +36,7 @@ typedef struct Fase {
   uint8_t riegoh;
   uint8_t huml;
   uint8_t humh;
+  uint8_t riegod;  // riego dias
 } Fase;
 
 typedef struct Programa {
@@ -50,6 +51,7 @@ typedef struct fActiva {
   uint8_t hLuz;
   uint8_t templ;
   uint8_t temph;
+  uint8_t riegod;  // riego dias
   uint8_t riegol;
   uint8_t riegoh;
   uint8_t huml;
@@ -59,6 +61,7 @@ typedef struct fActiva {
   uint32_t diaFindefase;     // dia en unixtime del fin de la fase activa
   uint32_t sLuz;             // segundo del dia en el que prende la luz
   uint32_t sFinLuz;          // segundo del dia en el que apaga la luz
+  uint32_t sProx_riego;      // segundo del dia del proximo riego
   uint8_t ciclos;            // cantidad de ciclos - 0 = ciclo continuo
 } fActiva;
 
@@ -72,6 +75,7 @@ typedef struct Reloj {
 
 typedef struct Estado {
   float t;
+  float dias_prox_riego;
   uint16_t dias;
   uint8_t hTierra;
   uint8_t h;

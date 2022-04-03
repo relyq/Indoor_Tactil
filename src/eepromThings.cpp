@@ -18,6 +18,7 @@ void eeprom_cargarfActivaSP(fActiva* fActivaSP, uint8_t f) {
   fActivaSP->riegoh = EEPROM.read(fDir + 6);
   fActivaSP->huml = EEPROM.read(fDir + 7);
   fActivaSP->humh = EEPROM.read(fDir + 8);
+  fActivaSP->riegod = EEPROM.read(fDir + 9);
   fActivaSP->ciclos = EEPROM.read(22);
 }
 
@@ -50,6 +51,7 @@ void eeprom_hardReset(Adafruit_TFTLCD* tft) {
   F1DefaultSettings.riegoh = 60;
   F1DefaultSettings.huml = 60;
   F1DefaultSettings.humh = 80;
+  F1DefaultSettings.riegod = 1;
 
   F2DefaultSettings = F1DefaultSettings;
   F3DefaultSettings = F1DefaultSettings;
@@ -70,6 +72,7 @@ void eeprom_hardReset(Adafruit_TFTLCD* tft) {
   p1.f1.riegoh = 60;
   p1.f1.huml = 60;
   p1.f1.humh = 70;
+  p1.f1.riegod = 1;
 
   p1.f2.dias = 90;
   p1.f2.hLuz = 14;
@@ -79,6 +82,7 @@ void eeprom_hardReset(Adafruit_TFTLCD* tft) {
   p1.f2.riegoh = 60;
   p1.f2.huml = 65;
   p1.f2.humh = 75;
+  p1.f2.riegod = 1;
 
   p1.f3.dias = 90;
   p1.f3.hLuz = 12;
@@ -88,6 +92,7 @@ void eeprom_hardReset(Adafruit_TFTLCD* tft) {
   p1.f3.riegoh = 40;
   p1.f3.huml = 70;
   p1.f3.humh = 80;
+  p1.f3.riegod = 1;
 
   p1.f4.dias = 90;
   p1.f4.hLuz = 14;
@@ -97,6 +102,7 @@ void eeprom_hardReset(Adafruit_TFTLCD* tft) {
   p1.f4.riegoh = 60;
   p1.f4.huml = 65;
   p1.f4.humh = 75;
+  p1.f4.riegod = 1;
 
   p2 = p1;
   p3 = p1;
@@ -117,7 +123,7 @@ void eeprom_hardReset(Adafruit_TFTLCD* tft) {
   p4.f3.dias = 666;
   p4.f4.dias = 666;
 
-  EEPROM.update(0, 89);
+  EEPROM.update(0, 90);
   Serial.println(F("device information restored"));
   for (uint8_t i = 10; i < 26; i++) {
     EEPROM.update(i, 0x00);

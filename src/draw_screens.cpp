@@ -95,6 +95,12 @@ void drawHomeScreen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* homeButtons,
   tft->setTextColor(WHITE, BLACK);
   tft->print(F("Riego "));
 
+  sprintf_P(buffer, PSTR("%d"), fActivaSP.riegod);
+  tft->setCursor(230 - (strlen(buffer) * 12), 200);
+  tft->setTextColor(ORANGE);
+  tft->print(buffer);
+
+  /* riego por humedad
   sprintf_P(buffer, PSTR("%d"), fActivaSP.riegoh);
   strcat_P(buffer, PSTR("%"));
   tft->setCursor(130, 220);
@@ -106,6 +112,7 @@ void drawHomeScreen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* homeButtons,
   tft->setCursor(130, 240);
   tft->setTextColor(BLUE);
   tft->print(buffer);  // riego sp l
+  */
 
   tft->setCursor(10, 260);
   tft->setTextColor(WHITE, BLACK);
@@ -147,10 +154,17 @@ void drawHomeScreen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* homeButtons,
   tft->setTextColor(WHITE, BLACK);
   tft->print(buffer);
 
-  sprintf_P(buffer, PSTR("%d"), mediciones.hTierra);
-  strcat_P(buffer, PSTR("%"));
+  // riego dias
+  dtostrf(mediciones.dias_prox_riego, 4, 2, buffer);
   tft->setCursor(230 - (strlen(buffer) * 18), 230);
   tft->print(buffer);
+
+  /*
+    sprintf_P(buffer, PSTR("%d"), mediciones.hTierra);
+    strcat_P(buffer, PSTR("%"));
+    tft->setCursor(230 - (strlen(buffer) * 18), 230);
+    tft->print(buffer);
+  */
 
   dtostrf(mediciones.t, 4, 1, buffer);
   strcat_P(buffer, PSTR("C"));
@@ -227,9 +241,11 @@ void drawCalibracionScreen(Adafruit_TFTLCD* tft,
       120 - (((CHARACTER_WIDTH * TITLE_TEXTSIZE * 11) - 3) / 2) - 14 * 3, 10);
   tft->print(F("Calibracion"));
 
+  /*
   calibracionButtons[1].initButtonUL(tft, 5, 35, 230, 40, WHITE, ORANGE, YELLOW,
                                      "Tierra", BUTTON_TEXTSIZE);
   calibracionButtons[1].drawButton();
+  */
 
   calibracionButtons[0].initButtonUL(tft, 5, 280, 230, 40, WHITE, LIGHTGREY,
                                      WHITE, "Volver", BUTTON_TEXTSIZE);
@@ -586,16 +602,25 @@ void drawZ1F1Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f1Buttons,
   tft->setCursor(15, 130);
   tft->print(F("Temp."));
 
-  z1f1Buttons[8].initButtonUL(tft, 100, 170, 60, 40, BLACK, BLACK, BLACK, "",
-                              2);
-  z1f1Buttons[8].drawRectButton();
-  z1f1Buttons[7].initButtonUL(tft, 175, 170, 60, 40, BLACK, BLACK, BLACK, "",
-                              2);
-  z1f1Buttons[7].drawRectButton();
+  /* riego por humedad
+    z1f1Buttons[8].initButtonUL(tft, 100, 170, 60, 40, BLACK, BLACK, BLACK, "",
+                                2);
+    z1f1Buttons[8].drawRectButton();
+    z1f1Buttons[7].initButtonUL(tft, 175, 170, 60, 40, BLACK, BLACK, BLACK, "",
+                                2);
+    z1f1Buttons[7].drawRectButton();
+    z1f1Buttons[3].initButtonUL(tft, 5, 170, 230, 40, WHITE, BLACK, WHITE, "",
+    2); z1f1Buttons[3].drawRectButton(); tft->setCursor(15, 175);
+    tft->print(F("Riego"));
+  */
+
   z1f1Buttons[3].initButtonUL(tft, 5, 170, 230, 40, WHITE, BLACK, WHITE, "", 2);
   z1f1Buttons[3].drawRectButton();
   tft->setCursor(15, 175);
   tft->print(F("Riego"));
+  tft->setCursor(15, 205 - (CHARACTER_HEIGHT * TITLE_TEXTSIZE));
+  tft->print(F("cada"));
+
   /*
     z1f1Buttons[11].initButtonUL(tft, 100, 215, 60, 40, BLACK, BLACK, BLACK, "",
                                  2);
@@ -641,6 +666,8 @@ void drawZ1F1Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f1Buttons,
   tft->print(F("-"));
 
   //// riego
+
+  /* riego por humedad
   sprintf_P(buffer, PSTR("%d"), pActivo->f1.riegoh);
   uint8_t z1f1riegohSTRlen = strlen(buffer);
   strcat_P(buffer, PSTR("%"));
@@ -653,6 +680,14 @@ void drawZ1F1Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f1Buttons,
 
   tft->setCursor(192 - (z1f1riegohSTRlen * 18), 180);
   tft->print(F("-"));
+  */
+
+  if (pActivo->f1.riegod > 255) pActivo->f1.riegod = 255;
+  sprintf_P(buffer, PSTR("%d"), pActivo->f1.riegod);
+  strcat_P(buffer, PSTR("D"));
+  tft->setCursor(228 - (strlen(buffer) * 18), 180);
+  tft->print(buffer);
+
   /*
     //// humedad
     sprintf_P(buffer, PSTR("%d"), pActivo->f1.humh);
@@ -704,6 +739,7 @@ void drawZ1F2Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f2Buttons,
   tft->setCursor(15, 130);
   tft->print(F("Temp."));
 
+  /* riego por humedad
   z1f2Buttons[8].initButtonUL(tft, 100, 170, 60, 40, BLACK, BLACK, BLACK, "",
                               2);
   z1f2Buttons[8].drawRectButton();
@@ -714,6 +750,15 @@ void drawZ1F2Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f2Buttons,
   z1f2Buttons[3].drawRectButton();
   tft->setCursor(15, 175);
   tft->print(F("Riego"));
+  */
+
+  z1f2Buttons[3].initButtonUL(tft, 5, 170, 230, 40, WHITE, BLACK, WHITE, "", 2);
+  z1f2Buttons[3].drawRectButton();
+  tft->setCursor(15, 175);
+  tft->print(F("Riego"));
+  tft->setCursor(15, 205 - (CHARACTER_HEIGHT * TITLE_TEXTSIZE));
+  tft->print(F("cada"));
+
   /*
     z1f2Buttons[11].initButtonUL(tft, 100, 215, 60, 40, BLACK, BLACK, BLACK, "",
                                  2);
@@ -757,6 +802,7 @@ void drawZ1F2Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f2Buttons,
   tft->print(F("-"));
 
   //// riego
+  /*
   sprintf_P(buffer, PSTR("%d"), pActivo->f2.riegoh);
   uint8_t z1f2riegohSTRlen = strlen(buffer);
   strcat_P(buffer, PSTR("%"));
@@ -769,6 +815,14 @@ void drawZ1F2Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f2Buttons,
 
   tft->setCursor(192 - (z1f2riegohSTRlen * 18), 180);
   tft->print(F("-"));
+  */
+
+  if (pActivo->f2.riegod > 255) pActivo->f2.riegod = 255;
+  sprintf_P(buffer, PSTR("%d"), pActivo->f2.riegod);
+  strcat_P(buffer, PSTR("D"));
+  tft->setCursor(228 - (strlen(buffer) * 18), 180);
+  tft->print(buffer);
+
   /*
     //// humedad
     sprintf_P(buffer, PSTR("%d"), pActivo->f2.humh);
@@ -820,6 +874,7 @@ void drawZ1F3Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f3Buttons,
   tft->setCursor(15, 130);
   tft->print(F("Temp."));
 
+  /* riego por humedad
   z1f3Buttons[8].initButtonUL(tft, 100, 170, 60, 40, BLACK, BLACK, BLACK, "",
                               2);
   z1f3Buttons[8].drawRectButton();
@@ -830,6 +885,14 @@ void drawZ1F3Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f3Buttons,
   z1f3Buttons[3].drawRectButton();
   tft->setCursor(15, 175);
   tft->print(F("Riego"));
+  */
+
+  z1f3Buttons[3].initButtonUL(tft, 5, 170, 230, 40, WHITE, BLACK, WHITE, "", 2);
+  z1f3Buttons[3].drawRectButton();
+  tft->setCursor(15, 175);
+  tft->print(F("Riego"));
+  tft->setCursor(15, 205 - (CHARACTER_HEIGHT * TITLE_TEXTSIZE));
+  tft->print(F("cada"));
   /*
     z1f3Buttons[11].initButtonUL(tft, 100, 215, 60, 40, BLACK, BLACK, BLACK, "",
                                  2);
@@ -873,6 +936,7 @@ void drawZ1F3Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f3Buttons,
   tft->print(F("-"));
 
   //// riego
+  /*
   sprintf_P(buffer, PSTR("%d"), pActivo->f3.riegoh);
   uint8_t z1f3riegohSTRlen = strlen(buffer);
   strcat_P(buffer, PSTR("%"));
@@ -885,6 +949,14 @@ void drawZ1F3Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f3Buttons,
 
   tft->setCursor(192 - (z1f3riegohSTRlen * 18), 180);
   tft->print(F("-"));
+  */
+
+  if (pActivo->f3.riegod > 255) pActivo->f3.riegod = 255;
+  sprintf_P(buffer, PSTR("%d"), pActivo->f3.riegod);
+  strcat_P(buffer, PSTR("D"));
+  tft->setCursor(228 - (strlen(buffer) * 18), 180);
+  tft->print(buffer);
+
   /*
     //// humedad
     sprintf_P(buffer, PSTR("%d"), pActivo->f3.humh);
@@ -936,6 +1008,7 @@ void drawZ1F4Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f4Buttons,
   tft->setCursor(15, 130);
   tft->print(F("Temp."));
 
+  /*
   z1f4Buttons[8].initButtonUL(tft, 100, 170, 60, 40, BLACK, BLACK, BLACK, "",
                               2);
   z1f4Buttons[8].drawRectButton();
@@ -946,6 +1019,15 @@ void drawZ1F4Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f4Buttons,
   z1f4Buttons[3].drawRectButton();
   tft->setCursor(15, 175);
   tft->print(F("Riego"));
+  */
+
+  z1f4Buttons[3].initButtonUL(tft, 5, 170, 230, 40, WHITE, BLACK, WHITE, "", 2);
+  z1f4Buttons[3].drawRectButton();
+  tft->setCursor(15, 175);
+  tft->print(F("Riego"));
+  tft->setCursor(15, 205 - (CHARACTER_HEIGHT * TITLE_TEXTSIZE));
+  tft->print(F("cada"));
+
   /*
     z1f4Buttons[11].initButtonUL(tft, 100, 215, 60, 40, BLACK, BLACK, BLACK, "",
                                  2);
@@ -989,6 +1071,7 @@ void drawZ1F4Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f4Buttons,
   tft->print(F("-"));
 
   //// riego
+  /*
   sprintf_P(buffer, PSTR("%d"), pActivo->f4.riegoh);
   uint8_t z1f4riegohSTRlen = strlen(buffer);
   strcat_P(buffer, PSTR("%"));
@@ -1001,6 +1084,14 @@ void drawZ1F4Screen(Adafruit_TFTLCD* tft, Adafruit_GFX_Button* z1f4Buttons,
 
   tft->setCursor(192 - (z1f4riegohSTRlen * 18), 180);
   tft->print(F("-"));
+  */
+
+  if (pActivo->f4.riegod > 99) pActivo->f4.riegod = 99;
+  sprintf_P(buffer, PSTR("%d"), pActivo->f4.riegod);
+  strcat_P(buffer, PSTR("D"));
+  tft->setCursor(228 - (strlen(buffer) * 18), 180);
+  tft->print(buffer);
+
   /*
     //// humedad
     sprintf_P(buffer, PSTR("%d"), pActivo->f4.humh);

@@ -63,6 +63,7 @@ Programa pActivo;
 fActiva fActivaSP;
 
 uint16_t dias;  // dias que lleva la fase activa
+float dias_prox_riego;
 
 float t;          // temperatura
 float h;          // humedad
@@ -118,9 +119,9 @@ DHT dht(31, DHT22);  // pin hardcoded
 RTC_DS3231 rtc;
 
 // tiempo que dura la rafaga de riego
-const uint8_t riegoTiempo PROGMEM = 5;
+const uint8_t riegoTiempo PROGMEM = 2;
 // tiempo que dura la espera para que la tierra se humedezca
-const uint8_t riegoTiempoEspera PROGMEM = 30;
+const uint8_t riegoTiempoEspera PROGMEM = 5;
 uint8_t LASTRIEGOSTATE;  // ultimo estado de riego - esto es para actualizar la
                          // luz del dashboard
 
@@ -128,8 +129,11 @@ volatile static uint16_t framecount;
 const uint8_t refreshFrames PROGMEM = 100;
 
 /*
+  ESTOY GUARDANDO fActivaSP.sProx_riego EN 3900 PORQUE ME QUEDE SIN ESPACIO AL
+  PRINCIPIO TENGO QUE CAMBIAR TODO EL LAYOUT DE LA EEPROM PARA ARREGLARLO
   EEPROM:
-  [0-9] = id, device info, etc
+  [0] = magic number
+  [1-9] = id, device info, etc
   [10-29] = fase activa, info fase activa, ciclos
     10 = fase activa
     11-14 = UNIX timestamp inicio de fase
@@ -139,6 +143,7 @@ const uint8_t refreshFrames PROGMEM = 100;
     22 = cantidad de ciclos
     26-27 = calibracion tierra seca / tMax
     28-29 = calibracion tierra mojada / tMin
+    3900-3903 = UNIX timestamp prox riego
   [30-109] = programa activo
     [30-49] = configuracion fase 1
       30-31 = dias
@@ -149,6 +154,7 @@ const uint8_t refreshFrames PROGMEM = 100;
       36 = riego high
       37 = hum low
       38 = hum high
+      39 = riego dias
     [50-69] = configuracion fase 2
     [70-89] = configuracion fase 3
     [90-109] = configuracion fase 4
@@ -172,6 +178,7 @@ const uint8_t refreshFrames PROGMEM = 100;
     [430-449] = programa 4 fase 2
     [450-469] = programa 4 fase 3
     [470-489] = programa 4 fase 4
+  [3900-3903] = UNIX timestamp prox riego
   [4000-4019] = fase 0
 */
 
@@ -247,13 +254,14 @@ void setup() {
   tft.begin(lcd_id);
   tft.setRotation(lcd_rotation);
 
-  if (EEPROM.read(0) != 89) eeprom_hardReset(&tft);
+  if (EEPROM.read(0) != 90) eeprom_hardReset(&tft);
 
   z1fActiva = EEPROM.read(10);
   z1fActivalast = z1fActiva;
   z1fSeleccionada = z1fActiva;
   EEPROM.get(11, fActivaSP.diaIniciodefase);
   EEPROM.get(15, fActivaSP.sLuz);
+  EEPROM.get(3900, fActivaSP.sProx_riego);
 
   EEPROM.get(26, tMin);
   EEPROM.get(28, tMax);
@@ -303,7 +311,7 @@ void loop() {
 #else
   now = rtc.now();
   readTH();
-  readSoil();
+  // readSoil();
 #endif  // DEBUG_ENABLED
 
   // acá manejo la pantalla tactil
@@ -321,9 +329,18 @@ void loop() {
     fActivaSP.sFinLuz =
         (fActivaSP.sLuz + (uint32_t)fActivaSP.hLuz * 3600) % 86400;
 
+    fActivaSP.sProx_riego = now.unixtime();  // regar por primera vez ahora
+
     EEPROM.update(10, z1fActiva);
     EEPROM.put(11, fActivaSP.diaIniciodefase);
     EEPROM.put(15, fActivaSP.sLuz);
+    EEPROM.put(3900, fActivaSP.sProx_riego);
+
+    if (z1fActiva == 0) {
+      dias_prox_riego = 0;
+    } else {
+      dias_prox_riego = (float)(fActivaSP.sProx_riego - now.unixtime()) / 86400;
+    }
 
     dias = 0;
 
@@ -336,6 +353,7 @@ void loop() {
 
   // funcionalidad
   if (z1fActiva != 0) {
+    // no deberia leer la eeprom todo el tiempo
     eeprom_cargarfActivaSP(&fActivaSP, z1fActiva);
 
     static uint32_t tRiegoBomba;
@@ -369,6 +387,8 @@ void loop() {
       VAP_OFF();
     }
 
+    // riego por tiempo en vez de medicion
+    /*
     if (hTierra <= fActivaSP.riegol && (tRiegoEspera + tRiegoBomba) == 0) {
       tRiegoBomba = now.unixtime() + riegoTiempo;  // tiempo encendido
       RIEGO_ON();
@@ -377,7 +397,32 @@ void loop() {
       tRiegoBomba = 0;
       RIEGO_OFF();
     }
+    */
 
+    static uint8_t contador_riego;
+    uint8_t const contador_riego_max = 5;
+    if (now.unixtime() >= fActivaSP.sProx_riego) {
+      // iniciar riego
+      contador_riego = 0;
+      tRiegoBomba = now.unixtime() + riegoTiempo;  // tiempo encendido
+      RIEGO_ON();
+
+      // guardar proximo tiempo de riego
+      fActivaSP.sProx_riego = now.unixtime() + (fActivaSP.riegod * 86400);
+      EEPROM.put(3900, fActivaSP.sProx_riego);
+
+    } else if (contador_riego >
+               contador_riego_max) {  // cuantos ciclos de riego hacer
+      // parar riego
+      tRiegoEspera = 0;
+      tRiegoBomba = 0;
+      RIEGO_OFF();
+    }
+
+    // va despues porque si no se glitchea
+    dias_prox_riego = (float)(fActivaSP.sProx_riego - now.unixtime()) / 86400;
+
+    // esto maneja cuanto tiempo tiene que quedar prendido el riego
     if (tRiegoBomba && !tRiegoEspera) {
       if (now.unixtime() >= tRiegoBomba) {
         tRiegoBomba = 0;
@@ -391,6 +436,7 @@ void loop() {
         tRiegoEspera = 0;
         tRiegoBomba = now.unixtime() + riegoTiempo;  // tiempo encendido
         RIEGO_ON();
+        contador_riego++;
       }
     }
 
@@ -459,6 +505,7 @@ void loop() {
     static float lastH = 0xff;
     static uint8_t lastLuz;
     static uint8_t lasthTierra = 0xff;
+    static float last_dias_riego = 0xff;  // dias que faltan para regar
 
     if (lastLuz != (PINC & LUZPIN)) {
       lastLuz = (PINC & LUZPIN);
@@ -478,6 +525,7 @@ void loop() {
       tft.print(buffer);
     }
 
+    /*
     if (lasthTierra != hTierra || LASTRIEGOSTATE != (PINC & RIEGOPIN)) {
       lasthTierra = hTierra;
       sprintf_P(buffer, PSTR("%2d"), hTierra);
@@ -486,6 +534,26 @@ void loop() {
       tft.setTextSize(3);
       tft.setTextColor(WHITE, BLACK);
       tft.print(buffer);
+      LASTRIEGOSTATE = (PINC & RIEGOPIN);
+
+      if (!(PINC & RIEGOPIN)) {
+        tft.fillCircle(180, 119, 10, GREEN);
+      } else {
+        tft.fillCircle(180, 119, 10, LIGHTGREY);
+      }
+    }
+    */
+
+    if ((last_dias_riego != dias_prox_riego) ||
+        LASTRIEGOSTATE != (PINC & RIEGOPIN)) {
+      last_dias_riego = dias_prox_riego;
+
+      dtostrf(dias_prox_riego, 4, 2, buffer);
+      tft.setTextSize(3);
+      tft.setTextColor(WHITE, BLACK);
+      tft.setCursor(230 - (strlen(buffer) * 18), 230);
+      tft.print(buffer);
+
       LASTRIEGOSTATE = (PINC & RIEGOPIN);
 
       if (!(PINC & RIEGOPIN)) {
@@ -635,6 +703,10 @@ void DEBUG() {
             Serial.println(fActivaSP.sLuz);
             Serial.print(F("fActivaSP.sFinLuz: \t\t"));
             Serial.println(fActivaSP.sFinLuz);
+            Serial.print(F("fActivaSP.riegod: \t\t"));
+            Serial.println(fActivaSP.riegod);
+            Serial.print(F("fActivaSP.sProx_riego: \t\t"));
+            Serial.println(fActivaSP.sProx_riego);
             Serial.print(F("tMax: \t\t"));
             Serial.println(tMax);
             Serial.print(F("tMin: \t\t"));
@@ -1571,11 +1643,16 @@ void tsMenu() {
           NumericKeyboardScreen(&pActivo.f1.templ, 33, 2, "Temp baja");
         } else if (z1f1Buttons[5].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f1.temph, 34, 2, "Temp alta");
-        } else if (z1f1Buttons[8].contains(p.x, p.y)) {
+        } else if (z1f1Buttons[3].contains(p.x, p.y)) {
+          NumericKeyboardScreen(&pActivo.f1.riegod, eeprom_dirFase(1) + 9, 2,
+                                "Riego dias");
+        }
+        /* else if (z1f1Buttons[8].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f1.riegol, 35, 2, "Riego bajo");
         } else if (z1f1Buttons[7].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f1.riegoh, 36, 2, "Riego alto");
-        } /* else if (z1f1Buttons[11].contains(p.x, p.y)) {
+        } */
+        /* else if (z1f1Buttons[11].contains(p.x, p.y)) {
            NumericKeyboardScreen(&pActivo.f1.huml, 37, 2, "Hum baja");
          } else if (z1f1Buttons[10].contains(p.x, p.y)) {
            NumericKeyboardScreen(&pActivo.f1.humh, 38, 2, "Hum alta");
@@ -1594,11 +1671,16 @@ void tsMenu() {
           NumericKeyboardScreen(&pActivo.f2.templ, 53, 2, "Temp baja");
         } else if (z1f2Buttons[5].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f2.temph, 54, 2, "Temp alta");
-        } else if (z1f2Buttons[8].contains(p.x, p.y)) {
+        } else if (z1f2Buttons[3].contains(p.x, p.y)) {
+          NumericKeyboardScreen(&pActivo.f2.riegod, eeprom_dirFase(2) + 9, 2,
+                                "Riego dias");
+        }
+        /* else if (z1f2Buttons[8].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f2.riegol, 55, 2, "Riego bajo");
         } else if (z1f2Buttons[7].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f2.riegoh, 56, 2, "Riego alto");
-        } /*else if (z1f2Buttons[11].contains(p.x, p.y)) {
+        } */
+        /* else if (z1f2Buttons[11].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f2.huml, 57, 2, "Hum baja");
         } else if (z1f2Buttons[10].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f2.humh, 58, 2, "Hum alta");
@@ -1616,11 +1698,16 @@ void tsMenu() {
           NumericKeyboardScreen(&pActivo.f3.templ, 73, 2, "Temp baja");
         } else if (z1f3Buttons[5].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f3.temph, 74, 2, "Temp alta");
-        } else if (z1f3Buttons[8].contains(p.x, p.y)) {
+        } else if (z1f3Buttons[3].contains(p.x, p.y)) {
+          NumericKeyboardScreen(&pActivo.f3.riegod, eeprom_dirFase(3) + 9, 2,
+                                "Riego dias");
+        }
+        /* else if (z1f3Buttons[8].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f3.riegol, 75, 2, "Riego bajo");
         } else if (z1f3Buttons[7].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f3.riegoh, 76, 2, "Riego alto");
-        } /* else if (z1f3Buttons[11].contains(p.x, p.y)) {
+        } */
+        /* else if (z1f3Buttons[11].contains(p.x, p.y)) {
            NumericKeyboardScreen(&pActivo.f3.huml, 77, 2, "Hum baja");
          } else if (z1f3Buttons[10].contains(p.x, p.y)) {
            NumericKeyboardScreen(&pActivo.f3.humh, 78, 2, "Hum alta");
@@ -1638,11 +1725,16 @@ void tsMenu() {
           NumericKeyboardScreen(&pActivo.f4.templ, 93, 2, "Temp baja");
         } else if (z1f4Buttons[5].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f4.temph, 94, 2, "Temp alta");
-        } else if (z1f4Buttons[8].contains(p.x, p.y)) {
+        } else if (z1f4Buttons[3].contains(p.x, p.y)) {
+          NumericKeyboardScreen(&pActivo.f4.riegod, eeprom_dirFase(4) + 9, 2,
+                                "Riego dias");
+        }
+        /* else if (z1f4Buttons[8].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f4.riegol, 95, 2, "Riego bajo");
         } else if (z1f4Buttons[7].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f4.riegoh, 96, 2, "Riego alto");
-        } /*else if (z1f4Buttons[11].contains(p.x, p.y)) {
+        } */
+        /* else if (z1f4Buttons[11].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f4.huml, 97, 2, "Hum baja");
         } else if (z1f4Buttons[10].contains(p.x, p.y)) {
           NumericKeyboardScreen(&pActivo.f4.humh, 98, 2, "Hum alta");
@@ -1799,6 +1891,7 @@ void HomeScreen() {
   mediciones.dias = dias;
   mediciones.hTierra = hTierra;
   mediciones.h = (uint8_t)h;
+  mediciones.dias_prox_riego = dias_prox_riego;
   eeprom_cargarfActivaSP(&fActivaSP, z1fActiva);
   drawHomeScreen(&tft, homeButtons, z1fActiva, fActivaSP, mediciones, now);
 }
