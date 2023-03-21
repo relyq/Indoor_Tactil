@@ -128,6 +128,8 @@ uint8_t LASTRIEGOSTATE;  // ultimo estado de riego - esto es para actualizar la
 volatile static uint16_t framecount;
 const uint8_t refreshFrames PROGMEM = 100;
 
+uint8_t lcd_rotation = 0;
+
 /*
   ESTOY GUARDANDO fActivaSP.sProx_riego EN 3900 PORQUE ME QUEDE SIN ESPACIO AL
   PRINCIPIO TENGO QUE CAMBIAR TODO EL LAYOUT DE LA EEPROM PARA ARREGLARLO
@@ -213,7 +215,6 @@ void setup() {
   MCUSR = 0;  // clear out any flags of prior resets.
 
   uint16_t lcd_id = tft.readID();
-  uint8_t lcd_rotation = 0;
 
   switch (lcd_id) {
     case 0x9325: {
@@ -786,8 +787,13 @@ void tsMenu() {
     DEBUG_PRINT(p.z);
     DEBUG_PRINT(F(") "));
     */
-    p.x = map(p.x, TS_MINX, TS_MAXX, tft.width(), 0);
-    p.y = map(p.y, TS_MINY, TS_MAXY - 60, tft.height(), 0);
+    if (lcd_rotation == 0) {
+      p.x = map(p.x, TS_MINX, TS_MAXX, tft.width(), 0);
+      p.y = map(p.y, TS_MINY, TS_MAXY - 60, tft.height(), 0);
+    } else {
+      p.x = map(p.x, TS_MINX, TS_MAXX, 0, tft.width());
+      p.y = map(p.y, TS_MINY, TS_MAXY - 60, 0, tft.height());
+    }
     /*
     DEBUG_PRINT(F("Mapped p: "));
     DEBUG_PRINT(F("("));
@@ -799,7 +805,9 @@ void tsMenu() {
     DEBUG_PRINTLN(F(") "));
     */
 
-    if (currentScreen != Screens::Home && (p.y < -1)) {
+    if (currentScreen != Screens::Home &&
+        ((lcd_rotation == 0 && (p.y < 0)) ||
+         (lcd_rotation == 2 && (p.y > 320)))) {
       HomeScreen();
     }
 
