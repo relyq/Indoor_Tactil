@@ -9,4 +9,3 @@ lib/
 test/
 .gitattributes
 .travis.yml
-platformio.ini
