@@ -3,7 +3,7 @@
 
 #define DEBUG_ENABLED 1
 
-#ifdef DEBUG_ENABLED
+#if DEBUG_ENABLED
 #define DEBUG_BEGIN(x) Serial.begin(x)
 #define DEBUG_PRINT(x) Serial.print(x)
 #define DEBUG_PRINTLN(x) Serial.println(x)
