@@ -233,6 +233,10 @@ void setup() {
       lcd_rotation = 0;
       break;
     }
+    case 0x7783: {
+      lcd_rotation = 0;
+      break;
+    }
     default: {
       DEBUG_PRINT(F("UNRECOGNIZED DRIVER (0x"));
       DEBUG_PRINTHEX(lcd_id);
